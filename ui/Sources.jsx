@@ -35,6 +35,7 @@ import css from "./sources.css";
 import PermanentDeleteDialog from './components/PermanentDeleteDialog.jsx';
 import { useStudy } from './study-context.jsx';
 import { useRetrievalStatus } from './retrieval-status.js';
+import ScannedOnly from './scanned/ScannedOnly.jsx';
 
 /* 资料视图：一份文档一行（PDF 的各页收在行内，按需展开；P18）。按导入日期分组，
    最新一组默认展开（P23）；刚导入的资料高亮并滚动到视野里。sourceForm 是 App
@@ -504,6 +505,7 @@ export default function Sources({ data, setModal, sourceForm, openAgent, onGener
         {!filtered.length && <p className="muted">{ui('这个范围还没有资料。可切换到全部课程查看。')}</p>}
       </>}
       <AudioJobs data={data} busy={busy} act={act} openAgent={openAgent} onOpenSources={onOpenSources} onLegacyRetry={onLegacyRetry} onGenerate={onGenerate} />
+      <ScannedOnly call={call} revision={data.revision} />
       <PdfConvertJobs data={data} act={act} call={call} onOpenSources={onOpenSources} onOpenSettings={onOpenSettings} onGenerate={onGenerate} />
       <PdfConvertHistory data={data} act={act} call={call} onOpenSources={onOpenSources} onOpenSettings={onOpenSettings} collapsible hideWhenEmpty />
       {!items.length ? (

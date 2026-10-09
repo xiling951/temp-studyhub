@@ -20,6 +20,7 @@ import { toBase64 } from './upload.js';
 import css from './import-hub.css';
 import { hasContext } from './capabilities.js';
 import { useStudy } from './study-context.jsx';
+import ScannedImport from './scanned/ScannedImport.jsx';
 
 /* The one way to add material (O-3, O-4, P19–P21, P05). The course is one line
    (the current course, or what the learner chose, or the course a file name
@@ -504,6 +505,7 @@ export default function ImportHub({
       <SegmentedControl className="import-hub__tabs" label={ui('添加方式')} value={tab} options={tabs} disabled={running} onChange={setTab} />
       {stray && <p className="import-hub__stray" role="status"><Icon name="info" size={16} />{strayText}</p>}
       {tab === 'files' && <div className="import-hub__files">
+        <ScannedImport call={call} data={data} courses={parseCourses(courseText)} onStarted={conversionStarted} />
         {!running && failed > 0 && <InlineMessage tone="warning" boxed className="import-hub__summary"
           title={finished ? uiFormat('{0} 个文件已导入，{1} 个没有导入', [finished, failed]) : uiFormat('{0} 个文件没有导入', [failed])}
           action={finished ? { label: ui('查看已导入的内容'), onClick: () => onComplete?.(importSummary(itemsRef.current)) } : undefined}>

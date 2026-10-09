@@ -41,6 +41,7 @@ import { outlineFromSections, collectHeadings, withoutLabels, structureOutline, 
 import { applyOutline, clearOutlineTags } from './reader/ai-outline.js';
 import { findRanges, paintMatches } from './reader/find.js';
 import css from './document-preview.css';
+import VisualReader from '../scanned/VisualReader.jsx';
 import readerCss from './reader/reader.css';
 import linksCss from './links/links.css';
 import translationCss from './translation/translation.css';
@@ -143,10 +144,11 @@ function DocumentReader({ source, quote, call, data, host, onOpenCard, onOpenDec
           ...(source.selection?.revision ? { revision: source.selection.revision } : {}) });
         if (!current) return;
         setDocument(value);
+        if (value.visual && initialMode === 'read') setMode('visual');
         const backlink = await call('materials.links.list', { documentId: value.documentId || value.id });
         if (current) setLinks(backlink.links || []);
         const original = originalHandling(value);
-        if (original === 'download' || original === 'none') setContent(value.sources?.find(item => item.id === source.id)?.text || source.text);
+        if (value.visual || original === 'download' || original === 'none') setContent(value.sources?.find(item => item.id === source.id)?.text || source.text);
         else {
           const bytes = await call('materials.document.bytes', { documentId: value.documentId || value.id, revision: value.revision });
           if (!current) return;
@@ -384,8 +386,8 @@ function DocumentReader({ source, quote, call, data, host, onOpenCard, onOpenDec
   // The 原始 PDF tab without a file is not dead: it explains and offers 补全原文件.
   const chooseView = value => value === 'original' && !fileUrl ? (document && setAttaching(issueOf(document.original)?.kind === 'none' ? 'attach' : 'relink')) : setMode(value);
   if (document) attachTarget.current = { documentId: document.documentId || document.id, revision: document.revision, title: document.filename || document.title || source.title, format };
-  const modes = [{ value: 'read', label: ui('阅读') }, { value: 'text', label: ui('原文') },
-    ...(format === 'pdf' ? [{ value: 'original', label: ui('原始 PDF'), title: fileUrl ? undefined : ui('还没有原始 PDF，点击查看如何补全') }] : [])];
+  const modes = [...(document?.visual ? [{ value: 'visual', label: '图文教材' }] : []), { value: 'read', label: ui('阅读') }, { value: 'text', label: ui('原文') },
+    ...(format === 'pdf' && !document?.visual ? [{ value: 'original', label: ui('原始 PDF'), title: fileUrl ? undefined : ui('还没有原始 PDF，点击查看如何补全') }] : [])];
   const notices = [
     loading && <LoadingState key="loading" label={ui('正在打开资料…')} />,
     !localMode && <OriginalNotice key="original" document={document} onAction={setAttaching} />,
@@ -459,7 +461,7 @@ function DocumentReader({ source, quote, call, data, host, onOpenCard, onOpenDec
       <div className="reader-scroll" ref={scroller} tabIndex={0} role="region" aria-label={localMode ? localContent.title || source.title || ui('资料内容') : ui('资料内容')} data-mode={view}>
         <div className="reader-page">
           <div className="study-document-body" ref={body} onMouseUp={select} onKeyUp={select} onTouchEnd={select} onClick={pick} onCopy={copy}>
-            {view === 'original'
+            {view === 'visual' && document?.visual ? <VisualReader document={document} call={call} initialPage={source.document?.page || 1} /> : view === 'original'
               ? <div className="reader-original"><iframe src={`${fileUrl}#page=${pdfPage}`} title={source.title || ui('原始 PDF')} /></div>
               : reading
                 ? html ? <div className="reader-html source-md" data-study-text="true" dangerouslySetInnerHTML={{ __html: html }} />

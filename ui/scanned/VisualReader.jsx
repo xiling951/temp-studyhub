@@ -1,8 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react';
-import DOMPurify from 'dompurify';
 import Markdown from '../Markdown.jsx';
 import { Button, Dialog, InlineMessage } from '../components/index.js';
 import { readVisualAsset, downloadVisualAsset, downloadVisualArchive } from './asset.js';
+import VisualTable from './VisualTable.jsx';
 
 export function VisualImage({ call, scope, asset, caption, onOpen }) {
   const element = useRef(null), [url, setUrl] = useState(''), [error, setError] = useState('');
@@ -53,7 +53,7 @@ export default function VisualReader({ document, call, initialPage = 1 }) {
       <p>原书 PDF 第 {value.page.originalPage} 页 · 印刷页码 {value.page.printedPage || '未识别'}</p>
       {original && <aside aria-label="原页对照"><VisualImage call={call} scope={scope} asset={original} caption={`原书 PDF 第 ${value.page.originalPage} 页`} onOpen={(url, title) => setZoom({ url, title })} /></aside>}
       {value.page.blocks.map(block => <article key={block.id} data-visual-block={block.id} data-study-page={page} data-study-source={value.page.sourceId || undefined}>
-        {block.type === 'equation' ? <Markdown text={`$$\n${block.text}\n$$`} /> : block.type === 'table' && /<table/i.test(block.text) ? <div className="scanned-table" dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(block.text.replace(/<eq>(.*?)<\/eq>/gs, '$1'), { ALLOWED_TAGS: ['table', 'thead', 'tbody', 'tr', 'td', 'th'], ALLOWED_ATTR: ['rowspan', 'colspan'] }) }} /> : block.text ? <Markdown text={block.text} /> : null}
+        {block.type === 'equation' ? <Markdown text={`$$\n${block.text}\n$$`} /> : block.type === 'table' && /<table/i.test(block.text) ? <VisualTable text={block.text} /> : block.text ? <Markdown text={block.text} /> : null}
         {block.assetId && <VisualImage call={call} scope={scope} asset={value.assets.find(asset => asset.assetId === block.assetId)} caption={block.captions.map(caption => caption.text).join('\n')} onOpen={(url, title) => setZoom({ url, title })} />}
         {!block.assetId && block.captions.map((caption, index) => <Markdown key={index} text={caption.text} />)}
         {block.quality === 'original-page-fallback' && <Button size="sm" onClick={preview}>查看未解析区域的原页</Button>}

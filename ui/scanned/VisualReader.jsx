@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import DOMPurify from 'dompurify';
 import Markdown from '../Markdown.jsx';
 import { Button, Dialog, InlineMessage } from '../components/index.js';
-import { readVisualAsset, downloadVisualAsset } from './asset.js';
+import { readVisualAsset, downloadVisualAsset, downloadVisualArchive } from './asset.js';
 
 export function VisualImage({ call, scope, asset, caption, onOpen }) {
   const element = useRef(null), [url, setUrl] = useState(''), [error, setError] = useState('');
@@ -44,6 +44,7 @@ export default function VisualReader({ document, call, initialPage = 1 }) {
       <Button size="sm" disabled={page >= document.visual.pageCount} onClick={() => setPage(page + 1)}>下一页</Button>
       <Button size="sm" onClick={preview}>原页对照</Button>
       <Button size="sm" onClick={() => downloadVisualAsset(call, scope, document.visual.original, document.filename).catch(error => setError(error.message))}>保存原 PDF</Button>
+      <Button size="sm" onClick={() => downloadVisualArchive(call, 'materials.visual.export', scope, 'textbook.zip').catch(error => setError(error.message))}>导出图文教材</Button>
     </div>
     <p>图文已保存 · OCR 与图像内容待核对 · 图像解释尚未执行</p>
     {error && <InlineMessage tone="error">{error}</InlineMessage>}

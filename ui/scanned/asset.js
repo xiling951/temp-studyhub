@@ -14,13 +14,13 @@ export async function readVisualAsset(call, scope, asset, { signal } = {}) {
   return new Blob([bytes], { type: asset.mime });
 }
 
-export async function downloadVisualAsset(call, scope, asset, name) {
+export async function downloadVisualAsset(call, scope, asset, name, preparedHandle) {
   if (!window.showSaveFilePicker) {
     if (asset.bytes > 8 * 1024 * 1024) throw new Error('大文件保存需要 Chrome/Edge 文件保存支持，请使用桌面导出');
     const url = URL.createObjectURL(await readVisualAsset(call, scope, asset));
     const anchor = document.createElement('a'); anchor.href = url; anchor.download = name; anchor.click(); setTimeout(() => URL.revokeObjectURL(url), 1000); return;
   }
-  const handle = await window.showSaveFilePicker({ suggestedName: name }), writer = await handle.createWritable();
+  const handle = preparedHandle || await window.showSaveFilePicker({ suggestedName: name }), writer = await handle.createWritable();
   try {
     for (let offset = 0; offset < asset.bytes;) {
       const chunk = await call('materials.visual.chunk', { ...scope, assetId: asset.assetId, offset });
@@ -30,4 +30,13 @@ export async function downloadVisualAsset(call, scope, asset, name) {
     }
     await writer.close();
   } catch (error) { await writer.abort(); throw error; }
+}
+
+export async function downloadVisualArchive(call, action, args, name) {
+  // Reserve the destination during the user gesture, before a large archive is compressed.
+  const handle = window.showSaveFilePicker ? await window.showSaveFilePicker({ suggestedName: name }) : null;
+  const result = await call(action, args);
+  const archiveCall = (_action, request) => call('materials.visual.export.chunk', { transferId: result.transferId, offset: request.offset });
+  try { await downloadVisualAsset(archiveCall, {}, { ...result, assetId: result.transferId, mime: 'application/zip' }, name, handle); }
+  finally { await call('materials.visual.export.discard', { transferId: result.transferId }); }
 }

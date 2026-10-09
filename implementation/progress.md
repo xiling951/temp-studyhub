@@ -1,0 +1,41 @@
+# 扫描教材实施进度
+
+## 当前状态
+- 当前任务：T10；T01–T09 已通过相关阶段验证，T10–T12 未通过验收。
+- 基线：上游 v3.3.0，daa4df7b3045df14290e10a43d72e0e751e0f72d。
+- 独立源码：D:/studyhub/implementation/source，分支 feat/scanned-textbook-visual。
+- 隔离环境：D:/studyhub/implementation/test-harness；测试库：implementation/test-libraries。
+- 正式 Desktop profile、dsh-home、.dsh-study 目前未修改。用户已追加授权：开发完成后备份再安装到本机 Desktop，实测原书与反相器带图题组。
+- T01：依赖/lint/build/release:check/隔离 DSH smoke 通过；原版完整测试 7891 通过、2 个已复现基线失败、153 跳过，详见 evidence/baseline-results.md。
+- T02：7 页公共 MinerU API 实际成功取得 JSON/ZIP；DSH 原生附件保存/读回及模型目录实测通过，evidence/mineru-contract.md、dsh-capabilities.md。
+- T01/T02 证据提交：实施记录仓库 32363c5；源码基线未改动。
+- T03/T04：默认关闭开关/严格 DTO/跨库隔离/历史版本/取消/去重/完整清单验证，相关 32 项测试与 lint 通过，evidence/t03-t04-tests.log、t03-t04-lint.log；源码提交 4d2dd6ef。
+- T04：188.9 MiB 原书流式保存成功，SHA-256 与原件一致，原件修改时间未变；此次保存进程峰值 RSS 99282944 字节，evidence/t04-full-retain.json。此数值不代表解析/宿主总内存。
+- T05：7 页样例实际公共 API 导入成功，35 个图/公式/表资源，重复导入校验复用，首个样例页对应原书第 200 页；evidence/t05-sample-result.json、t05-sample/manifest.json。
+- T05 视觉检查：已直接查看本次保存的图 6.14、6.15(a)/(b)、6.16，核对原页，四张图清晰、图注对应、6.15 子图共享父组。页码齐全不等于 OCR 无误，所有结果仍待核对。
+- T05：17 项相关测试通过（含原版 native PDF Job 测试），evidence/t05-tests.log；本地解析使用既有 Jobs/gateway，cancel/retry，暂停/重启恢复明确 unsupported/none。
+- T05/T06 native 验证：实际隔离 DSH 0.2.0-rc.2 上传样例、运行原生 Job、提交、打开图文、原页对照、翻页成功；未认证请求 HTTP 401，console/pageerror 均为 0。evidence/t06-native/summary.json 与三张截图。
+- T06：相关 29 项测试、lint/build 通过；包括无模型旋转页预览、纯图文档不伪造 source、资产篡改拒绝、历史版本及旧材料兼容。evidence/t06-tests.log、t06-lint.log、t06-build.log。
+- T06 截图核对：原图与公式实际渲染；纠正旧阅读器误报“没有原文件”，大原件只能沿新分块通道，不扩大旧 document.bytes。
+- T06 源码提交：0062b616。
+- T07：实际 7 页教材 ZIP 导出并恢复新测试库，逐页资产哈希验证通过，源文字不变。evidence/t07-roundtrip.json；packages/sample-textbook.zip 为可离线阅读的样例产物。
+- T07：离线 HTML 原图/公式/表格浏览通过，外部请求 0、页面错误 0，evidence/t07-offline-result.json、t07-offline/page200.png、page201.png。
+- T07：7 项相关测试通过，涵盖旧 JSON 材料、旧题 SM-2 状态、跨库 transfer 拒绝、坏 ZIP/路径穿越/缺资源拒绝且原库不变；evidence/t07-tests.log。样例库本身没有旧题，SM-2 验证来自明确的合成测试，不冒充真实练习。
+- ZIP 上限 2 GiB、展开 4 GiB、库元数据 64 MiB；新文件不走旧整包 JSON 通道。旧库 JSON 导出/恢复继续使用原逻辑；含图文版本时旧导出明确拒绝缺附件备份。外部引用原件仍保留引用语义，不冒称已复制进 ZIP。
+- 当前实际 native profile/library 路径以 evidence/t06-native/summary.json 为准，每次 QA 使用唯一隔离后缀，不复用正式库。
+- 尚待验证：新 ZIP 按钮的完整宿主界面往返、真实视觉模型、带图题、检索、572 页全书与最终打包。正式 Desktop 安装/测试尚未执行。
+- 调试纠正：一次样例脚本漏设 DSH_HOME，产生默认 .dsh 下该样例 hash 对应的 visual-render 临时目录；后续固定为 test-harness/home。对该空临时目录的清理命令被系统策略拒绝，未继续绕过；不涉及正式 profile/学习库安装或数据写入。
+- T08：新增显式原生 image 附件入口，保留旧 complete 文本清理；真实 DSH direct/subagent 均准确回答仅存在于控制图内的随机代码与形状数量。evidence/t08-real-vision.json、t08-native-gateway.json。
+- T08：真实 native Job 两次调用分别记账 670/1722 tokens，accounting=recorded，子代理释放；真实已接纳子代理取消成功并释放，evidence/t08-native-cancel.json。取消调用未获得 provider 用量，明确为 null，不能推断未计费。
+- T08：43 项相关测试及 lint 通过，evidence/t08-tests.log、t08-lint.log；请求组装测试证明 image 块保留，覆盖模型能力未知/不支持、超限、占位 offload 拒绝、附件不可读、429、超时、取消、旧文本入口。offload/429 错误为显式模拟的 provider finish，未冒称触发真实官方服务的这些错误。
+- T08：密钥仅从用户授权文件读取到隔离启动环境，经 DSH credentials/provider 使用；未写入插件配置、证据、聊天或提交。
+- T08 源码提交：4c1a9ae2。T05 源码提交：2e017a44；T07 源码提交：9b1d1b66、5044cf59。
+- T08 实施证据提交：a7d1751。
+- T09：图解通过原生 Jobs/gateway，逐组保存独立版本、上下文/清单指纹、图片哈希、路由及待核对状态。公开操作支持页范围补解、重解留痕、人工修正/否决和明确选择索引；解析源文字不接收图解内容。
+- T09：真实隔离 DSH 安装当前开发包并经浏览器调用，电路图 p1-b2、表格 p2-b9、曲面图 p7-b9 分别得到待核对解释；3 次 subagent 调用用量 3992/4499/4475 tokens 均 recorded，匹配任务全部复用，OCR 未改，console/pageerror=0。evidence/t09-native/summary.json、explanation-pending.png。
+- T09：真实无视觉模型环境尝试“同时解释”，图解明确 unavailable、没有虚构解释，图文导入/原页/翻页继续成功。evidence/t09-no-model/summary.json、import-retained-no-vision.png。
+- T09：63 项相关测试及 lint/build 通过，evidence/t09-tests.log、t09-lint.log、t09-build.log。覆盖分组预算、模型/上下文改版、人工历史和拒绝缓存、取消保留已完成组、强制重解的 native retry 复用、失败无无限重试、备份恢复解释历史及旧 SM-2。取消/人工作品修正为明示的合成测试，实际教材解释仍 pending，尚未证明所有技术叙述准确。
+- T09：真实默认推理首次达到输出上限，失败未存为解释；最终使用宿主实际最低可用等级（Flash 为 off），说明长度限制和 4000 输出 token 预算。调用成功不等于解释已被人工核对。
+- T09 源码提交：36f504ad。
+- 下一步：T10 visualCitations、独立图片审阅和带图题全链路，再继续 T11/T12；开发与隔离验收通过后进行获授权的正式 Desktop 实测。
+- GitHub 交付目标：https://github.com/xiling951/temp-studyhub；仓库当前为空且公开，仅提交源码、进度和必要测试记录，教材 PDF/扫描图/凭据留在本机。

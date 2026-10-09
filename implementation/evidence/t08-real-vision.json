@@ -1,0 +1,19 @@
+{
+  "route": {
+    "provider": "deepseek-official",
+    "model": "deepseek-flash"
+  },
+  "paidCallMade": true,
+  "startedAt": "2026-10-09T17:08:43.774Z",
+  "attachment": {
+    "attachmentId": "sha256:efd8c67e4c5f997c4f2408778005d236582217b86008bec3a8af396c39357ef1",
+    "mediaType": "image/png",
+    "width": 1000,
+    "height": 550,
+    "bytes": 12811,
+    "name": "vision-control.png"
+  },
+  "answer": "{\"code\": \"9D6D44B4\", \"redCircles\": 3, \"blueSquares\": 2}",
+  "ok": true,
+  "finishedAt": "2026-10-09T17:08:46.275Z"
+}

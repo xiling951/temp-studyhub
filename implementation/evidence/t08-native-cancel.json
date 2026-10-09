@@ -1,0 +1,55 @@
+{
+  "startedAt": "2026-10-09T17:13:13.673Z",
+  "paidModel": true,
+  "route": {
+    "provider": "deepseek-official",
+    "model": "deepseek-flash"
+  },
+  "answers": [],
+  "admittedChildId": "63bb69b5-db11-4052-8a8a-24ee88f76dca",
+  "cancelRequestedAt": "2026-10-09T17:13:13.877Z",
+  "status": "cancelled",
+  "error": null,
+  "calls": [
+    {
+      "callId": "713b6d40-e1d4-4fa5-aaa7-ad40e62650b7",
+      "jobId": "60178329-00bf-49c7-b9a5-d0e1673dcb03",
+      "attemptId": "f0cfa009-9e62-4086-8287-3e4c7fd75019",
+      "stepKey": "agent-required",
+      "stepRunId": "54f2f1fb-84a4-438d-b4c1-8c3d6f40ff33",
+      "kind": "visual-probe",
+      "startedAt": "2026-10-09T17:13:13.802Z",
+      "endedAt": "2026-10-09T17:13:13.886Z",
+      "status": "cancelled",
+      "runner": "subagent",
+      "childId": "63bb69b5-db11-4052-8a8a-24ee88f76dca",
+      "parentId": "9fe84837-b699-42aa-aeec-649293df0b1b",
+      "tokens": null,
+      "reason": "aborted",
+      "observation": {
+        "boundary": "host-attempt",
+        "requestCount": null
+      },
+      "purpose": "visual-probe",
+      "feature": "other",
+      "requestedEffort": "default",
+      "executionMode": "agent-required",
+      "budget": {
+        "timeoutMs": 90000,
+        "maxOutputTokens": 256
+      },
+      "tokenUsage": null,
+      "appliedEffort": null,
+      "modelRequest": true,
+      "selectedEffort": "default"
+    }
+  ],
+  "nativeExecutor": {
+    "service": "dsh-jobs",
+    "handleId": "t08-native-images-1",
+    "ownerAgentId": "9fe84837-b699-42aa-aeec-649293df0b1b"
+  },
+  "childDisposed": true,
+  "ok": true,
+  "finishedAt": "2026-10-09T17:13:13.893Z"
+}

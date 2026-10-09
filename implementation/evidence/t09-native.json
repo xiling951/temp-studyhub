@@ -1,0 +1,860 @@
+{
+  "root": "D:\\studyhub\\implementation\\test-libraries\\native-1791566784901",
+  "home": "D:\\studyhub\\implementation\\test-harness\\native-1791566784901",
+  "startedAt": "2026-10-09T17:26:24.904Z",
+  "consoleErrors": [],
+  "pageErrors": [],
+  "model": "deepseek-official/deepseek-flash-real",
+  "steps": [
+    {
+      "name": "native-submit",
+      "started": {
+        "jobId": "55a066fa-2d88-463d-b994-9d6fe0689a72",
+        "status": "queued",
+        "filename": "扫描教材",
+        "route": "local",
+        "converter": "mineru"
+      }
+    }
+  ],
+  "job": {
+    "status": "complete",
+    "contract": {
+      "contractVersion": 2,
+      "jobId": "d32b325a-b421-455c-886e-385313e8cf43",
+      "attemptId": "d32979b7-7c74-4f58-83a9-71f894b9d99f",
+      "kind": "scanned-textbook-import",
+      "title": "数字集成电路-p200-206.pdf",
+      "status": "complete",
+      "stage": {
+        "code": "complete",
+        "text": "图文已保存；OCR 和图像内容待核对"
+      },
+      "progress": {
+        "done": 7,
+        "total": 7,
+        "unit": "page",
+        "percent": 100,
+        "segments": []
+      },
+      "actions": {
+        "cancel": {
+          "available": false,
+          "reason": {
+            "code": "job-ended"
+          }
+        },
+        "pause": {
+          "available": false,
+          "reason": {
+            "code": "job-ended"
+          },
+          "mode": "unsupported"
+        },
+        "resume": {
+          "available": false,
+          "reason": {
+            "code": "not-paused"
+          }
+        },
+        "retry": {
+          "available": false,
+          "reason": {
+            "code": "not-retryable"
+          }
+        },
+        "set": {
+          "available": false,
+          "reason": {
+            "code": "capability-unsupported"
+          }
+        }
+      },
+      "result": {
+        "refs": [
+          {
+            "kind": "document",
+            "id": "visual-7e4c79bfc1ee40e43161ff21a7173e3e97fdeb898c3d780dc6cbe123ffc45263"
+          },
+          {
+            "kind": "source",
+            "id": "visual-7e4c79bfc1ee40e43161ff21a7173e3e97fdeb898c3d780dc6cbe123ffc45263-visual1-336c4df87bb808ac958f33c7cb60fc9311dfdd0a20d3834a88cfdafa478a9a81-p1"
+          },
+          {
+            "kind": "source",
+            "id": "visual-7e4c79bfc1ee40e43161ff21a7173e3e97fdeb898c3d780dc6cbe123ffc45263-visual1-336c4df87bb808ac958f33c7cb60fc9311dfdd0a20d3834a88cfdafa478a9a81-p2"
+          },
+          {
+            "kind": "source",
+            "id": "visual-7e4c79bfc1ee40e43161ff21a7173e3e97fdeb898c3d780dc6cbe123ffc45263-visual1-336c4df87bb808ac958f33c7cb60fc9311dfdd0a20d3834a88cfdafa478a9a81-p3"
+          },
+          {
+            "kind": "source",
+            "id": "visual-7e4c79bfc1ee40e43161ff21a7173e3e97fdeb898c3d780dc6cbe123ffc45263-visual1-336c4df87bb808ac958f33c7cb60fc9311dfdd0a20d3834a88cfdafa478a9a81-p4"
+          },
+          {
+            "kind": "source",
+            "id": "visual-7e4c79bfc1ee40e43161ff21a7173e3e97fdeb898c3d780dc6cbe123ffc45263-visual1-336c4df87bb808ac958f33c7cb60fc9311dfdd0a20d3834a88cfdafa478a9a81-p5"
+          },
+          {
+            "kind": "source",
+            "id": "visual-7e4c79bfc1ee40e43161ff21a7173e3e97fdeb898c3d780dc6cbe123ffc45263-visual1-336c4df87bb808ac958f33c7cb60fc9311dfdd0a20d3834a88cfdafa478a9a81-p6"
+          },
+          {
+            "kind": "source",
+            "id": "visual-7e4c79bfc1ee40e43161ff21a7173e3e97fdeb898c3d780dc6cbe123ffc45263-visual1-336c4df87bb808ac958f33c7cb60fc9311dfdd0a20d3834a88cfdafa478a9a81-p7"
+          }
+        ],
+        "completeness": "complete"
+      },
+      "error": null,
+      "usage": {
+        "tokens": null,
+        "tokenUsage": null,
+        "calls": 0
+      },
+      "execution": {
+        "mode": null
+      },
+      "detail": {
+        "visual": true,
+        "legacy": {
+          "filename": "数字集成电路-p200-206.pdf",
+          "done": 7,
+          "total": 7
+        },
+        "usageIncomplete": false
+      },
+      "startedAt": "2026-10-09T17:26:37.351Z",
+      "finishedAt": "2026-10-09T17:27:02.535Z",
+      "calls": [
+        {
+          "callId": "77d7eacb-1e00-41f6-9274-b2124e0c011a",
+          "jobId": "d32b325a-b421-455c-886e-385313e8cf43",
+          "attemptId": "d32979b7-7c74-4f58-83a9-71f894b9d99f",
+          "stepKey": "parse-textbook",
+          "stepRunId": "a65f667c-2676-42b9-a0d1-8f26b80555ae",
+          "kind": "mineru-visual",
+          "startedAt": "2026-10-09T17:26:37.352Z",
+          "endedAt": "2026-10-09T17:27:02.531Z",
+          "status": "ok",
+          "runner": "direct",
+          "tokens": null,
+          "observation": {
+            "boundary": "local-process",
+            "requestCount": null
+          },
+          "purpose": "convert",
+          "feature": "scanned-textbook",
+          "budget": null,
+          "tokenUsage": null,
+          "appliedEffort": null,
+          "modelRequest": false
+        }
+      ],
+      "events": [
+        {
+          "eventId": "d32b325a-b421-455c-886e-385313e8cf43:d32979b7-7c74-4f58-83a9-71f894b9d99f:settled",
+          "type": "settled",
+          "at": "2026-10-09T17:27:02.535Z",
+          "status": "complete"
+        }
+      ],
+      "capabilities": {
+        "cancel": true,
+        "pauseMode": "unsupported",
+        "recoveryMode": "none",
+        "retry": true,
+        "set": false,
+        "executionModes": [
+          "direct"
+        ]
+      },
+      "runtime": {
+        "schemaVersion": 1,
+        "definitionVersion": 1,
+        "scopeId": "materials.v1",
+        "legacyId": "55a066fa-2d88-463d-b994-9d6fe0689a72",
+        "activeAttemptId": null,
+        "attempts": [
+          {
+            "jobId": "d32b325a-b421-455c-886e-385313e8cf43",
+            "attemptId": "d32979b7-7c74-4f58-83a9-71f894b9d99f",
+            "definitionVersion": 1,
+            "status": "complete",
+            "executor": {
+              "service": "dsh-jobs",
+              "handleId": "scanned-textbook-import-1",
+              "ownerAgentId": "session-acd047d4-f3c3-4ecf-8849-b4b406cfa7ff"
+            },
+            "policySnapshot": {},
+            "startedAt": "2026-10-09T17:26:37.351Z",
+            "finishedAt": "2026-10-09T17:27:02.534Z"
+          }
+        ],
+        "steps": [
+          {
+            "jobId": "d32b325a-b421-455c-886e-385313e8cf43",
+            "attemptId": "d32979b7-7c74-4f58-83a9-71f894b9d99f",
+            "stepKey": "parse-textbook",
+            "stepRunId": "a65f667c-2676-42b9-a0d1-8f26b80555ae",
+            "status": "complete"
+          }
+        ]
+      }
+    }
+  },
+  "document": {
+    "documentId": "visual-7e4c79bfc1ee40e43161ff21a7173e3e97fdeb898c3d780dc6cbe123ffc45263",
+    "revision": "visual1-336c4df87bb808ac958f33c7cb60fc9311dfdd0a20d3834a88cfdafa478a9a81",
+    "pages": 7
+  },
+  "assets": 4,
+  "preview": {
+    "asset": {
+      "assetId": "asset-039ca2e8451922514005d765e9f15c81ddd860661a25b9a84e8cea6c6b84b79a",
+      "hash": "039ca2e8451922514005d765e9f15c81ddd860661a25b9a84e8cea6c6b84b79a",
+      "bytes": 321720,
+      "mime": "image/png",
+      "kind": "page-preview",
+      "width": 1323,
+      "height": 1895,
+      "previewKey": "1:page:160",
+      "page": 1,
+      "originalHash": "7e4c79bfc1ee40e43161ff21a7173e3e97fdeb898c3d780dc6cbe123ffc45263"
+    },
+    "page": 1,
+    "originalPage": 200
+  },
+  "unauthorizedHttpStatus": 401,
+  "unauthorizedRejected": true,
+  "explanationJob": {
+    "contractVersion": 2,
+    "jobId": "87015d2a-f217-4ccb-9e2d-e7b84cfcb747",
+    "attemptId": "37d3b471-df82-445c-a365-0a8fbe73a9b5",
+    "kind": "scanned-textbook-explain",
+    "title": "教材图解",
+    "status": "complete",
+    "stage": {
+      "code": "complete",
+      "text": "已保存 3/3 组图解，等待人工核对"
+    },
+    "progress": {
+      "done": 3,
+      "total": 3,
+      "unit": "figure",
+      "percent": 100,
+      "segments": []
+    },
+    "actions": {
+      "cancel": {
+        "available": false,
+        "reason": {
+          "code": "job-ended"
+        }
+      },
+      "pause": {
+        "available": false,
+        "reason": {
+          "code": "job-ended"
+        },
+        "mode": "unsupported"
+      },
+      "resume": {
+        "available": false,
+        "reason": {
+          "code": "not-paused"
+        }
+      },
+      "retry": {
+        "available": false,
+        "reason": {
+          "code": "not-retryable"
+        }
+      },
+      "set": {
+        "available": false,
+        "reason": {
+          "code": "capability-unsupported"
+        }
+      }
+    },
+    "result": {
+      "refs": [
+        {
+          "kind": "document",
+          "id": "visual-7e4c79bfc1ee40e43161ff21a7173e3e97fdeb898c3d780dc6cbe123ffc45263"
+        }
+      ],
+      "completeness": "complete"
+    },
+    "error": null,
+    "usage": {
+      "tokens": 12966,
+      "tokenUsage": {
+        "uncachedInputTokens": 7140,
+        "outputTokens": 1858,
+        "cacheReadTokens": 3968,
+        "cacheWriteTokens": 0
+      },
+      "calls": 3
+    },
+    "execution": {
+      "mode": "subagent"
+    },
+    "detail": {
+      "visualExplanation": true,
+      "reviewRequired": true,
+      "legacy": {
+        "done": 3,
+        "total": 3
+      },
+      "usageIncomplete": false
+    },
+    "startedAt": "2026-10-09T17:27:05.234Z",
+    "finishedAt": "2026-10-09T17:27:23.715Z",
+    "calls": [
+      {
+        "callId": "833f0c05-8d60-4bdd-ad5b-28fd4e076533",
+        "jobId": "87015d2a-f217-4ccb-9e2d-e7b84cfcb747",
+        "attemptId": "37d3b471-df82-445c-a365-0a8fbe73a9b5",
+        "stepKey": "figure:bc7ce8dcae065b6d9730:0",
+        "stepRunId": "83cf695f-cbb0-449c-8c78-2489feebd7ad",
+        "kind": "figure-explanation",
+        "stage": "图解待核对",
+        "startedAt": "2026-10-09T17:27:05.328Z",
+        "firstOutputAt": "2026-10-09T17:27:07.764Z",
+        "endedAt": "2026-10-09T17:27:11.099Z",
+        "status": "ok",
+        "runner": "subagent",
+        "childId": "04086013-dfbd-4d1a-8182-f4f62d972012",
+        "parentId": "session-acd047d4-f3c3-4ecf-8849-b4b406cfa7ff",
+        "part": 1,
+        "parts": 3,
+        "tokens": 3992,
+        "observation": {
+          "boundary": "host-attempt",
+          "requestCount": null
+        },
+        "purpose": "figure-explanation",
+        "feature": "other",
+        "requestedEffort": "lowest",
+        "executionMode": "agent-preferred",
+        "budget": {
+          "timeoutMs": 180000,
+          "maxOutputTokens": 4000
+        },
+        "tokenUsage": {
+          "uncachedInputTokens": 3368,
+          "outputTokens": 624,
+          "cacheReadTokens": 0,
+          "cacheWriteTokens": 0
+        },
+        "appliedEffort": "off",
+        "modelRequest": true,
+        "selectedEffort": "off",
+        "accounting": "recorded"
+      },
+      {
+        "callId": "c2aaa5b2-1b7c-40cb-b475-e5a72fb478c3",
+        "jobId": "87015d2a-f217-4ccb-9e2d-e7b84cfcb747",
+        "attemptId": "37d3b471-df82-445c-a365-0a8fbe73a9b5",
+        "stepKey": "figure:8688d15ccfffe85a496d:1",
+        "stepRunId": "89117ab5-e4ba-4529-8265-292a57dad594",
+        "kind": "figure-explanation",
+        "stage": "图解待核对",
+        "startedAt": "2026-10-09T17:27:11.112Z",
+        "firstOutputAt": "2026-10-09T17:27:14.507Z",
+        "endedAt": "2026-10-09T17:27:16.436Z",
+        "status": "ok",
+        "runner": "subagent",
+        "childId": "4085103b-d6f5-4b43-a96b-0583fef4b2cb",
+        "parentId": "session-acd047d4-f3c3-4ecf-8849-b4b406cfa7ff",
+        "part": 2,
+        "parts": 3,
+        "tokens": 4499,
+        "observation": {
+          "boundary": "host-attempt",
+          "requestCount": null
+        },
+        "purpose": "figure-explanation",
+        "feature": "other",
+        "requestedEffort": "lowest",
+        "executionMode": "agent-preferred",
+        "budget": {
+          "timeoutMs": 180000,
+          "maxOutputTokens": 4000
+        },
+        "tokenUsage": {
+          "uncachedInputTokens": 1577,
+          "outputTokens": 362,
+          "cacheReadTokens": 2560,
+          "cacheWriteTokens": 0
+        },
+        "appliedEffort": "off",
+        "modelRequest": true,
+        "selectedEffort": "off",
+        "accounting": "recorded"
+      },
+      {
+        "callId": "1c9cd209-95a8-4850-b456-65873cf2d4b4",
+        "jobId": "87015d2a-f217-4ccb-9e2d-e7b84cfcb747",
+        "attemptId": "37d3b471-df82-445c-a365-0a8fbe73a9b5",
+        "stepKey": "figure:787669daab657dfbb0c0:2",
+        "stepRunId": "b6723c09-6ad2-425c-9292-89b4e5a02b0b",
+        "kind": "figure-explanation",
+        "stage": "图解待核对",
+        "startedAt": "2026-10-09T17:27:16.462Z",
+        "firstOutputAt": "2026-10-09T17:27:19.109Z",
+        "endedAt": "2026-10-09T17:27:23.703Z",
+        "status": "ok",
+        "runner": "subagent",
+        "childId": "d837b945-c82b-49fa-8bff-b2f9bdcf8e06",
+        "parentId": "session-acd047d4-f3c3-4ecf-8849-b4b406cfa7ff",
+        "part": 3,
+        "parts": 3,
+        "tokens": 4475,
+        "observation": {
+          "boundary": "host-attempt",
+          "requestCount": null
+        },
+        "purpose": "figure-explanation",
+        "feature": "other",
+        "requestedEffort": "lowest",
+        "executionMode": "agent-preferred",
+        "budget": {
+          "timeoutMs": 180000,
+          "maxOutputTokens": 4000
+        },
+        "tokenUsage": {
+          "uncachedInputTokens": 2195,
+          "outputTokens": 872,
+          "cacheReadTokens": 1408,
+          "cacheWriteTokens": 0
+        },
+        "appliedEffort": "off",
+        "modelRequest": true,
+        "selectedEffort": "off",
+        "accounting": "recorded"
+      }
+    ],
+    "events": [
+      {
+        "eventId": "87015d2a-f217-4ccb-9e2d-e7b84cfcb747:37d3b471-df82-445c-a365-0a8fbe73a9b5:settled",
+        "type": "settled",
+        "at": "2026-10-09T17:27:23.715Z",
+        "status": "complete"
+      }
+    ],
+    "capabilities": {
+      "cancel": true,
+      "pauseMode": "unsupported",
+      "recoveryMode": "none",
+      "retry": true,
+      "set": false,
+      "executionModes": [
+        "direct",
+        "subagent"
+      ]
+    },
+    "runtime": {
+      "schemaVersion": 1,
+      "definitionVersion": 1,
+      "scopeId": "materials.v1",
+      "legacyId": "eca7e4bd-5b05-4158-9be3-89db9a3a2f2a",
+      "activeAttemptId": null,
+      "attempts": [
+        {
+          "jobId": "87015d2a-f217-4ccb-9e2d-e7b84cfcb747",
+          "attemptId": "37d3b471-df82-445c-a365-0a8fbe73a9b5",
+          "definitionVersion": 1,
+          "status": "complete",
+          "executor": {
+            "service": "dsh-jobs",
+            "handleId": "scanned-textbook-explain-1",
+            "ownerAgentId": "session-acd047d4-f3c3-4ecf-8849-b4b406cfa7ff"
+          },
+          "policySnapshot": {},
+          "startedAt": "2026-10-09T17:27:05.234Z",
+          "finishedAt": "2026-10-09T17:27:23.714Z"
+        }
+      ],
+      "steps": [
+        {
+          "jobId": "87015d2a-f217-4ccb-9e2d-e7b84cfcb747",
+          "attemptId": "37d3b471-df82-445c-a365-0a8fbe73a9b5",
+          "stepKey": "figure:bc7ce8dcae065b6d9730:0",
+          "stepRunId": "83cf695f-cbb0-449c-8c78-2489feebd7ad",
+          "status": "complete"
+        },
+        {
+          "jobId": "87015d2a-f217-4ccb-9e2d-e7b84cfcb747",
+          "attemptId": "37d3b471-df82-445c-a365-0a8fbe73a9b5",
+          "stepKey": "figure:8688d15ccfffe85a496d:1",
+          "stepRunId": "89117ab5-e4ba-4529-8265-292a57dad594",
+          "status": "complete"
+        },
+        {
+          "jobId": "87015d2a-f217-4ccb-9e2d-e7b84cfcb747",
+          "attemptId": "37d3b471-df82-445c-a365-0a8fbe73a9b5",
+          "stepKey": "figure:787669daab657dfbb0c0:2",
+          "stepRunId": "b6723c09-6ad2-425c-9292-89b4e5a02b0b",
+          "status": "complete"
+        }
+      ]
+    }
+  },
+  "explanations": [
+    {
+      "schema": "studyhub-figure-explanation/v1",
+      "id": "93c139a6-5adf-4292-a19e-e2549419444d",
+      "documentId": "visual-7e4c79bfc1ee40e43161ff21a7173e3e97fdeb898c3d780dc6cbe123ffc45263",
+      "revision": "visual1-336c4df87bb808ac958f33c7cb60fc9311dfdd0a20d3834a88cfdafa478a9a81",
+      "manifestHash": "417f24232475e7f665fa15203ff728808ac9b19659a94dbc249547341e1e8edf",
+      "page": 1,
+      "originalPage": 200,
+      "blockIds": [
+        "p1-b2"
+      ],
+      "assetHashes": [
+        "85276dcecb1fd9bf5918a654dd8bd644800ef6e66f881ea2eb5d0a9d3ebe1841"
+      ],
+      "contextHash": "8b01a93903e2de2feecbd5e851076612a3790231d62a521fd4d62aec6fbc5530",
+      "fingerprint": "bc7ce8dcae065b6d9730dfd64290afddb9e77461289efc261c4147033385a43d",
+      "route": {
+        "provider": "deepseek-official",
+        "model": "deepseek-flash"
+      },
+      "requestedEffort": "lowest",
+      "text": "图中是一条由 N 个 NMOS 晶体管 M₁…M_N 串联构成的放电（下拉）链：M₁ 源极接地（GND），M₁ 漏极接 M₂ 源极，依次向上，M_N 漏极接输出端 Out；输出端并有负载电容 C_L 到地，各级中间节点分别接有对地电容 C₁、C₂、C₃……（图中标注为 C₁、C₂、C₃，与第 6.15 节讨论的中间节点寄生电容对应）。输入信号 In₁…In_N 分别接到各管的栅极。图中右侧给出尺寸关系 M₁ > M₂ > M₃ > M_N，即靠近输出（最靠近 C_L）的管子最小，靠近地端的 M₁ 最大，也就是从输出向地端逐级加大晶体管尺寸。其含义是：串联链中每个中间节点电容都要由下面的管子放电，越靠下端的管子承受的放电电荷越多，于是逐级加大尺寸可让各级“努力”相当，减小内部节点电容带来的额外负载，从而缩短整链延时。图中“C₁、C₂、C₃”与“C_L”为对地电容符号；OCR 上下文提到该图为“图6.14 在长的晶体管链中逐级加大晶体管的尺寸可以减少内部电容的额外负载”。就曲线坐标或表格而言：本图不含坐标曲线；本页相关的表 6.4（本征延时比 p：反相器 1、n 输入 NAND/NOR 为 n、n 路多路开关 2n、XOR/NXOR 为 n·2^(n−1)）与表 6.5（逻辑努力 g：反相器 1）说明按行（门类型）与列（输入数目 1、2、3、n）读取。阅读要点：节点 = 各串联管之间的中间节点及输出节点；连接 = 自上而下串联、栅极接输入、源端接地、输出带 C_L。",
+      "uncertainty": [
+        "图中只标出 C₁、C₂、C₃，但正文讨论涉及 N 级，C₄…C_(N-1) 是否以省略号表示需核对原图。",
+        "最上方 C_L 与 Out 的连接点是否还有额外器件（如 PMOS 上拉网络）在原图中被截断，无法确认。",
+        "尺寸关系标注为 M₁ > M₂ > M₃ > M_N，其中编号对应的是晶体管宽长比 W/L 还是仅指宽度，OCR 未说明。",
+        "图号与页码（图6.14、第182页）来自 OCR，可能与实际排版不一致，需核对。",
+        "表 6.5 的 OCR 只给出反相器一行，其余行列数据缺失，不能据此推断其他门的逻辑努力值。"
+      ],
+      "review": "pending",
+      "indexed": false,
+      "origin": "model",
+      "createdAt": "2026-10-09T17:27:11.100Z"
+    },
+    {
+      "schema": "studyhub-figure-explanation/v1",
+      "id": "b96e838a-5fd0-4833-b19f-625c2c6b9fb2",
+      "documentId": "visual-7e4c79bfc1ee40e43161ff21a7173e3e97fdeb898c3d780dc6cbe123ffc45263",
+      "revision": "visual1-336c4df87bb808ac958f33c7cb60fc9311dfdd0a20d3834a88cfdafa478a9a81",
+      "manifestHash": "417f24232475e7f665fa15203ff728808ac9b19659a94dbc249547341e1e8edf",
+      "page": 2,
+      "originalPage": 201,
+      "blockIds": [
+        "p2-b9"
+      ],
+      "assetHashes": [
+        "889fc90e9f0c56399738d6af0e2afb5fd4962135d479c56e09c79afbe6b59e80"
+      ],
+      "contextHash": "5ea86f55f16a188ad925168df7c052f3d1a724bf48b48c29a43a72a0cceb1732",
+      "fingerprint": "8688d15ccfffe85a496d407ba056e4a1752799955a90b34e747672fc7fa9d417",
+      "route": {
+        "provider": "deepseek-official",
+        "model": "deepseek-flash"
+      },
+      "requestedEffort": "lowest",
+      "text": "图中是表6.4「不同逻辑类型本征延时的估计」，两列结构：左列「门的类型」，右列「P」（本征延时相对于反相器的比值）。各行对应关系为：反相器 P=1；n 输入的 NAND，P=n；n 输入的 NOR，P=n；n 路多路开关（多路选择器），P=2n；XOR/NXOR，P=n·2^(n-1)。表下文字说明该估计假设简单版图样式、固定 PMOS-NMOS 比，并忽略内部节点电容等二次效应。结合正文公式(6.6) t_p = t_p0(p + gf/γ)，p 即本征延时项系数，与门拓扑结构和版图有关：多输入门结构越复杂，本征延时相对反相器越大，所以 NAND/NOR 随输入数线性增长，XOR 增长最快。需注意表6.4与后续表6.5（逻辑努力 g）是不同参数，不要混用；图中 P 值未给出推导过程，属经验估计。",
+      "uncertainty": [
+        "图中 P 列数值仅凭 OCR 与图像读取，符号 n2^(n-1) 的上标是否为 n-1 需以原书核对",
+        "表头列名是否还有被裁掉的第三列（如 NOR/XOR 的分列数值）无法确认",
+        "图注/表注中的「固定 PMOS-NMOS 比」具体数值原文未在表内给出，需核对正文",
+        "本图是否为完整表格（是否含续表部分，如 NAND/NOR 的各输入数列）需核对原页"
+      ],
+      "review": "pending",
+      "indexed": false,
+      "origin": "model",
+      "createdAt": "2026-10-09T17:27:16.439Z"
+    },
+    {
+      "schema": "studyhub-figure-explanation/v1",
+      "id": "6a9dbd73-4eb7-4953-a81d-7b87b9574708",
+      "documentId": "visual-7e4c79bfc1ee40e43161ff21a7173e3e97fdeb898c3d780dc6cbe123ffc45263",
+      "revision": "visual1-336c4df87bb808ac958f33c7cb60fc9311dfdd0a20d3834a88cfdafa478a9a81",
+      "manifestHash": "417f24232475e7f665fa15203ff728808ac9b19659a94dbc249547341e1e8edf",
+      "page": 7,
+      "originalPage": 206,
+      "blockIds": [
+        "p7-b9"
+      ],
+      "assetHashes": [
+        "76634928945610e8374ccc9f6ae2784c81ad924fb770f5cd8e557d1410a5aa36"
+      ],
+      "contextHash": "83ba2b910d770dedc10e17aba4fbb49ccb10a99970764733a81864c29f4e6103",
+      "fingerprint": "787669daab657dfbb0c0fefcb2c4439f3a80d05032667ccacd49e45825439694",
+      "route": {
+        "provider": "deepseek-official",
+        "model": "deepseek-flash"
+      },
+      "requestedEffort": "lowest",
+      "text": "这是一幅三维曲面图（图6.20），出自《数字集成电路——电路、系统与设计》第6章，用来展示两输入静态CMOS NOR门的输出翻转概率 α₀→₁ 与两个输入信号为1的概率 p_A、p_B 之间的关系。\n\n坐标含义：竖直轴标注 α，即0→1翻转概率（也就是功耗公式 α₀→₁C_LV²_DD f 中的活动性因子），刻度可见 0、0.1、0.2，曲面最高处约0.2稍多；水平轴有两条，分别标注 P_A 和 P_B，即输入A、B为逻辑1的概率，两条轴刻度均为0、0.2、0.4、0.6、0.8、1，构成 p_A-p_B 平面（0到1的单位正方形）。网格线的疏密代表曲面被剖分的采样密度，不是数据。\n\n曲面形态：整体像一块被掀起的“帐篷布”。在原点 (p_A=0, p_B=0) 附近曲面最低，α≈0；沿两条轴分别抬升，在 (p_A=1, p_B=0) 和 (p_A=0, p_B=1) 两处出现较低的高点；而在对角顶点 (p_A=1, p_B=1) 处曲面又回到 α≈0。最高峰位于 p_A、p_B 大约都在0.2~0.5之间的中部偏左区域，峰高略高于0.2。\n\n物理对应：这来自公式 (6.23) α₀→₁=[1-(1-p_A)(1-p_B)](1-p_A)(1-p_B)，即 p₀·p₁。只有当输出“上周期为0、下周期为1”两种情况概率都不为零时才有翻转，所以曲面在四个角落被压到零。当任一输入概率被固定在0附近时，曲面退化为反相器情形的单峰曲线——图中沿 p_A=0 或 p_B=0 边缘的一维剖面即可看到这一点。图形给出的结论是：翻转活动性强烈依赖于输入信号统计特性，合理设计信号概率可显著降低动态功耗。\n\n与OCR的对应关系：文中“图6.20显示了翻转概率与 p_a 和 p_b 的关系”以及表6.6（NOR真值表，N₀=1，N₁=3，均匀分布下 α=3/16≈0.1875）可与此图的峰值量级相互佐证——0.1875与图中最高处略高于0.2（目测网格与刻度）大致吻合。\n\n不确定之处见 uncertainty 字段。",
+      "uncertainty": [
+        "竖直轴 α 的刻度数字仅能辨认 0、0.1、0.2，更高的刻度及曲面峰值精确数值无法从图中读出，峰值是否恰为均匀分布下的 3/16≈0.1875 不能确认。",
+        "两条水平轴到底哪条是 P_A、哪条是 P_B 从图像（透视投影、右前方轴标签与数字 0~1 的归属）不易唯一判定，OCR 未给出轴对应关系的文字说明。",
+        "图中 p_A、p_B 轴刻度标号 0.2/0.4/0.6/0.8 与轴线的对应（是否有位置偏移或透视角导致的错位）需对照原书页面核对。",
+        "图中央偏左有一个孤立小点，性质不明（可能为扫描噪点或标记），不作为数据解读。",
+        "OCR 公式 (6.21) 中写作 N 而非 N₀（分子 N₀·(2^N−N)），疑为 OCR 误识，应为 N₀；最终数值 3/16 与正确表达式一致，但公式文本需回原文核对。",
+        "OCR 文本在页末“信号间的相关性……更”处中断，图6.20 后续讨论内容本页未见，相关结论未纳入。"
+      ],
+      "review": "pending",
+      "indexed": false,
+      "origin": "model",
+      "createdAt": "2026-10-09T17:27:23.705Z"
+    }
+  ],
+  "reusedJob": {
+    "contractVersion": 2,
+    "jobId": "a4bc83e8-adf4-4cc5-b3be-c650d70ba5f2",
+    "attemptId": "823985f6-7fbf-4c97-8781-d5ffd119ba56",
+    "kind": "scanned-textbook-explain",
+    "title": "教材图解",
+    "status": "complete",
+    "stage": {
+      "code": "complete",
+      "text": "已保存 3/3 组图解，等待人工核对"
+    },
+    "progress": {
+      "done": 3,
+      "total": 3,
+      "unit": "figure",
+      "percent": 100,
+      "segments": []
+    },
+    "actions": {
+      "cancel": {
+        "available": false,
+        "reason": {
+          "code": "job-ended"
+        }
+      },
+      "pause": {
+        "available": false,
+        "reason": {
+          "code": "job-ended"
+        },
+        "mode": "unsupported"
+      },
+      "resume": {
+        "available": false,
+        "reason": {
+          "code": "not-paused"
+        }
+      },
+      "retry": {
+        "available": false,
+        "reason": {
+          "code": "not-retryable"
+        }
+      },
+      "set": {
+        "available": false,
+        "reason": {
+          "code": "capability-unsupported"
+        }
+      }
+    },
+    "result": {
+      "refs": [
+        {
+          "kind": "document",
+          "id": "visual-7e4c79bfc1ee40e43161ff21a7173e3e97fdeb898c3d780dc6cbe123ffc45263"
+        }
+      ],
+      "completeness": "complete"
+    },
+    "error": null,
+    "usage": {
+      "tokens": null,
+      "tokenUsage": null,
+      "calls": null
+    },
+    "execution": {
+      "mode": null
+    },
+    "detail": {
+      "visualExplanation": true,
+      "reviewRequired": true,
+      "legacy": {
+        "done": 3,
+        "total": 3
+      }
+    },
+    "startedAt": "2026-10-09T17:27:24.067Z",
+    "finishedAt": "2026-10-09T17:27:24.103Z",
+    "calls": [
+      {
+        "callId": "174aaa57-62e7-4c6a-b5fc-d0168a09fd96",
+        "jobId": "a4bc83e8-adf4-4cc5-b3be-c650d70ba5f2",
+        "attemptId": "823985f6-7fbf-4c97-8781-d5ffd119ba56",
+        "stepKey": "figure:bc7ce8dcae065b6d9730:0",
+        "stepRunId": "6707a382-6e12-45a9-af74-46c88a03a4e8",
+        "kind": "figure-explanation",
+        "stage": "图解待核对",
+        "startedAt": null,
+        "endedAt": null,
+        "status": "skipped",
+        "runner": "saved",
+        "part": 1,
+        "parts": 3,
+        "tokens": null,
+        "reason": "matching-explanation-version",
+        "observation": {
+          "boundary": "legacy",
+          "requestCount": null
+        },
+        "purpose": "figure-explanation",
+        "feature": "other",
+        "requestedEffort": "lowest",
+        "executionMode": "agent-preferred",
+        "budget": {
+          "timeoutMs": 180000,
+          "maxOutputTokens": 4000
+        },
+        "reused": true,
+        "appliedEffort": null,
+        "tokenUsage": null,
+        "modelRequest": false
+      },
+      {
+        "callId": "a59042de-c1a5-4a87-8b92-b0fd5569e228",
+        "jobId": "a4bc83e8-adf4-4cc5-b3be-c650d70ba5f2",
+        "attemptId": "823985f6-7fbf-4c97-8781-d5ffd119ba56",
+        "stepKey": "figure:8688d15ccfffe85a496d:1",
+        "stepRunId": "585ef977-9755-4e45-ae55-9c30dd649b1f",
+        "kind": "figure-explanation",
+        "stage": "图解待核对",
+        "startedAt": null,
+        "endedAt": null,
+        "status": "skipped",
+        "runner": "saved",
+        "part": 2,
+        "parts": 3,
+        "tokens": null,
+        "reason": "matching-explanation-version",
+        "observation": {
+          "boundary": "legacy",
+          "requestCount": null
+        },
+        "purpose": "figure-explanation",
+        "feature": "other",
+        "requestedEffort": "lowest",
+        "executionMode": "agent-preferred",
+        "budget": {
+          "timeoutMs": 180000,
+          "maxOutputTokens": 4000
+        },
+        "reused": true,
+        "appliedEffort": null,
+        "tokenUsage": null,
+        "modelRequest": false
+      },
+      {
+        "callId": "006b61b4-ea6b-4ac0-98b3-bf966690ad4f",
+        "jobId": "a4bc83e8-adf4-4cc5-b3be-c650d70ba5f2",
+        "attemptId": "823985f6-7fbf-4c97-8781-d5ffd119ba56",
+        "stepKey": "figure:787669daab657dfbb0c0:2",
+        "stepRunId": "4afa8df3-a7bf-40be-8644-05c6f66cc588",
+        "kind": "figure-explanation",
+        "stage": "图解待核对",
+        "startedAt": null,
+        "endedAt": null,
+        "status": "skipped",
+        "runner": "saved",
+        "part": 3,
+        "parts": 3,
+        "tokens": null,
+        "reason": "matching-explanation-version",
+        "observation": {
+          "boundary": "legacy",
+          "requestCount": null
+        },
+        "purpose": "figure-explanation",
+        "feature": "other",
+        "requestedEffort": "lowest",
+        "executionMode": "agent-preferred",
+        "budget": {
+          "timeoutMs": 180000,
+          "maxOutputTokens": 4000
+        },
+        "reused": true,
+        "appliedEffort": null,
+        "tokenUsage": null,
+        "modelRequest": false
+      }
+    ],
+    "events": [
+      {
+        "eventId": "a4bc83e8-adf4-4cc5-b3be-c650d70ba5f2:823985f6-7fbf-4c97-8781-d5ffd119ba56:settled",
+        "type": "settled",
+        "at": "2026-10-09T17:27:24.103Z",
+        "status": "complete"
+      }
+    ],
+    "capabilities": {
+      "cancel": true,
+      "pauseMode": "unsupported",
+      "recoveryMode": "none",
+      "retry": true,
+      "set": false,
+      "executionModes": [
+        "direct",
+        "subagent"
+      ]
+    },
+    "runtime": {
+      "schemaVersion": 1,
+      "definitionVersion": 1,
+      "scopeId": "materials.v1",
+      "legacyId": "7470cb43-904b-4381-a294-153bb7711bd0",
+      "activeAttemptId": null,
+      "attempts": [
+        {
+          "jobId": "a4bc83e8-adf4-4cc5-b3be-c650d70ba5f2",
+          "attemptId": "823985f6-7fbf-4c97-8781-d5ffd119ba56",
+          "definitionVersion": 1,
+          "status": "complete",
+          "executor": {
+            "service": "dsh-jobs",
+            "handleId": "scanned-textbook-explain-2",
+            "ownerAgentId": "session-acd047d4-f3c3-4ecf-8849-b4b406cfa7ff"
+          },
+          "policySnapshot": {},
+          "startedAt": "2026-10-09T17:27:24.067Z",
+          "finishedAt": "2026-10-09T17:27:24.102Z"
+        }
+      ],
+      "steps": [
+        {
+          "jobId": "a4bc83e8-adf4-4cc5-b3be-c650d70ba5f2",
+          "attemptId": "823985f6-7fbf-4c97-8781-d5ffd119ba56",
+          "stepKey": "figure:bc7ce8dcae065b6d9730:0",
+          "stepRunId": "6707a382-6e12-45a9-af74-46c88a03a4e8",
+          "status": "complete"
+        },
+        {
+          "jobId": "a4bc83e8-adf4-4cc5-b3be-c650d70ba5f2",
+          "attemptId": "823985f6-7fbf-4c97-8781-d5ffd119ba56",
+          "stepKey": "figure:8688d15ccfffe85a496d:1",
+          "stepRunId": "585ef977-9755-4e45-ae55-9c30dd649b1f",
+          "status": "complete"
+        },
+        {
+          "jobId": "a4bc83e8-adf4-4cc5-b3be-c650d70ba5f2",
+          "attemptId": "823985f6-7fbf-4c97-8781-d5ffd119ba56",
+          "stepKey": "figure:787669daab657dfbb0c0:2",
+          "stepRunId": "4afa8df3-a7bf-40be-8644-05c6f66cc588",
+          "status": "complete"
+        }
+      ]
+    }
+  },
+  "ocrUnchanged": true,
+  "ok": true,
+  "finishedAt": "2026-10-09T17:27:25.178Z"
+}

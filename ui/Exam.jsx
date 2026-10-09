@@ -20,6 +20,7 @@ import { DEFAULT_COUNT, cardKindName, clampCount, picksFromRun, typeAvailableOf,
 import WrittenSetup from './exam/WrittenSetup.jsx';
 import WrittenReport from './exam/WrittenReport.jsx';
 import { useStudy } from './study-context.jsx';
+import QuestionImages from './scanned/QuestionImages.jsx';
 
 /* 模拟考试（v0.4 契约 §3）：选择题笔试。生命周期（setup → running → report、恢复、交卷、计时）在
    ui/exam/useExamRun.js，三种考试形式共用；这里只管作答界面和各形式的外壳。
@@ -269,6 +270,7 @@ export default function Exam({ data, onExit, onCreate, onCreateCase, onStartRun,
             </div>
             <div className="exam-prompt">
               <Markdown text={run.card.prompt} links={false} />
+              <QuestionImages citations={run.card.visualCitations} />
             </div>
             <div className="exam-options">
               {(run.card.options || []).map((o, i) => {

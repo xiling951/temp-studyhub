@@ -12,6 +12,7 @@ import ModelSetupGate from './ModelSetupGate.jsx';
 import { NO_FILTER, RECS_PREVIEW, STATUS_KINDS, VARIANT_BATCH_CAP, deckChoices, filterActive, filterRows, groupRows, groupSummaryText, readGroupBy, readOpenGroups, reasonText, retrainOptions,
   sameVariantState, saveGroupBy, saveOpenGroups, scopedFilter, shortDeckNames, statusCounts, statusLabel, statusOf, variantFailureText, variantState } from './wrongbook-model.js';
 import { useStudy } from './study-context.jsx';
+import QuestionImages from './scanned/QuestionImages.jsx';
 import { setQueryData, useHostQuery } from './host-query.js';
 
 // One page of this view holds ten pages of the service (which gives at most 100), so a filter sees every mistake of a normal library.
@@ -109,6 +110,7 @@ function DetailLine({ label, children }) {
 function RowDetail({ id, item, detail, variants, recs, shortName, onPractice, disabled }) {
   return (
     <div className="wb-detail" id={id}>
+      {detail?.visualCitations && <QuestionImages citations={detail.visualCitations} />}
       {detail === "loading" || detail === undefined ? <LoadingState label={ui("正在读取详情…")} />
         : detail?.error ? <InlineMessage tone="error">{ui("读取详情失败，稍后再试")}</InlineMessage>
           : (

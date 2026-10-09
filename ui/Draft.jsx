@@ -23,6 +23,7 @@ import { useCoverage } from "./coverage/use-coverage.js";
 import { modelReadiness } from "./generation-status.js";
 import { coverageGroups, coverageUnit } from "./coverage-groups.js";
 import LocalImagePicker from './LocalImagePicker.jsx';
+import QuestionImages from './scanned/QuestionImages.jsx';
 import { useStudy } from "./study-context.jsx";
 import { useSciencePreferences } from './SciencePreferences.jsx';
 import { DraftPartLine, NEW_DECK, PartTargetChoice, defaultPartTarget, partTargets } from './DraftPart.jsx';
@@ -189,6 +190,10 @@ export default function Draft({
             act("draft.save", { deck: d }, openDraft);
           }}
         >{ui("保存并校验")}</Button>
+        {draft.cards.some(card => card.visualCitations?.length) && <Button
+          disabled={busy || updatingDraft || staleDraft || missingDraft || unsavedDraft}
+          onClick={() => act('generation.visual.review', { draftId: draft.id, draftVersion: draft.draftVersion }, () => toast.success('已提交独立图片复审；请在任务页查看结果，完成后载入最新草稿。'))}
+        >独立图片复审</Button>}
         <Button variant="primary"
           disabled={busy || updatingDraft || staleDraft || missingDraft || activeReview}
           title={activeReview ? ui("先完成或结束原题组的学习") : undefined}
@@ -392,6 +397,7 @@ export default function Draft({
                 />
               </label>
               {science.localImages && <LocalImagePicker key={JSON.stringify([data.root, draft.id, q.id, 'prompt'])} disabled={busy} onInsert={markdown => appendImage(q.id, 'prompt', markdown)} />}
+              <QuestionImages citations={q.visualCitations} />
               <div className="two-col">
                 <label>{ui("主题")}<input
                     value={q.topic}

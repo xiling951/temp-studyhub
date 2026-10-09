@@ -4,6 +4,7 @@ import { Button, Dialog, InlineMessage } from '../components/index.js';
 import { readVisualAsset, downloadVisualAsset, downloadVisualArchive } from './asset.js';
 import VisualTable from './VisualTable.jsx';
 import VisualExplanations from './VisualExplanations.jsx';
+import VisualQuestions from './VisualQuestions.jsx';
 
 export function VisualImage({ call, scope, asset, caption, onOpen }) {
   const element = useRef(null), [url, setUrl] = useState(''), [error, setError] = useState('');
@@ -59,6 +60,7 @@ export default function VisualReader({ document, call, initialPage = 1 }) {
         {!block.assetId && block.captions.map((caption, index) => <Markdown key={index} text={caption.text} />)}
         {block.quality === 'original-page-fallback' && <Button size="sm" onClick={preview}>查看未解析区域的原页</Button>}
       </article>)}
+      <VisualQuestions key={`${scope.documentId}:${scope.revision}:${page}`} call={call} scope={scope} blocks={value.page.blocks} />
       <VisualExplanations call={call} scope={scope} page={page} pageCount={document.visual.pageCount} />
     </>}
     {zoom && <Dialog title={zoom.title || '教材原图'} onClose={() => setZoom(null)}><Button size="sm" onClick={() => { setZoom(null); void preview(); }}>定位原页</Button><img src={zoom.url} alt={zoom.title || '教材原图'} style={{ maxWidth: '100%', height: 'auto' }} /></Dialog>}

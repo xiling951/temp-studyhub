@@ -11,6 +11,7 @@ import { ExamSetupCard, CountField } from './ExamShell.jsx';
 import { modelReadiness } from './generation-status.js';
 import { useExamRun } from './exam/useExamRun.js';
 import { useStudy } from './study-context.jsx';
+import QuestionImages from './scanned/QuestionImages.jsx';
 
 /* 口头面试：lifecycle (restore, submit, report) in ui/exam/useExamRun.js; this file keeps the answering UI and the
    answer drafts the browser holds while the learner types. */
@@ -124,6 +125,7 @@ export default function OralExam({ data, onExit, onStartRun, initialRunId, onLoc
       <Panel className="oral-question">
         <Badge tone="info">{run.entry.topic}</Badge>
         <div className="oral-prompt"><Markdown text={run.entry.prompt} links={false} /></div>
+        <QuestionImages citations={run.entry.visualCitations} />
         {run.entry.options?.length > 0 && <details><summary>{ui("查看题目选项")}</summary><ul>
           {run.entry.options.map((option) => <li key={option.id}><Markdown text={option.text} links={false} /></li>)}
         </ul></details>}
@@ -165,6 +167,7 @@ export default function OralExam({ data, onExit, onStartRun, initialRunId, onLoc
         {report.entries.map((entry, index) => <article key={`${entry.deckId}:${entry.cardId}`} className="oral-report-entry">
           <strong>{index + 1}. {entry.topic} · {entry.assessment ? ui(bandName[entry.assessment.band]) : ui("未评估")}</strong>
           <Markdown text={entry.prompt} links={false} />
+          <QuestionImages citations={entry.visualCitations} />
           <p>{ui("你的回答：")}{entry.answer || ui("未答")}</p>
           {entry.followup && <p>{ui("追问：")}{entry.followup}<br />{ui("补充回答：")}{entry.followupAnswer || ui("未答")}</p>}
           {entry.assessment?.reason && <p>{ui("反馈：")}{entry.assessment.reason}</p>}

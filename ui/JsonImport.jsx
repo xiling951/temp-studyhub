@@ -55,7 +55,7 @@ export default function JsonImport({ data, openDraft }) {
         finally { setProposing(false); }
       } else act("draft.import", { text, title: proposal.title, course: proposal.course,
         ...(merge && proposal.mergeTargetId ? { mergeTargetId: proposal.mergeTargetId } : {}) }, (deck) => {
-          toast.success(uiFormat("已导入「{0}」共 {1} 题。可检查后直接发布。",[deck.title,deck.cards.length]));
+          toast.success(deck.cards.some(card => card.visualCitations?.length) ? '带图题已导入草稿；请先独立图片复审，再检查并发布。' : uiFormat("已导入「{0}」共 {1} 题。可检查后直接发布。",[deck.title,deck.cards.length]));
           openDraft(deck);
         });
     }}>

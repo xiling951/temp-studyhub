@@ -25,6 +25,7 @@ import DailyRecap from './DailyRecap.jsx';
 import { Badge, Banner, Button, Chip, Icon, InlineMessage, PageHeader, Popover, ProgressBar, SegmentedControl, Spinner, Tooltip } from "./components/index.js";
 import { uiRich } from "./i18n-rich.jsx";
 import { useStudy } from "./study-context.jsx";
+import QuestionImages from './scanned/QuestionImages.jsx';
 import { HELP_CHOICES, IMPROVE_SUGGESTIONS } from "./agent-prompts/card.js";
 import { weakTopicsPrompt } from "./agent-prompts/library.js";
 import { fixSuggestionFor } from "./card-fix.js";
@@ -417,6 +418,7 @@ export default function Review({ session, data, shellTitle, feedback, coachProps
               </div>
               <ProgressBar size="sm" className="card-progress" label={ui("复习进度")} value={run.index + 1} max={Math.max(1, run.total)} />
               {(choice || isCloze || run.card.publicationUngrable) && prereqStrip}
+              <QuestionImages citations={run.card.visualCitations} />
               {run.card.publicationUngrable ? (
                 <Banner tone="warning" role="status" className="review-ungrable"
                   action={{ label: ui("跳过此题，不计成绩 →"), variant: "primary", disabled: busy, onClick: () => reviewAct("review.skip") }}

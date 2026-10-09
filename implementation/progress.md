@@ -39,3 +39,5 @@
 - T09 源码提交：36f504ad。
 - 下一步：T10 visualCitations、独立图片审阅和带图题全链路，再继续 T11/T12；开发与隔离验收通过后进行获授权的正式 Desktop 实测。
 - GitHub 交付目标：https://github.com/xiling951/temp-studyhub；仓库当前为空且公开，仅提交源码、进度和必要测试记录，教材 PDF/扫描图/凭据留在本机。
+- GitHub 已推送 main：c827109e（包含截至 T09 的源码历史与证据）。Desktop 快捷方式已确认指向 D:/studyhub/start-dsh-desktop.cmd；此步仅只读检查，未重启/替换 Desktop。
+- T10 进行中：已增加严格 visualCitations DTO、实际文档/页/块/区域/资产校验、独立复审记录绑定与 publicCard 原图投影；普通原文引用不放宽，JSON 标记不能豁免视觉证据。14 项新增相关测试及 100 项引用/题库/发布回归通过，evidence/t10-citations-tests.log、t10-citations-regression.log。模型生成/发布接线及全部练习显示尚未完成，不能标记 T10 通过。

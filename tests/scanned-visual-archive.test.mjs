@@ -33,6 +33,8 @@ test('textbook export contains actual original/images/offline math; full archive
   const pdf = await PDFDocument.create(); pdf.addPage([300, 400]); const path = join(root, 'fixture.pdf'); await writeFile(path, await pdf.save());
   const imported = await importVisualPdf({ root, path, name: '教材.pdf', read: () => runtime.storage.read(), update: fn => runtime.storage.update(fn),
     parse: async () => ({ pages: [{ page_idx: 0, blocks: [{ type: 'equation', content: 'E=mc^2', bbox: [0.1, 0.1, 0.8, 0.3] }] }] }) });
+  const notes = [{ id: 'fixture-pending', text: 'Synthetic pending model note', review: 'pending', indexed: false }, { id: 'fixture-correction', supersedes: 'fixture-pending', text: 'Synthetic human correction', review: 'verified', indexed: true }];
+  await runtime.storage.update(state => { state.documents.find(document => document.id === imported.documentId).versions[0].visual.explanations = notes; });
   const old = await runtime.call('materials.document.import', { filename: 'old.txt', dataBase64: Buffer.from('old exact citation').toString('base64') });
   const review = { repetitions: 3, interval_days: 18, ease_factor: 2.4, due_at: '2026-10-20T12:00:00.000Z' };
   await runtime.storage.update(state => state.decks.push({ id: 'old-deck', title: 'Old deck', cards: [{ id: 'old-card', kind: 'flashcard', question: 'Q', answer: 'A', citations: [{ sourceId: old.sourceIds[0], quote: 'old exact citation' }], review }] }));
@@ -44,6 +46,7 @@ test('textbook export contains actual original/images/offline math; full archive
   const backup = await runtime.call('library.visualBackup.export'), bytes = await download(runtime, backup), uploadId = await upload(destination.runtime, bytes);
   await destination.runtime.call('library.visualBackup.restore', { uploadId });
   const restored = await destination.runtime.storage.read(); assert.deepEqual(restored.decks[0].cards[0].review, review);
+  assert.deepEqual(restored.documents.find(document => document.id === imported.documentId).versions[0].visual.explanations, notes, 'independent explanations and human history survive a full backup');
   const original = await destination.runtime.call('materials.document.bytes', { documentId: old.documentId });
   assert.equal(Buffer.from(original.dataBase64, 'base64').toString(), 'old exact citation');
   assert.equal((await destination.runtime.call('materials.visual.page', { documentId: imported.documentId, page: 1 })).assets.length, 1);

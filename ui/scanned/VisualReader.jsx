@@ -3,6 +3,7 @@ import Markdown from '../Markdown.jsx';
 import { Button, Dialog, InlineMessage } from '../components/index.js';
 import { readVisualAsset, downloadVisualAsset, downloadVisualArchive } from './asset.js';
 import VisualTable from './VisualTable.jsx';
+import VisualExplanations from './VisualExplanations.jsx';
 
 export function VisualImage({ call, scope, asset, caption, onOpen }) {
   const element = useRef(null), [url, setUrl] = useState(''), [error, setError] = useState('');
@@ -46,7 +47,7 @@ export default function VisualReader({ document, call, initialPage = 1 }) {
       <Button size="sm" onClick={() => downloadVisualAsset(call, scope, document.visual.original, document.filename).catch(error => setError(error.message))}>保存原 PDF</Button>
       <Button size="sm" onClick={() => downloadVisualArchive(call, 'materials.visual.export', scope, 'textbook.zip').catch(error => setError(error.message))}>导出图文教材</Button>
     </div>
-    <p>图文已保存 · OCR 与图像内容待核对 · 图像解释尚未执行</p>
+    <p>图文已保存 · OCR 与图像内容待核对</p>
     {error && <InlineMessage tone="error">{error}</InlineMessage>}
     {!value && !error && <p role="status">加载当前页…</p>}
     {value && <>
@@ -58,6 +59,7 @@ export default function VisualReader({ document, call, initialPage = 1 }) {
         {!block.assetId && block.captions.map((caption, index) => <Markdown key={index} text={caption.text} />)}
         {block.quality === 'original-page-fallback' && <Button size="sm" onClick={preview}>查看未解析区域的原页</Button>}
       </article>)}
+      <VisualExplanations call={call} scope={scope} page={page} pageCount={document.visual.pageCount} />
     </>}
     {zoom && <Dialog title={zoom.title || '教材原图'} onClose={() => setZoom(null)}><Button size="sm" onClick={() => { setZoom(null); void preview(); }}>定位原页</Button><img src={zoom.url} alt={zoom.title || '教材原图'} style={{ maxWidth: '100%', height: 'auto' }} /></Dialog>}
   </section>;

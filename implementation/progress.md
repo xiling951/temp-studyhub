@@ -41,3 +41,5 @@
 - GitHub 交付目标：https://github.com/xiling951/temp-studyhub；仓库当前为空且公开，仅提交源码、进度和必要测试记录，教材 PDF/扫描图/凭据留在本机。
 - GitHub 已推送 main：c827109e（包含截至 T09 的源码历史与证据）。Desktop 快捷方式已确认指向 D:/studyhub/start-dsh-desktop.cmd；此步仅只读检查，未重启/替换 Desktop。
 - T10 进行中：已增加严格 visualCitations DTO、实际文档/页/块/区域/资产校验、独立复审记录绑定与 publicCard 原图投影；普通原文引用不放宽，JSON 标记不能豁免视觉证据。14 项新增相关测试及 100 项引用/题库/发布回归通过，evidence/t10-citations-tests.log、t10-citations-regression.log。模型生成/发布接线及全部练习显示尚未完成，不能标记 T10 通过。
+- T10 证据校验源码提交并推送：8aa8e080。
+- T10 发布边界接线：常规/快速/计划发布重新核验真实资产，事务内检查文档拥有的独立审核记录；bank.append 在协调锁内核验。带图 JSON 保留引用并成为待复审草稿，不信任导入的已核对标记，也不静默丢弃错误文字引用。104 项相关测试通过，evidence/t10-publication-tests.log；批准发布与审核记录均采用明确的合成测试，真实带图模型出题/审阅和练习界面尚未验收。

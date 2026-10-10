@@ -1,0 +1,9 @@
+{
+  "originalTag": "v3.3.0",
+  "fullBookDocuments": 1,
+  "ocrSources": 1142,
+  "versions": 2,
+  "visualMetadataRetained": true,
+  "oldCodeReadsActualBookOcr": true,
+  "claim": "旧构建读取真实OCR元数据；未宣称旧界面支持新图片或带图题"
+}

@@ -1,0 +1,186 @@
+{
+  "customVersion": "3.3.0-scanned.2",
+  "actualDesktopShortcut": "C:/Users/Lenovo/Desktop/DSH Desktop.lnk",
+  "root": "D:/studyhub/libraries/数字集成电路-图文",
+  "document": {
+    "id": "visual-1bee28d307564671e604d8a85860aecc53099221044046e16ad264b21fb8c358",
+    "revision": "visual1-eadf9e35e97d57c70945ae7257c70f6568ddb45b36924f3365997cec481d85b6",
+    "pages": 572,
+    "assetsVerified": 1321
+  },
+  "original": {
+    "hash": "1bee28d307564671e604d8a85860aecc53099221044046e16ad264b21fb8c358",
+    "bytes": 198094368,
+    "mtimeMs": 1790417277779.4038,
+    "mtimeUnchanged": true
+  },
+  "importJob": {
+    "status": "complete",
+    "reusedVerifiedImport": true
+  },
+  "model": {
+    "provider": "deepseek-official",
+    "id": "deepseek-flash",
+    "label": "DeepSeek · DeepSeek-V41-Flash",
+    "effort": "off",
+    "credentialSource": "native-file"
+  },
+  "firstDraftRejected": true,
+  "correction": {
+    "by": "implementation-agent",
+    "originalImageInspected": true,
+    "changes": [
+      "补齐开放题评分标准",
+      "明确初始电荷与开路条件",
+      "移除模型伪造文字ID，保留真实纯图片证据",
+      "区分静态、充放电与可能直通功耗"
+    ],
+    "draftVersion": 2
+  },
+  "independentReviews": 4,
+  "calls": [
+    {
+      "stage": "visual-plan",
+      "runner": "subagent",
+      "status": "ok",
+      "tokens": 5141,
+      "tokenUsage": {
+        "uncachedInputTokens": 4736,
+        "outputTokens": 405,
+        "cacheReadTokens": 0,
+        "cacheWriteTokens": 0
+      },
+      "accounting": "recorded",
+      "appliedEffort": "off"
+    },
+    {
+      "stage": "visual-answers",
+      "runner": "subagent",
+      "status": "ok",
+      "tokens": 7428,
+      "tokenUsage": {
+        "uncachedInputTokens": 2438,
+        "outputTokens": 2174,
+        "cacheReadTokens": 2816,
+        "cacheWriteTokens": 0
+      },
+      "accounting": "recorded",
+      "appliedEffort": "off"
+    },
+    {
+      "stage": "visual-author",
+      "runner": "subagent",
+      "status": "ok",
+      "tokens": 9061,
+      "tokenUsage": {
+        "uncachedInputTokens": 4377,
+        "outputTokens": 1868,
+        "cacheReadTokens": 2816,
+        "cacheWriteTokens": 0
+      },
+      "accounting": "recorded",
+      "appliedEffort": "off"
+    },
+    {
+      "stage": "visual-review:38c70831-8d07-4440-83df-65abe48a8e73",
+      "runner": "subagent",
+      "status": "ok",
+      "tokens": 7360,
+      "tokenUsage": {
+        "uncachedInputTokens": 3598,
+        "outputTokens": 946,
+        "cacheReadTokens": 2816,
+        "cacheWriteTokens": 0
+      },
+      "accounting": "recorded",
+      "appliedEffort": "off"
+    },
+    {
+      "stage": "visual-review:aae09d8c-d88a-41f1-afde-22864b5b8cfc",
+      "runner": "subagent",
+      "status": "ok",
+      "tokens": 7213,
+      "tokenUsage": {
+        "uncachedInputTokens": 1763,
+        "outputTokens": 842,
+        "cacheReadTokens": 4608,
+        "cacheWriteTokens": 0
+      },
+      "accounting": "recorded",
+      "appliedEffort": "off"
+    },
+    {
+      "stage": "visual-review:bbc8228b-e415-49ba-aa58-b51454f44fa9",
+      "runner": "subagent",
+      "status": "ok",
+      "tokens": 7498,
+      "tokenUsage": {
+        "uncachedInputTokens": 1789,
+        "outputTokens": 1101,
+        "cacheReadTokens": 4608,
+        "cacheWriteTokens": 0
+      },
+      "accounting": "recorded",
+      "appliedEffort": "off"
+    },
+    {
+      "stage": "visual-review:17f57237-950d-403e-9b26-5b8e6be145b1",
+      "runner": "subagent",
+      "status": "ok",
+      "tokens": 7256,
+      "tokenUsage": {
+        "uncachedInputTokens": 1812,
+        "outputTokens": 836,
+        "cacheReadTokens": 4608,
+        "cacheWriteTokens": 0
+      },
+      "accounting": "recorded",
+      "appliedEffort": "off"
+    }
+  ],
+  "totalTokens": 50957,
+  "publishedCount": 4,
+  "publication": {
+    "id": "visual-draft-7b8c9372-9737-4d62-b43a-d254eccdc659",
+    "deckId": "visual-draft-7b8c9372-9737-4d62-b43a-d254eccdc659",
+    "autoReviewed": 0,
+    "unchecked": 0,
+    "accepted": 4,
+    "rejected": 0,
+    "added": 4,
+    "total": 4
+  },
+  "course": "数字集成电路",
+  "questionFront": {
+    "runId": "d1c4e19f-be13-4ba7-86f4-063a74f26468",
+    "cardId": "38c70831-8d07-4440-83df-65abe48a8e73",
+    "images": 1,
+    "noAnswerLeak": true
+  },
+  "actualDesktopUiVerified": true,
+  "userBackup": {
+    "filename": "数字集成电路-图文与反相器题组.zip",
+    "hash": "04db3bb234648c75a8bc1b3e94071bb1674aa133a8e00cc985c06df5e11952b3",
+    "bytes": 263443829
+  },
+  "normalRestart": {
+    "root": "D:/studyhub/libraries/数字集成电路-图文",
+    "provider": "deepseek-official",
+    "model": "deepseek-flash",
+    "modelStatus": {
+      "ready": true,
+      "reason": "ok",
+      "label": "DeepSeek · DeepSeek-V41-Flash",
+      "provider": "deepseek-official",
+      "model": "deepseek-flash"
+    },
+    "reasoningEffort": "off",
+    "credentialSource": "file",
+    "originalShortcutUsed": true
+  },
+  "desktopOtherComponentIssues": [
+    "/api/pet/pets 404",
+    "/api/pet/state 404"
+  ],
+  "ok": true
+}

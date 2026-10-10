@@ -1,0 +1,57 @@
+{
+  "home": "D:\\studyhub\\implementation\\test-harness\\modular-restart-1791612906365",
+  "root": "D:\\studyhub\\implementation\\test-libraries\\modular-restart-1791612906365",
+  "realNativeDsh": true,
+  "paidModelCalls": 0,
+  "phases": [
+    {
+      "phase": "installed",
+      "contexts": [
+        "materials",
+        "study",
+        "bank",
+        "authoring",
+        "generation",
+        "audio"
+      ],
+      "hasMaterials": true,
+      "decks": 3,
+      "featureOff": true,
+      "disabledImportBlocked": true,
+      "ok": true
+    },
+    {
+      "phase": "removed",
+      "contexts": [
+        "bank",
+        "study",
+        "authoring",
+        "generation",
+        "audio"
+      ],
+      "hasMaterials": false,
+      "decks": 3,
+      "ok": true
+    },
+    {
+      "phase": "reloaded",
+      "contexts": [
+        "study",
+        "bank",
+        "authoring",
+        "generation",
+        "materials",
+        "audio"
+      ],
+      "hasMaterials": true,
+      "decks": 3,
+      "featureOff": true,
+      "disabledImportBlocked": true,
+      "ok": true
+    }
+  ],
+  "beforeStateHash": "cd2acd27d5e9b990e741333d6db6fb58b308c09cbb17ef919b8dbaa4ec512d3c",
+  "afterStateHash": "cd2acd27d5e9b990e741333d6db6fb58b308c09cbb17ef919b8dbaa4ec512d3c",
+  "oldStateUnchanged": true,
+  "ok": true
+}

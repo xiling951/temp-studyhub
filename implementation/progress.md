@@ -5,7 +5,7 @@
 - 基线：上游 v3.3.0，daa4df7b3045df14290e10a43d72e0e751e0f72d。
 - 独立源码：D:/studyhub/implementation/source，分支 feat/scanned-textbook-visual。
 - 隔离环境：D:/studyhub/implementation/test-harness；测试库：implementation/test-libraries。
-- 正式 Desktop profile、dsh-home、.dsh-study 目前未修改。用户已追加授权：开发完成后备份再安装到本机 Desktop，实测原书与反相器带图题组。
+- 已按追加授权安装到正式 Desktop web profile，运行 3.3.0-scanned.2；旧 .dsh-study 的 40 个文件与安装前备份哈希一致。新教材和题组使用独立库 D:/studyhub/libraries/数字集成电路-图文。
 - T01：依赖/lint/build/release:check/隔离 DSH smoke 通过；原版完整测试 7891 通过、2 个已复现基线失败、153 跳过，详见 evidence/baseline-results.md。
 - T02：7 页公共 MinerU API 实际成功取得 JSON/ZIP；DSH 原生附件保存/读回及模型目录实测通过，evidence/mineru-contract.md、dsh-capabilities.md。
 - T01/T02 证据提交：实施记录仓库 32363c5；源码基线未改动。
@@ -61,3 +61,7 @@
 - T12 最终完整 verify：8101 项，8079 通过、9 失败、13 跳过（evidence/t12-verify-release.log）；8 项失败已在原版 Chrome/Windows 对照复现，剩余旧转换历史时序失败在当前/原版各 20 项定向重跑均通过。停止草稿后测试断言存在等待已移除元素的原版问题，两边相同超时并遗留测试服务，已仅结束报错后测试子进程。build/release:check 实际通过，不冒称 verify 退出码为 0。
 - T12 整库原生界面恢复通过：另一隔离 profile 通过设置页上传/确认完整 ZIP，572 页、2 个历史版本、1142 真实 sources、1321 当前资源全部哈希核验，PDF149/印刷131反相器原图及原页显示通过，console/pageerror=0。evidence/t12-restore/summary.json、inverter-p149.png、inverter-original-p149.png；UI 成功后跳转首页，验收脚本已改为检查跳转与恢复数据。正式旧库40文件备份校验完成，Desktop 主包实际运行定制版本，检索扩展/真实题组仍待完成。
 - T12 Desktop 实测发现学习模式缺少原生 Job 控制器，拒绝任务接纳；已在 study preset 加载 DSH 原生 job_output/job_list/job_kill 管理组件（无命令启动能力），quiet 完成通知避免额外唤醒，未修改 executor 的控制器准入边界。36 项预设/模块/生命周期/图文导入与出题回归通过，真实隔离 study preset 无视觉模型导入/原页/不可用提示通过，console/pageerror=0，evidence/t12-study-native.log 与 t12-study-native-result.json。最终包版本递增为 3.3.0-scanned.2，lint/build/release:check 通过；正式旧库仍保持原路径和数据，新书位于独立库 libraries/数字集成电路-图文。
+
+- T12 Desktop 真实验收通过：572 页/1321 当前资源读回；原 PDF 原生导入复用已验证完整解析；图5.1（PDF149/印刷131）生成4道开放题。初次模型草稿因缺评分标准及无效文字ID被拒绝，实施代理对原图修订后4次原生独立图片复审均通过，4题正式发布，答题前图片/无答案泄漏/定位原页在实际 Desktop 验证通过。7次真实模型调用共50957 tokens，均 recorded，最低可用推理off。evidence/t12-desktop-result.json；用户本人尚未逐题核对，不冒称自动答案无误。
+- T12 正常快捷方式重启通过：临时调试启动参数已移除，脚本和快捷方式哈希与原版一致；密钥经原生 credentials 服务保存，配置来源file，正常启动模型ready=true。StudyHub自动更新检查已关闭；既有宠物组件 /api/pet/pets、/api/pet/state 出现404，未扩大范围修改。
+- T12 独立组件原生安装/卸载/重载通过：按项目约定为generation/study显式设置independent:true，禁用图文入口拒绝导入，卸载材料后相关能力消失、其它模块和3个旧题组保留，重装后能力恢复；完整旧库状态SHA前后一致。默认单组件会自动保留依赖，不能把该设计误判为卸载失败。evidence/t12-modular-result.json。

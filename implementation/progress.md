@@ -1,7 +1,7 @@
 # 扫描教材实施进度
 
 ## 当前状态
-- 当前任务：T10；T01–T09 已通过相关阶段验证，T10–T12 未通过验收。
+- 当前任务：T11；T01–T10 已通过相关阶段验证，T11–T12 未通过验收。
 - 基线：上游 v3.3.0，daa4df7b3045df14290e10a43d72e0e751e0f72d。
 - 独立源码：D:/studyhub/implementation/source，分支 feat/scanned-textbook-visual。
 - 隔离环境：D:/studyhub/implementation/test-harness；测试库：implementation/test-libraries。
@@ -38,7 +38,7 @@
 - T09：真实默认推理首次达到输出上限，失败未存为解释；最终使用宿主实际最低可用等级（Flash 为 off），说明长度限制和 4000 输出 token 预算。调用成功不等于解释已被人工核对。
 - T09 源码提交：36f504ad。
 - 下一步：T10 visualCitations、独立图片审阅和带图题全链路，再继续 T11/T12；开发与隔离验收通过后进行获授权的正式 Desktop 实测。
-- GitHub 交付目标：https://github.com/xiling951/temp-studyhub；仓库当前为空且公开，仅提交源码、进度和必要测试记录，教材 PDF/扫描图/凭据留在本机。
+- GitHub 交付目标：https://github.com/xiling951/temp-studyhub；仓库公开，已包含阶段提交，仅提交源码、进度和必要测试记录，教材 PDF/扫描图/凭据留在本机。
 - GitHub 已推送 main：c827109e（包含截至 T09 的源码历史与证据）。Desktop 快捷方式已确认指向 D:/studyhub/start-dsh-desktop.cmd；此步仅只读检查，未重启/替换 Desktop。
 - T10 进行中：已增加严格 visualCitations DTO、实际文档/页/块/区域/资产校验、独立复审记录绑定与 publicCard 原图投影；普通原文引用不放宽，JSON 标记不能豁免视觉证据。14 项新增相关测试及 100 项引用/题库/发布回归通过，evidence/t10-citations-tests.log、t10-citations-regression.log。模型生成/发布接线及全部练习显示尚未完成，不能标记 T10 通过。
 - T10 证据校验源码提交并推送：8aa8e080。
@@ -46,3 +46,6 @@
 - T10 原生带图出题和界面接入：四阶段均走原生图片附件；审核未通过保留草稿，改题后旧审核失效，可重新独立审阅。阅读器可选图出题，草稿/练习/考试/口头模拟/错题详情显示原图并可定位原页。49 项相关测试及 lint/build 通过，evidence/t10-questions-tests.log、t10-questions-lint.log、t10-questions-build.log；模型返回仍为明确合成测试，真实付费模型和界面验证接下来执行，T10 尚未通过。
 - T10 浏览器界面验证通过：明确合成的图像/题目 fixture，五种题型答题前原图可见且无答案/图解泄漏，闪卡翻面保留图片，放大/原页定位、笔试、口试、错题详情通过；evidence/t10-ui-fixtures、t10-browser-tests.log。50 项相关测试通过，不能据此冒称真实模型答案准确。
 - T10 真实模型发现并阻止错误草稿：首次规划格式不满足要求，后续模型把 NMOS 尺寸关系读反，独立图片审阅实际拒绝。人工对原图修订后的复审又暴露普通 draft.save 清理新拒绝记录的问题；已添加受授权内部复审保存通道，内部审核操作从外部 action/能力目录排除，保持原公共保存行为。20 项相关审核测试及 8 项 runtime 权限/事务/快照回归、lint/build 通过；真实复审重测进行中，尚不标记 T10 通过。
+
+- T10 阶段通过：真实教材两题（纯图证据，不伪造文字引用）经人工对原图修订及新原生独立图片审阅，2 题正式发布成功；2 次 final subagent 审阅 5376/17101 tokens 均 recorded。答题前原图显示并定位原页、JSON 往返保留哈希且重置为 pending/拒绝直接发布、OCR 不变，console/pageerror=0。evidence/t10-native-result.json、t10-native/summary.json 与截图。初始自动答案实际被拒绝，不冒称无需审阅即可正确。
+- T10 最终相关 27 项测试及 lint/build 通过（evidence/t10-final-tests.log）。复审前先验证草稿必填字段，错误状态不派发模型调用；安装 QA 采用独立 tgz 路径并校验 4 个关键文件 SHA，防止同版本同路径的宿主包缓存冒充当前源码。T11 继续实施，T12 全书、最终回归/定制版本与 Desktop 实测未完成。

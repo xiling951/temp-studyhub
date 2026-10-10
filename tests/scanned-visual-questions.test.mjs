@@ -80,3 +80,13 @@ test('a fresh rejection after editing is retained and reported as partial; appro
   const approved = await wait(await runtime.call('generation.visual.review', { draftId: draft.id, draftVersion: draft.draftVersion }, services));
   assert.equal(approved.result.completeness, 'complete');
 });
+
+test('invalid edited visual drafts fail structural preflight before another paid image review', async t => {
+  const { runtime, services, wait, requests } = await setup(t);
+  await wait(await runtime.call('generation.visual.start', { documentId: 'book', blockIds: ['b0'], count: 1 }, services));
+  let draft = structuredClone((await runtime.storage.read()).drafts[0]); draft.cards[0].hint = '';
+  draft = await runtime.call('draft.save', { deck: draft });
+  const job = await wait(await runtime.call('generation.visual.review', { draftId: draft.id, draftVersion: draft.draftVersion }, services));
+  assert.equal(job.status, 'failed'); assert.match(job.error.message, /hint is required/);
+  assert.equal(requests.length, 4); assert.equal(job.calls.length, 0);
+});

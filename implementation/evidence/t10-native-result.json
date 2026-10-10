@@ -1,0 +1,94 @@
+{
+  "status": "passed-with-explicit-human-correction",
+  "model": "deepseek-official/deepseek-flash",
+  "nativeLibrary": "D:\\studyhub\\implementation\\test-libraries\\native-1791590014608",
+  "installedSourceVerified": [
+    {
+      "file": "lib/runtime.js",
+      "hash": "a6f17633c1b24e3457aa8b3867d14ddb81ff8bebaa329c33399b07f96233daa8"
+    },
+    {
+      "file": "lib/runtime/builtins.js",
+      "hash": "d6425ae29baebdce73498cec84d87633168e78a76bb387dab9aa33d44ab6d5e2"
+    },
+    {
+      "file": "lib/contexts/bank/operations.js",
+      "hash": "f9dd080e43eb39061efbedf9424296cc027e5d62261af3d248be7200714d1a13"
+    },
+    {
+      "file": "lib/contexts/generation/visual-questions.js",
+      "hash": "cde1736c5088f846f5cd706624c2febbd7bfa3d41ba0f55a8b082896175448a4"
+    }
+  ],
+  "initialGeneration": {
+    "calls": [
+      {
+        "stepKey": "visual-plan",
+        "tokens": 3765,
+        "runner": "subagent",
+        "accounting": "recorded"
+      },
+      {
+        "stepKey": "visual-answers",
+        "tokens": 5346,
+        "runner": "subagent",
+        "accounting": "recorded"
+      },
+      {
+        "stepKey": "visual-author",
+        "tokens": 5889,
+        "runner": "subagent",
+        "accounting": "recorded"
+      },
+      {
+        "stepKey": "visual-review:57e6728d-adb4-4719-a62d-b668f93bc673",
+        "tokens": 27948,
+        "runner": "subagent",
+        "accounting": "recorded"
+      },
+      {
+        "stepKey": "visual-review:d1a747fe-4e69-446d-8ac3-887efea29d78",
+        "tokens": 6599,
+        "runner": "subagent",
+        "accounting": "recorded"
+      }
+    ],
+    "outcome": "Independent image review rejected wrong model answer; no publication"
+  },
+  "finalIndependentReview": {
+    "calls": [
+      {
+        "stepKey": "visual-review:57e6728d-adb4-4719-a62d-b668f93bc673",
+        "tokens": 5376,
+        "runner": "subagent",
+        "accounting": "recorded"
+      },
+      {
+        "stepKey": "visual-review:d1a747fe-4e69-446d-8ac3-887efea29d78",
+        "tokens": 17101,
+        "runner": "subagent",
+        "accounting": "recorded"
+      }
+    ],
+    "tokens": 22477,
+    "completeness": "complete"
+  },
+  "publication": {
+    "id": "visual-draft-e8afc6ac-3a87-4a77-b0db-614aaa90ff53",
+    "accepted": 2,
+    "rejected": 0
+  },
+  "jsonRoundTrip": {
+    "draftId": "4b11e8a4-b49f-451a-9d7a-fde62075b8fa",
+    "cards": 2,
+    "imageHashPreserved": true,
+    "reviewReset": true,
+    "publicationBlocked": true
+  },
+  "ocrUnchanged": true,
+  "questionFrontHasImages": true,
+  "frontHasAnswer": false,
+  "consoleErrors": [],
+  "pageErrors": [],
+  "note": "Screenshots and textbook resources stay local; publication is validated, initial automatic answers are not assumed correct."
+}

@@ -1,5 +1,6 @@
 /* Actual isolated DSH + browser QA. Local model stand-in only; no real vision claim. */
 import { spawnSync } from 'node:child_process';
+import { createHash } from 'node:crypto';
 import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import { join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -18,7 +19,7 @@ const runId = Date.now();
 const evidence = join(base, questions ? 'evidence/t10-native' : vision ? 'evidence/t09-native' : noModel ? 'evidence/t09-no-model' : 'evidence/t06-native');
 const previous = resume ? JSON.parse(await readFile(join(evidence, 'summary.json'), 'utf8')) : null;
 const home = previous?.home || join(base, `test-harness/native-${runId}`), root = previous?.root || join(base, `test-libraries/native-${runId}`), workspace = join(base, `test-harness/workspace-${runId}`);
-const bin = join(base, 'test-harness/bin.mjs'), pack = join(base, 'packages/dev'), env = { ...scrubSecrets(process.env), DSH_HOME: home, SSH_TTY: 'audit', DSH_TELEMETRY_DISABLED: '1', npm_config_offline: 'true' };
+const bin = join(base, 'test-harness/bin.mjs'), pack = join(base, 'packages/dev', String(runId)), env = { ...scrubSecrets(process.env), DSH_HOME: home, SSH_TTY: 'audit', DSH_TELEMETRY_DISABLED: '1', npm_config_offline: 'true' };
 let credential = '';
 if (vision) {
   const candidates = (await readFile('C:/Users/Lenovo/Desktop/API-key.txt', 'utf8')).match(/sk-[A-Za-z0-9_-]+/g) || [];
@@ -38,6 +39,13 @@ try {
   const tgzName = run('npm', ['pack', '--ignore-scripts', '--pack-destination', pack]).trim().split(/\r?\n/).at(-1);
   if (!resume) run(process.execPath, [bin, '--profile', 'studyhub-e2e', '--from-default-profile', 'web', '--dump-config']);
   run(process.execPath, [bin, 'plugin', '--profile', 'studyhub-e2e', 'add', join(pack, tgzName)]);
+  summary.installedSourceVerified = [];
+  for (const file of ['lib/runtime.js', 'lib/runtime/builtins.js', 'lib/contexts/bank/operations.js', 'lib/contexts/generation/visual-questions.js']) {
+    const hash = value => createHash('sha256').update(value).digest('hex');
+    const sourceHash = hash(await readFile(join(repo, file))), installedHash = hash(await readFile(join(home, 'profiles/studyhub-e2e/node_modules/@ericwang1358/dsh-daily-flashcard', file)));
+    if (sourceHash !== installedHash) throw new Error(`Installed QA package is stale: ${file}`);
+    summary.installedSourceVerified.push({ file, hash: sourceHash });
+  }
   model = await createFakeOpenAI({ port: 43145 });
   const patch = join(base, 'test-harness/scanned.patch.yml');
   await writeFile(patch, YAML.stringify([...dshPatch({ fakeModelUrl: model.url, documentsDirectory: workspace }), ...(vision ? [{ id: 'agent-default-model', config: { provider: 'deepseek-official', model: 'deepseek-flash' } }] : []), { id: 'daily-flashcard', config: { libraryRoot: root } }]));
@@ -115,7 +123,7 @@ try {
   }
   if (questions) {
     let question;
-    if (resume && previous.publication) question = { jobId: previous.questionJob.jobId };
+    if (resume && previous.publication?.id) question = { jobId: previous.questionJob.jobId };
     else if (resume && previous.questionJob?.result?.refs?.[0]?.kind === 'draft') {
       // Explicit human correction against originals, followed by a fresh native independent review.
       // This is validation of the supported edit/review flow, not an assertion that the first model answer was correct.
@@ -127,14 +135,14 @@ try {
           prompt: '观察图 6.14，M₁ 位于链底端并连接地，M_N 位于输出端。假设全部输入为高电平、所有 NMOS 原本导通，输出负载电容 C_L 已充电。若把 M₁ 完全移除，原源漏位置保持开路且不增加任何替代连接，剩余串联链还能通过原来的导通通路把 Out 主动拉低吗？说明 M₁ 在该通路中的作用。忽略漏电及其它未画出的通路。',
           answer: '不能。Out 经 M_N 及其它串联 NMOS 到 M₁ 再到地，M₁ 是这条受输入控制的接地导通路径的一部分。移除 M₁ 并保持开路后，串联路径在接地端断开，剩余晶体管不能通过这条路径使 C_L 向地放电。',
           explanation: '沿原图从 Out 向地追踪，必须经过所有串联 NMOS。M₁ 的下端接地，上端接内部节点；保持源漏开路地移除它，会切断对地导通路径。图中电容不提供替代的直流导通连接，所以不能靠该串联链主动拉低输出。这里不据此推断其它未画出电路或长期漏电造成的最终电压。',
-          hint: '沿 Out 到地追踪完整连接，区分开路移除和用导线短接。', misconception: '把完全移除器件并留下开路，误认为用导线短接源漏。', rubric: '指出不能主动拉低；正确追踪串联链及 M₁ 的接地位置；说明开路导致对地导通路径断开。',
+          hint: '先独立判断，再用电路行为检验你的结论。', citations: [], misconception: '把完全移除器件并留下开路，误认为用导线短接源漏。', rubric: '指出不能主动拉低；正确追踪串联链及 M₁ 的接地位置；说明开路导致对地导通路径断开。',
         });
         else Object.assign(card, {
           topic: '反相器与逻辑极性', objective: '判断移除输出反相器是否改变逻辑功能',
-          prompt: '观察图 6.16 左侧电路，多个输入先进入一个 NOR 门，再经一个反相器得到 Out。将这些输入在本题中自行记为 x₁…x_N（这是题目约定，不是原图标号）。如果移除反相器并用导线把 NOR 门输出直接接到 Out，电路逻辑功能是否保持？用所有输入均为 0 的情况验证，并说明该反相器的作用。',
+          prompt: '观察题图左侧电路。将输入在本题中自行记为 x₁…x_N（这是题目约定，不是原图标号）。现作一个假设性的电路改动：移除最靠近 Out 的三角形器件并用导线连接其原输入与输出位置。根据图中门符号判断改动前后的逻辑功能是否相同，说明该器件的作用，并自行给出一种可以验证结论的输入情况。',
           answer: '不保持。原电路输出为 OR，即 x₁∨…∨x_N，因为 NOR 后接反相器进行第二次取反；旁路反相器后输出为 NOR，即 ¬(x₁∨…∨x_N)。所有输入为 0 时，原 Out 为 0，旁路后 Out 为 1。反相器恢复 OR 输出极性。',
-          explanation: '原图 NOR 门的输出端有反相小圆圈，后接三角形带反相圆圈的反相器。两次取反后得到 OR。移除后级并用导线旁路，只剩 NOR 的一次取反。因此全零输入即可构成反例，不能为减少器件而忽略所需的输出极性。',
-          hint: '数一数从输入到输出经历了几次逻辑取反。', misconception: '只看到减少一级门可能更快，却忽略输出逻辑极性的变化。', rubric: '写出原 OR 与旁路后 NOR；用全零输入给出不同输出；指出反相器用于改变输出极性。',
+          explanation: '本题旁路改动是构造性思想实验。原图第一个门的外形是 OR 符号，输出端小圆圈表示取反，故该门为 NOR；后级三角形带反相圆圈表示反相器。当输入均为 0 时 NOR 输出为 1，再经反相器得到 0，旁路则输出 1。设输入逻辑或为 S，原输出 ¬(¬S)=S，旁路后为 ¬S，因此两个电路逻辑不同。检查沿信号路径的取反次数可以判断输出极性，不能只按器件数量判断是否可省。',
+          hint: '选择能检验你所写逻辑表达式的输入情况。', citations: [], misconception: '只看到减少一级门可能更快，却忽略输出逻辑极性的变化。', rubric: '正确识别 NOR 与后级反相器；写出原 OR 与旁路后 NOR；自行给出有效输入反例；指出反相器改变输出极性。',
         });
       }
       const saved = await call('draft.save', { deck: draft });
@@ -152,10 +160,11 @@ try {
     summary.questionJob = questionJob?.contract;
     if (questionJob?.status !== 'complete' || questionJob.contract.result?.completeness !== 'complete') throw new Error(`Real image questions require revision: ${JSON.stringify(questionJob?.contract?.error || questionJob?.contract?.result)}`);
     const snapshot = await call('snapshot'), pending = snapshot.drafts.find(item => item.id === questionJob.draftId);
-    if (!pending && !previous?.publication) throw new Error('Native question draft missing');
+    if (!pending && !previous?.publication?.id) throw new Error('Native question draft missing');
     summary.draftId = pending?.id || previous.draftId;
-    const published = previous?.publication || await call('draft.publish', { id: pending.id, draftVersion: pending.draftVersion, requireReviewed: true });
+    const published = previous?.publication?.id ? previous.publication : await call('draft.publish', { id: pending.id, draftVersion: pending.draftVersion, requireReviewed: true });
     summary.publication = published;
+    if (!published.id || published.accepted !== 2 || published.rejected) throw new Error('Native visual publication retained invalid candidates');
     const exportedDeck = await call('deck.get', { id: published.id });
     const importedDeck = await call('draft.import', { text: JSON.stringify(exportedDeck), title: '带图题 JSON 往返检查', course: '扫描教材验收' });
     if (!importedDeck.cards.every(card => card.visualCitations?.every(ref => ref.reviewState === 'pending')) || importedDeck.cards[0].visualCitations[0].imageHash !== exportedDeck.cards[0].visualCitations[0].imageHash) throw new Error('Question JSON round trip lost original evidence or trusted imported review state');

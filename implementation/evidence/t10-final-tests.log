@@ -1,0 +1,35 @@
+✔ composed reads keep one committed revision while preserving authorized owner projections (51.8331ms)
+✔ committed read sessions enforce dependencies, grants and readonly owner APIs (15.9229ms)
+✔ borrowed transaction drafts reject nested read-only mutations without changing committed state (47.4067ms)
+✔ unloaded and reinstalled contexts cannot publish captured late state callbacks (5.1247ms)
+✔ host cancellation during an async state update prevents its late commit and preserves sibling writes (19.1891ms)
+✔ a view is the shared frozen collection, a read is a private copy (44.7476ms)
+✔ a read or a view can name the fields it needs (16.4048ms)
+✔ the state port's view merges defaults under the shared values and read stays a copy (0.4108ms)
+✔ original evidence renders before answering in all five kinds, written/oral exam and wrong-book; zoom and original page work (11565.306ms)
+✔ pure image evidence has no invented source; independent review authority binds exact question, image, version and region (92.136ms)
+✔ actual publication APIs reject client flags and resource tampering; quick publish cannot waive image review (62.2041ms)
+✔ actual bank append validates image resources under its coordination lock and accepts only independent approved cards (61.3141ms)
+✔ an approved visual draft publishes through the existing authoring flow with clean quality and preserved original references (71.174ms)
+✔ JSON import preserves visual references as a pending draft and does not silently discard bad ordinary evidence (61.5674ms)
+✔ cross-document, wrong revision, wrong region, missing resources and tampered bytes cannot become valid visual evidence (53.2721ms)
+✔ ordinary quote verification stays strict and public question DTOs expose only the required original-image references (45.3289ms)
+✔ structured completion sends a real native image block to the pinned adapter and reports usage once (3.0828ms)
+✔ native content preparation keeps attachment references while retaining the ordinary text sanitizer (0.6351ms)
+✔ unknown/text models, placeholder-only input, oversized images and unreadable native attachments fail before dispatch (0.8087ms)
+✔ structured provider offload/rate-limit errors keep their codes and do not return placeholder success (0.6113ms)
+✔ structured calls propagate caller cancellation and timeout to the prepared stream (42.0533ms)
+✔ gateway assembles native child image prompt, books usage once and drains child disposal (2.324ms)
+✔ all four native visual stages receive real image blocks; pure-image questions publish only after separate image/answer review (172.0769ms)
+✔ independent image/answer rejection preserves an editable draft and blocks every publication shortcut (105.7722ms)
+✔ an edited visual answer invalidates its old review and can be re-reviewed only through fresh actual image calls (173.429ms)
+✔ a fresh rejection after editing is retained and reported as partial; approval authority is never a public action (191.4485ms)
+✔ invalid edited visual drafts fail structural preflight before another paid image review (151.2183ms)
+ℹ tests 27
+ℹ suites 0
+ℹ pass 27
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 12669.5592

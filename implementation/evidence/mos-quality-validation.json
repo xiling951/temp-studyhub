@@ -1,0 +1,118 @@
+{
+  "version": "3.3.0-scanned.3",
+  "model": "deepseek-official/deepseek-flash",
+  "modelStages": {
+    "planning": "low",
+    "writing": "low",
+    "review": "low",
+    "repair": "low"
+  },
+  "mechanism": "DSH native gateway and Jobs in isolated profile; no manual answer or approval changes",
+  "selection": {
+    "inputPages": 571,
+    "retainedPages": 163,
+    "excludedPages": 408,
+    "excludedRegressionPages": [
+      112,
+      564
+    ]
+  },
+  "draftId": "d19cccbc-32ae-401e-b4a8-a0df06b44b82",
+  "firstJobId": "2614053a-6866-42e6-9ff1-834d9306f291",
+  "continuedJobId": "cb10745a-7c9d-4247-9e5c-9d5d5835d5e3",
+  "firstRun": {
+    "count": 29,
+    "stop": "budget",
+    "softTokenBudget": 400000,
+    "reportedTokens": 1312671,
+    "usage": {
+      "uncachedInputTokens": 747812,
+      "outputTokens": 341499,
+      "cacheReadTokens": 223360,
+      "cacheWriteTokens": 0,
+      "calls": 83
+    }
+  },
+  "continuation": {
+    "newQuestions": 1,
+    "count": 30,
+    "state": "complete",
+    "reportedTotalTokens": 1337868,
+    "usage": {
+      "uncachedInputTokens": 15552,
+      "outputTokens": 8365,
+      "cacheReadTokens": 1280,
+      "cacheWriteTokens": 0,
+      "calls": 3
+    }
+  },
+  "review": {
+    "cards": 30,
+    "allTopicPass": true,
+    "allSourceSupportPass": true
+  },
+  "ocrUnchanged": true,
+  "pageErrors": [],
+  "ordinaryTextCards": 30,
+  "automaticVisualAttachment": false,
+  "limits": [
+    "Head-of-page screening can miss relevant content",
+    "Model approval does not guarantee all answers are correct",
+    "Soft budget can be exceeded by calls already started",
+    "Original user questions and responses are preserved"
+  ],
+  "localEvidence": [
+    "mos-quality-1791638043353/summary.json",
+    "mos-quality-1791639029755/summary.json"
+  ],
+  "tests": {
+    "focusedCoverage": 9,
+    "relatedRegression": 178,
+    "compatibility": 54,
+    "finalPublicationAndProtocol": 51,
+    "runtimeAndSeverity": 14,
+    "countsOverlap": true,
+    "wholeSuiteRerun": false
+  },
+  "ok": true,
+  "desktop": {
+    "ok": true,
+    "installedVersion": "3.3.0-scanned.3",
+    "retrievalVersion": "3.3.0-scanned.3",
+    "dataUnchanged": true,
+    "launchUnchanged": true,
+    "nativeWebUiVisible": true,
+    "pageErrors": [],
+    "sourceChecks": [
+      {
+        "file": "lib/section-weights.js",
+        "matches": true
+      },
+      {
+        "file": "lib/generation.js",
+        "matches": true
+      },
+      {
+        "file": "lib/contexts/generation/operations.js",
+        "matches": true
+      },
+      {
+        "file": "lib/contexts/authoring/publication.js",
+        "matches": true
+      }
+    ],
+    "backupVerifiedFiles": {
+      "currentLibrary": 2495,
+      "oldLibrary": 40
+    },
+    "nativeGenerationUpgrade": {
+      "ok": true,
+      "target": "@ericwang1358/dsh-daily-flashcard",
+      "version": "3.3.0-scanned.3",
+      "generationId": "ericwang1358+dsh-daily-flashcard+3.3.0-scanned.3+f5bf53f9d4da",
+      "mechanism": "Desktop upgradePluginToGeneration path: shipped generation installer and transactional projection",
+      "runtimeValidationRequired": true
+    },
+    "additionalMigrationPeerDiagnostic": "failed: React/ReactDOM host closure unresolved; retained in local generation-install.log; not a prerequisite in Desktop upgradePluginToGeneration"
+  }
+}

@@ -1,0 +1,10 @@
+
+> @ericwang1358/dsh-daily-flashcard@3.3.0-scanned.3 lint
+> eslint --cache --cache-location node_modules/.cache/eslint/ lib scripts tests ui packages eslint.config.js
+
+
+D:\studyhub\implementation\source\ui\document-preview\DocumentViewer.jsx
+  171:6  warning  React Hook useEffect has a missing dependency: 'initialMode'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+✖ 1 problem (0 errors, 1 warning)
+

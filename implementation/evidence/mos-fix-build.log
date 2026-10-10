@@ -1,0 +1,5 @@
+
+> @ericwang1358/dsh-daily-flashcard@3.3.0-scanned.3 build
+> node scripts/build.mjs
+
+Built DSH client modules and standalone preview

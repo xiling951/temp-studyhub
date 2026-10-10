@@ -75,9 +75,13 @@
 - T12 已完成：GitHub正式发行 v3.3.0-scanned.2 已公开发布，19个交付资产均uploaded，GitHub服务端SHA256与本机逐项一致。evidence/t12-release-assets.json；https://github.com/xiling951/temp-studyhub/releases/tag/v3.3.0-scanned.2 。整合安装ZIP为34753986字节，SHA256 7ac1d5ebeb48a4111cb1cabc40187d128cc811be289330f3bb4290feee59c56e，包含17个交付文件（不含教材）。
 - 最终已验证而不夸大的边界：完整verify仍为8079通过/9失败/13跳过；原版问题、间歇时序、合成fixture范围和正式未执行破坏性数据回退均见final-validation.md。正式Desktop保持定制版，原PDF及旧库不变，新教材库完整可恢复。没有待实施的本轮核心功能。
 
-## 后续：MOS主题出题质量修复（进行中）
+## 后续：MOS主题出题质量修复（已开发并真实验证）
 - 真实问题：MOS请求保存了focus，但覆盖571页/635496字符，长度优先配额只选MOS正文80–111中的86页，参考文献564进入题组；24/30题，全部无图像证据。旧MOS题组和12题练习记录保持原样。
 - 修复：复用原生规划模型和已有sectionWeights，在配额前核验topic relevance，不完整/无模型/无相关页拒绝退回整书；新草稿引用范围、inputRef与覆盖分母跟随实际选材。每题独立复审新增topicRelevance硬检查；证据不足不再作为sourceSupport可选建议。无主题的既有长度回退保持原行为。
 - 7项新增测试及178项相关回归通过，lint仅原DocumentViewer警告；evidence/mos-focused-tests.log、mos-fix-regression.log、mos-fix-lint.log。合成模型测试不冒称真实答案已验证；实际教材/模型验收待执行。新版本3.3.0-scanned.3，正式环境仍为已交付.2，尚未替换。
 - 已提交并推送 f2c5f2cf（主题筛选/证据门禁）与338677a3（编辑后发布继续执行主题门禁及原生验收脚本）。真实DeepSeek Flash低推理原生任务选材571→163页，排除408页，参考文献112/564不再进入选材；第一轮保留29道经审阅题，达到400000软预算后停止（实际累计1312671tokens，预算按调用边界检查，不能保证不超出）。证据evidence/mos-quality-1791638043353/summary.json；未手改答案或审核标记。
 - 原生验收发现个别审阅遗漏topicRelevance，已复用原有有界协议重试，仅重问漏填的题，保留明确fail。新增回归现为9项；最终51项发布/协议/主题测试和14项真实文件名的运行时/严重性回归通过，另54项兼容回归通过（与178项存在重叠，不相加）。lint仍0错误/1原警告，证据mos-fix-final-tests.log、mos-fix-final-runtime-tests.log、mos-topic-protocol.log、mos-fix-compatibility.log。补题继续在同一隔离草稿进行，正式旧MOS题组及作答记录未修改。
+- 协议重试修复提交707f30bc已推送。相同隔离草稿真实原生续补1题成功，共30题、30份逐题主题/证据pass；累计86调用/1337868tokens，OCR SHA不变、pageerror=0。验收题保留在隔离草稿，未覆盖正式题库；不保证模型所有答案正确，不自动给普通文字题附图。证据mos-quality-1791639029755/summary.json和脱敏mos-quality-validation.json。
+- `.3`已安装到正常Desktop web profile，整包和检索均为3.3.0-scanned.3，原快捷方式正常启动。升级前私有备份desktop-before-mos-fix-1791639312818逐项核验2495个教材库文件/40个旧库文件；升级后两库整个Store状态SHA、脚本和快捷方式SHA完全一致。原生StudyHub接口及宿主网页界面实际通过，四个关键源码SHA匹配当前源码，pageerror=0；证据mos-desktop-upgrade/after.json。
+- 安装实测修复记录：普通CLI曾覆盖Desktop的generation投影，导致恢复模式；改用宿主自带upgradePluginToGeneration流程的版本安装器、登记锁及事务投影后正常web启动。额外的迁移peer静态扫描因宿主React闭包未通过，保留失败记录而非写通过；官方升级路径不要求此迁移扫描，实际运行另行验证。宿主agent-preset缺失警告在2026-09-30起已有，未扩展修复；恢复模式将一条不可用router-standard预设迁移为standard，正常预设列表仍无该旧ID，未伪造恢复。StudyHub数据保持原样。
+- 本轮lint/build/release:check通过（lint 1原警告）；未重跑8101项完整套件，历史9失败仍如原报告记录。`.2`交付目录和发行保持不变；新`.3`使用说明明确需重新生成旧偏题题组，图像题使用原图入口，报告记录软预算会超出及选材300字符开头的局限。正在完成新交付校验与推送。

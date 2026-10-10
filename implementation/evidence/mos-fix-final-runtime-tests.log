@@ -1,0 +1,22 @@
+✔ both cards pass their review and go into the target deck once; the draft is gone; the job reports what went in; the session is told once (107.9183ms)
+✔ a card that does not pass its review stays in a draft of its own, and the job says how many went in (61.3527ms)
+✔ a draft that changed since it was opened is refused before anything is queued, and one publication per draft at a time (59.6657ms)
+✔ suggest is a severity the shared review shape knows, and it is not an error (1.4076ms)
+✔ a card whose review only gave suggestions stays, and the suggestions are recorded (the owner's q1) (25.5484ms)
+✔ the old pass/fail reply is read with the same severity: a reviewer who concedes it is not a leak and only suggests does not drop the card (8.5094ms)
+✔ a quote that differs only in a full stop or the shape of the quote marks never fails a card (7.8784ms)
+✔ real blockers still drop or repair a card (21.1029ms)
+✔ the review prompt says what a blocker is, that a suggestion never rejects, and that the program checks quotes (6.9896ms)
+✔ applySuggestions on: a card that passed with a suggestion is re-worded once and re-reviewed alone; the others are not touched (9.6926ms)
+✔ applySuggestions is read when the review is done (the 即时控制 box), as a flag or as a function (21.1529ms)
+✔ a rewrite that does not pass its review leaves the approved card exactly as it was (8.6171ms)
+✔ a rewrite call that changes nothing costs the calls but changes nothing (6.3546ms)
+✔ applySuggestions with nothing to apply asks for nothing; a quote-format complaint is not a suggestion to apply (13.2499ms)
+ℹ tests 14
+ℹ suites 0
+ℹ pass 14
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 897.2168

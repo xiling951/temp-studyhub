@@ -1,0 +1,59 @@
+
+> @ericwang1358/dsh-daily-flashcard@3.3.0-scanned.3 release:check
+> node scripts/qa/release-artifacts.mjs --outdir=../packages/3.3.0-scanned.3
+
+{
+  "version": "3.3.0-scanned.3",
+  "archives": [
+    {
+      "name": "@ericwang1358/dsh-daily-flashcard",
+      "version": "3.3.0-scanned.3",
+      "files": 770,
+      "sha256": "3cdac59327e77691be6f75a51b24b6094556266fa220a56d7712ec73440cdb34"
+    },
+    {
+      "name": "@ericwang1358/dsh-study-runtime",
+      "version": "3.3.0-scanned.3",
+      "files": 769,
+      "sha256": "8207613cf2a58607b459b3db1143e1b6809f78455d9a380967e0e5d5c02523aa"
+    },
+    {
+      "name": "@ericwang1358/dsh-study-materials",
+      "version": "3.3.0-scanned.3",
+      "files": 769,
+      "sha256": "394de4597f3217200c6491241ab1779642b05bdde55435ef8f914a755c65b8fd"
+    },
+    {
+      "name": "@ericwang1358/dsh-study-bank",
+      "version": "3.3.0-scanned.3",
+      "files": 769,
+      "sha256": "67158451788e75c4016aeb1764d2b63be9605fd20997711e3d2f04fd5702e74b"
+    },
+    {
+      "name": "@ericwang1358/dsh-study-study",
+      "version": "3.3.0-scanned.3",
+      "files": 769,
+      "sha256": "aa8836d18be92648cdfa4600b9cc18bfb8cfe74a0ab3a1741cc7649c8d24f046"
+    },
+    {
+      "name": "@ericwang1358/dsh-study-generation",
+      "version": "3.3.0-scanned.3",
+      "files": 769,
+      "sha256": "de293bfa7ffe9dce01cd952077aab070dc42f299b559f7007940422d804aa71e"
+    },
+    {
+      "name": "@ericwang1358/dsh-study-audio",
+      "version": "3.3.0-scanned.3",
+      "files": 769,
+      "sha256": "84fbbdcb2a062d6442d2813c622dea16094811e27bb68471d62f3052c1f0d905"
+    },
+    {
+      "name": "@ericwang1358/studyhub-retrieval",
+      "version": "3.3.0-scanned.3",
+      "files": 9,
+      "sha256": "8e5f20dee505ade13e2958830ccb6ad1c3ca01db44ece0cf6f0c86c1e5688323"
+    }
+  ],
+  "setupPages": 2,
+  "status": "passed"
+}

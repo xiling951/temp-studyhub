@@ -90,3 +90,33 @@ test('a real coverage operation scopes the draft and its input identity before a
   assert.ok(draft.cards.every(card => card.citations.every(ref => ref.sourceId === 'mos')));
   assert.deepEqual(draft.editorial.generation.inputRef.sources.map(item => item.id), ['mos']);
 });
+
+test('publication after editing still requires a fresh topic verdict and retains rejected questions', async t => {
+  const root = await mkdtemp(join(tmpdir(), 'study-topic-publish-'));
+  t.after(() => rm(root, { recursive: true, force: true }));
+  const service = new StudyService(root);
+  t.after(() => service.dispose());
+  let verdict = 'fail';
+  service.complete = async (system, prompt) => {
+    assert.match(system, /topicRelevance/);
+    const review = qualityReview(JSON.parse(prompt).candidate);
+    review.checks.forEach(check => { check.topicRelevance = verdict; });
+    return JSON.stringify(review);
+  };
+  await service.call('source.add', sources[0]);
+  const mosCard = { id: 'q', kind: 'flashcard', topic: '导通条件', objective: 'Explain NMOS conduction',
+    prompt: 'What gate-to-source condition makes an NMOS device conduct?', answer: 'Its gate-to-source voltage exceeds its threshold.',
+    explanation: 'The gate voltage must establish a conducting channel; below threshold the ideal device is off.',
+    hint: 'Compare the applied control voltage with the device boundary.', misconception: 'Any positive gate voltage suffices.',
+    citations: [{ sourceId: 'mos', quote: sources[0].text }] };
+  const saved = await service.call('draft.save', { deck: { id: 'topic-draft', title: 'MOS', cards: [mosCard],
+    editorial: { generation: { focus: 'MOS device operation', topicScope: { focus: 'MOS', retained: 1 } } } } });
+  const rejected = await service.call('draft.publish', { id: saved.id, draftVersion: saved.draftVersion, requireReviewed: true });
+  assert.equal(rejected.accepted, 0);
+  const state = await service.call('export');
+  assert.equal(state.decks.length, 0);
+  assert.equal(state.drafts[0].cards.length, 1);
+  verdict = 'pass';
+  const next = await service.call('draft.publish', { id: state.drafts[0].id, draftVersion: state.drafts[0].draftVersion, requireReviewed: true });
+  assert.equal(next.accepted, 1);
+});

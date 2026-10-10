@@ -38,13 +38,13 @@ export function serverConfig({ home, entry, execPath = process.execPath, electro
     serverName: SERVER_NAME,
     transport: 'stdio',
     command: execPath,
-    args: [entry],
+    args: ['--import', new URL('./network.mjs', import.meta.url).href, entry],
     env: {
       DB_PATH: join(data, 'lancedb'),
       CACHE_DIR: join(data, 'models'),
       BASE_DIR: join(data, 'documents'),
-      // Node's fetch ignores the configured proxy unless opted in; keep downloads inside the user's existing network route.
-      NODE_USE_ENV_PROXY: '1',
+      // MCP deliberately filters inherited variables. Forward only network routing, never model credentials.
+      ...Object.fromEntries(['HTTP_PROXY', 'HTTPS_PROXY', 'NO_PROXY', 'http_proxy', 'https_proxy', 'no_proxy'].filter(key => process.env[key]).map(key => [key, process.env[key]])),
       ...(electron ? { ELECTRON_RUN_AS_NODE: '1' } : {}),
       ...(hfEndpoint ? { HF_ENDPOINT: hfEndpoint } : {}),
     },

@@ -1,30 +1,16 @@
-✔ the bundle declares what DSH needs: a patch layer, a pinned server dependency, an optional MCP client peer, display text (7.5843ms)
-✔ peers the server needs at runtime are declared, because DSH's installer does not add peer dependencies (0.1903ms)
-✔ the server runs on DSH's own Node with absolute paths under the StudyHub home; nothing is read from PATH or a config file (0.2965ms)
-✔ under DSH Desktop (Electron as Node) the child is told to run as Node; a documented download endpoint is passed on (0.0984ms)
-✔ the download endpoint comes from the StudyHub settings file and must be an https address (8.2718ms)
-✔ mounting: needs a recent Node and DSH's MCP client, and says so instead of failing DSH (1.341ms)
-✔ the release pack builds the companion as an asset with its checksum, at the same version as the main package (21938.7222ms)
-✔ the asset is the one of this StudyHub version, from the project's own release (0.994ms)
-✔ install: download, verify SHA-256, then hand the verified file to DSH; nothing else is touched (6.467ms)
-✔ install: a package that does not match its checksum is never installed (1.7136ms)
-✔ install: an unpublished or unreachable release is explained (1.3278ms)
-✔ install: build scripts pnpm holds back need the learner's yes; the retry carries exactly the approved names (3.4734ms)
-✔ install: a reinstall says DSH must restart; a failure is explained by its kind (6.856ms)
-✔ state: whether this DSH can install, and whether the extension is installed and switched on (0.3634ms)
-✔ uninstall removes the bundle and forgets it as the chosen provider (0.1348ms)
-✔ the host answers install, the approval round trip and uninstall; status carries the extension's state (28.8481ms)
-✔ a failure comes back as a coded error the page can show; a host without a plugin manager is refused plainly (20.8792ms)
-✔ the status says the extension is running once DSH exposes its tools, and picks it only after an index exists (13.3801ms)
-✔ state: an extension older than this StudyHub is flagged outdated, so it can be updated instead of silently never starting (0.2629ms)
-✔ ensure: an installed extension whose installer file went missing gets it back, verified, before anything else is installed (3.239ms)
-✔ ensure: nothing installed means nothing to restore, and a failed restore never throws or leaves a bad file (1.0772ms)
-✔ update over an installed older file: DSH says ambiguous-install, so the old one is removed first and the new one installed (4.2239ms)
-ℹ tests 22
+✔ the bundle declares what DSH needs: a patch layer, a pinned server dependency, an optional MCP client peer, display text (7.6559ms)
+✔ peers the server needs at runtime are declared, because DSH's installer does not add peer dependencies (0.2087ms)
+✔ the server runs on DSH's own Node with absolute paths under the StudyHub home; nothing is read from PATH or a config file (0.3691ms)
+✔ under DSH Desktop (Electron as Node) the child is told to run as Node; a documented download endpoint is passed on (0.123ms)
+✔ search child forwards proxy routing only and packages its dispatcher preload (1.0459ms)
+✔ the download endpoint comes from the StudyHub settings file and must be an https address (6.994ms)
+✔ mounting: needs a recent Node and DSH's MCP client, and says so instead of failing DSH (0.7734ms)
+✔ the release pack builds the companion as an asset with its checksum, at the same version as the main package (21984.4901ms)
+ℹ tests 8
 ℹ suites 0
-ℹ pass 22
+ℹ pass 8
 ℹ fail 0
 ℹ cancelled 0
 ℹ skipped 0
 ℹ todo 0
-ℹ duration_ms 22065.4376
+ℹ duration_ms 22111.2045

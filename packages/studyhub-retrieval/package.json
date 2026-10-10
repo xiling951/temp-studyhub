@@ -12,6 +12,7 @@
   "icon": "./icon.svg",
   "files": [
     "index.js",
+    "network.mjs",
     "cordis.patch.yml",
     "locale/*.json",
     "icon.svg",
@@ -24,6 +25,7 @@
   },
   "dependencies": {
     "apache-arrow": "18.1.0",
+    "undici": "8.11.2",
     "mcp-local-rag": "0.20.0"
   },
   "peerDependencies": {

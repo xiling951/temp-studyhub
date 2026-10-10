@@ -47,7 +47,9 @@ test('the server runs on DSH\'s own Node with absolute paths under the StudyHub 
   assert.equal(SERVER_NAME, 'studyhub');
   assert.equal(config.transport, 'stdio');
   assert.equal(config.command, process.execPath);
-  assert.ok(isAbsolute(config.args[0]));
+  assert.equal(config.args[0], '--import');
+  assert.equal(new URL(config.args[1]).protocol, 'file:');
+  assert.ok(isAbsolute(config.args[2]));
   for (const key of ['DB_PATH', 'CACHE_DIR', 'BASE_DIR']) assert.ok(config.env[key].startsWith(join(home, 'study', 'retrieval')), key);
   assert.equal(config.env.ELECTRON_RUN_AS_NODE, undefined);
   assert.ok(config.toolCallTimeoutMs >= 10 * 60 * 1000, 'the first call downloads the embedding model');
@@ -60,6 +62,23 @@ test('under DSH Desktop (Electron as Node) the child is told to run as Node; a d
   assert.equal(config.env.ELECTRON_RUN_AS_NODE, '1');
   assert.equal(config.env.HF_ENDPOINT, 'https://models.example.org');
   assert.equal(config.command, '/app/DSH.exe');
+});
+
+test('search child forwards proxy routing only and packages its dispatcher preload', async () => {
+  const prior = { HTTP_PROXY: process.env.HTTP_PROXY, DEEPSEEK_API_KEY: process.env.DEEPSEEK_API_KEY };
+  try {
+    process.env.HTTP_PROXY = 'http://127.0.0.1:12345';
+    process.env.DEEPSEEK_API_KEY = 'test-only-do-not-forward';
+    const config = serverConfig({ home: '/h', entry: '/h/index.js' });
+    assert.equal(config.env.HTTP_PROXY, process.env.HTTP_PROXY);
+    assert.equal(config.env.DEEPSEEK_API_KEY, undefined);
+    assert.ok(manifest.files.includes('network.mjs'));
+    assert.match(await readFile(new URL(config.args[1]), 'utf8'), /setGlobalDispatcher\(new EnvHttpProxyAgent\(\)\)/);
+  } finally {
+    for (const [key, value] of Object.entries(prior)) {
+      if (value === undefined) delete process.env[key]; else process.env[key] = value;
+    }
+  }
 });
 
 test('the download endpoint comes from the StudyHub settings file and must be an https address', async t => {

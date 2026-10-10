@@ -1,0 +1,170 @@
+{
+  "ok": true,
+  "startedAt": "2026-10-10T00:51:55.717Z",
+  "finishedAt": "2026-10-10T00:52:50.096Z",
+  "home": "D:\\studyhub\\implementation\\test-harness\\native-1791590014608",
+  "root": "D:\\studyhub\\implementation\\test-libraries\\native-1791590014608",
+  "installedSourceVerified": [
+    {
+      "file": "lib/runtime.js",
+      "hash": "a6f17633c1b24e3457aa8b3867d14ddb81ff8bebaa329c33399b07f96233daa8"
+    },
+    {
+      "file": "lib/runtime/builtins.js",
+      "hash": "aa6e7adbd445da646b3a0f8181260c5878a80fc6bc4eb8999ba34f45cdcfeaf6"
+    },
+    {
+      "file": "lib/contexts/bank/operations.js",
+      "hash": "f9dd080e43eb39061efbedf9424296cc027e5d62261af3d248be7200714d1a13"
+    },
+    {
+      "file": "lib/contexts/generation/visual-questions.js",
+      "hash": "cde1736c5088f846f5cd706624c2febbd7bfa3d41ba0f55a8b082896175448a4"
+    },
+    {
+      "file": "lib/retrieval-index.js",
+      "hash": "659d0d4719a6555abe6d236a9e5c9c3ed52a65505d161b7209601ae7ceccdc39"
+    },
+    {
+      "file": "lib/contexts/materials/visual-retrieval.js",
+      "hash": "821b3e3d9e1150415d13b9a0844029a172a0d52c1983c495502472618499b49d"
+    }
+  ],
+  "installedExtensionHash": "07197a1b6172eba4b9b769bea03266d8866fb1d957ccf52ed6f012f2878b5fc1",
+  "document": {
+    "documentId": "visual-7e4c79bfc1ee40e43161ff21a7173e3e97fdeb898c3d780dc6cbe123ffc45263",
+    "revision": "visual1-336c4df87bb808ac958f33c7cb60fc9311dfdd0a20d3834a88cfdafa478a9a81",
+    "pages": 7
+  },
+  "steps": [
+    {
+      "name": "native-submit",
+      "started": {
+        "jobId": "1b8ce342-6b8b-426a-83a3-3eaa95d881aa",
+        "status": "queued",
+        "filename": "扫描教材",
+        "route": "local",
+        "converter": "mineru"
+      }
+    },
+    {
+      "name": "real-native-index",
+      "started": {
+        "runId": "7e01be90-3e57-47f1-a9ac-cea13f8a643d",
+        "course": "扫描教材验收",
+        "status": "running",
+        "stage": "model",
+        "done": 0,
+        "total": 8,
+        "added": 0,
+        "removed": 0,
+        "unchanged": 0,
+        "failed": [],
+        "firstRun": true,
+        "startedAt": "2026-10-10T00:52:10.616Z",
+        "failedCount": 0
+      },
+      "plan": {
+        "course": "扫描教材验收",
+        "pages": 8,
+        "toIndex": 8,
+        "unchanged": 0,
+        "toRemove": 0,
+        "chars": 10892,
+        "firstRun": true,
+        "modelMb": 90,
+        "canIndex": true,
+        "documents": 2,
+        "missing": [
+          {
+            "title": "数字集成电路-p200-206.pdf",
+            "pages": 7
+          },
+          {
+            "title": "JSON 导入：真实教材电路图题组",
+            "pages": 1
+          }
+        ],
+        "missingDocuments": 2
+      },
+      "job": {
+        "runId": "7e01be90-3e57-47f1-a9ac-cea13f8a643d",
+        "course": "扫描教材验收",
+        "status": "complete",
+        "stage": "done",
+        "done": 8,
+        "total": 8,
+        "added": 8,
+        "removed": 0,
+        "unchanged": 0,
+        "failed": [],
+        "firstRun": true,
+        "startedAt": "2026-10-10T00:52:10.616Z",
+        "finishedAt": "2026-10-10T00:52:40.884Z",
+        "failedCount": 0
+      }
+    },
+    {
+      "name": "human-selected-note-reindex",
+      "started": {
+        "runId": "5eefa8d1-47a2-42d1-8bb2-a04b6202f31d",
+        "course": "扫描教材验收",
+        "status": "running",
+        "stage": "indexing",
+        "done": 0,
+        "total": 1,
+        "added": 0,
+        "removed": 0,
+        "unchanged": 7,
+        "failed": [],
+        "firstRun": false,
+        "startedAt": "2026-10-10T00:52:49.033Z",
+        "failedCount": 0
+      },
+      "plan": {
+        "course": "扫描教材验收",
+        "pages": 8,
+        "toIndex": 1,
+        "unchanged": 7,
+        "toRemove": 0,
+        "chars": 612,
+        "firstRun": false,
+        "modelMb": 90,
+        "canIndex": true,
+        "documents": 2,
+        "missing": [
+          {
+            "title": "数字集成电路-p200-206.pdf",
+            "pages": 1
+          }
+        ],
+        "missingDocuments": 1
+      },
+      "job": {
+        "runId": "5eefa8d1-47a2-42d1-8bb2-a04b6202f31d",
+        "course": "扫描教材验收",
+        "status": "complete",
+        "stage": "done",
+        "done": 1,
+        "total": 1,
+        "added": 1,
+        "removed": 0,
+        "unchanged": 7,
+        "failed": [],
+        "firstRun": false,
+        "startedAt": "2026-10-10T00:52:49.033Z",
+        "finishedAt": "2026-10-10T00:52:49.340Z",
+        "failedCount": 0
+      }
+    }
+  ],
+  "hitCount": 3,
+  "visualHitCount": 3,
+  "imageHashVerified": true,
+  "originalPreviewAvailable": true,
+  "ocrUnchanged": true,
+  "noteReviewOperator": "implementation-agent-reviewed-original",
+  "userManuallyApproved": false,
+  "consoleErrors": [],
+  "pageErrors": []
+}

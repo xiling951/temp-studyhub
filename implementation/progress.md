@@ -1,7 +1,7 @@
 # 扫描教材实施进度
 
 ## 当前状态
-- 当前任务：T11；T01–T10 已通过相关阶段验证，T11–T12 未通过验收。
+- 当前任务：T12；T01–T11 已通过相关阶段验证，T12 未通过验收。
 - 基线：上游 v3.3.0，daa4df7b3045df14290e10a43d72e0e751e0f72d。
 - 独立源码：D:/studyhub/implementation/source，分支 feat/scanned-textbook-visual。
 - 隔离环境：D:/studyhub/implementation/test-harness；测试库：implementation/test-libraries。
@@ -51,3 +51,6 @@
 - T10 最终相关 27 项测试及 lint/build 通过（evidence/t10-final-tests.log）。复审前先验证草稿必填字段，错误状态不派发模型调用；安装 QA 采用独立 tgz 路径并校验 4 个关键文件 SHA，防止同版本同路径的宿主包缓存冒充当前源码。T11 继续实施，T12 全书、最终回归/定制版本与 Desktop 实测未完成。
 - T11 进行中：通过材料权限域从 sourceId/当前不可变清单恢复原图映射，检索命中优先匹配图注/附近图像或已选图解的块；排除旧版，旧题历史图片仍可读。索引内容/哈希包含图文版本、明确选择的已核对图解及其版本；源 OCR 不接收这些文字。纯图片页仅生成私有索引记录，不写入旧 sources，也不能作为普通文字引用或文字出题页面。检索预览可查看原图、原页并提交原生带图出题。81 项相关检索/生命周期回归及 lint/build 通过，evidence/t11-tests.log、t11-lint.log、t11-build.log。
 - T11 真实检索环境调试：原生 CLI 的同版本包缓存已用独立路径与代码哈希校验规避；真实扩展须应用官方 bundle patch 才会启用。pnpm 11 的必要构建脚本已仅在隔离 profile 对 onnxruntime-node/sharp/protobufjs 配置允许，依赖缓存后离线安装成功，未改全局/正式环境。首次真实索引失败于搜索进程未使用现有代理；已仅在搜索子进程开启 Node 环境代理，22 项 companion/安装测试通过，native 实际索引与搜索重测进行中，不能标记 T11 通过。
+
+- T11 阶段通过：真实原生 MCP 索引 8 页完成，命中映射图片 SHA 与原页核验成功；只修改一页经实施代理对原图修订并明确选择的图解后，实际仅重新索引 1 页，其余 7 页不变，源 OCR 未变，console/pageerror=0。evidence/t11-native-result.json、t11-native/summary.json。此核对不是用户人工批准。
+- T11 网络修复：Undici 8 会替换 Node dispatcher，单独开启 Node 代理开关不足；搜索子进程使用已打包的 EnvHttpProxyAgent preload，只转发既有代理路由变量，不传模型密钥。8 项 companion/打包测试通过，evidence/t11-proxy-tests.log。正式环境未修改；继续 T12。

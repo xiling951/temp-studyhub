@@ -1,6 +1,6 @@
 {
   "name": "@ericwang1358/dsh-daily-flashcard",
-  "version": "3.3.0",
+  "version": "3.3.0-scanned.1",
   "description": "StudyHub: turn course materials and lecture recordings into source-cited flashcards, quizzes and SM-2 spaced review.",
   "repository": {
     "type": "git",
@@ -110,7 +110,8 @@
     "docs/plans/2026-10-01-studyhub-overhaul.md",
     "docs/requirements/studyhub-workflows.md",
     "docs/plans/2026-09-30-0016-feat-quiet-product-integration-plan.md",
-    "docs/quiet-product-integration-verification.md"
+    "docs/quiet-product-integration-verification.md",
+    "docs/scanned-textbooks.zh-CN.md"
   ],
   "license": "MIT",
   "engines": {

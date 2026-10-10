@@ -68,11 +68,14 @@ for (const domain of ['runtime', 'materials', 'bank', 'study', 'generation', 'au
   archives.push(await pack(staging));
 }
 const setupFilename = `StudyHub-${manifest.version}-Setup.html`;
-await cp(join(root, 'docs/install.html'), join(target, setupFilename));
+const customSetup = language => `<!doctype html><html lang="${language}"><meta charset="utf-8"><meta name="viewport" content="width=device-width"><title>StudyHub ${manifest.version}</title><style>body{font:18px/1.7 system-ui;max-width:850px;margin:40px auto;padding:0 24px}code{overflow-wrap:anywhere}a{color:#1761b0}</style><h1>StudyHub ${manifest.version}</h1><p>扫描教材图文定制包 / Scanned textbook custom build</p><p>这是本地定制发行包。先备份现有 profile 和学习库，再通过 DSH 原生插件管理安装同名本地 TGZ 并重启。<br>Back up the current profile and library; install the local TGZ through DSH's plugin manager, then restart.</p><ul><li><a href="ericwang1358-dsh-daily-flashcard-${manifest.version}.tgz">StudyHub 定制整包 / Custom bundle</a></li><li><a href="ericwang1358-studyhub-retrieval-${manifest.version}.tgz">可选检索扩展 / Optional retrieval</a></li><li><a href="SHA256SUMS-${manifest.version}.txt">SHA-256</a></li><li><a href="install-and-rollback.md">安装与回退 / Installation and rollback</a></li><li><a href="使用说明.md">使用说明 / Usage</a></li></ul><p>保留原插件名称；整包与独立组件选择一种。市场/upstream 更新会覆盖定制功能，请保留本地包并使用已验证的定制更新。<br>Keep the original plugin names, use either the bundle or modular components. Upstream updates replace custom features.</p></html>`;
+const writeSetup = async (filename, language, ordinary) => manifest.version.includes('-scanned.')
+  ? writeFile(join(target, filename), customSetup(language)) : cp(join(root, ordinary), join(target, filename));
+await writeSetup(setupFilename, 'en', 'docs/install.html');
 const setup = { filename: setupFilename,
   sha256: createHash('sha256').update(await readFile(join(target, setupFilename))).digest('hex') };
 const setupZhFilename = `StudyHub-${manifest.version}-Setup.zh-CN.html`;
-await cp(join(root, 'docs/install.zh-CN.html'), join(target, setupZhFilename));
+await writeSetup(setupZhFilename, 'zh-CN', 'docs/install.zh-CN.html');
 const setupZh = { filename: setupZhFilename,
   sha256: createHash('sha256').update(await readFile(join(target, setupZhFilename))).digest('hex') };
 await writeFile(join(target, `SHA256SUMS-${manifest.version}.txt`), [...archives, setup, setupZh].map(artifact => `${artifact.sha256}  ${artifact.filename}`).join('\n') + '\n');

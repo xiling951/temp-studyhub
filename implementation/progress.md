@@ -54,3 +54,4 @@
 
 - T11 阶段通过：真实原生 MCP 索引 8 页完成，命中映射图片 SHA 与原页核验成功；只修改一页经实施代理对原图修订并明确选择的图解后，实际仅重新索引 1 页，其余 7 页不变，源 OCR 未变，console/pageerror=0。evidence/t11-native-result.json、t11-native/summary.json。此核对不是用户人工批准。
 - T11 网络修复：Undici 8 会替换 Node dispatcher，单独开启 Node 代理开关不足；搜索子进程使用已打包的 EnvHttpProxyAgent preload，只转发既有代理路由变量，不传模型密钥。8 项 companion/打包测试通过，evidence/t11-proxy-tests.log。正式环境未修改；继续 T12。
+- T11 真实检索/网络修复已提交并推送 a2910951。T12 定制版本为 3.3.0-scanned.1；8 个 TGZ 和两份本地定制安装页已打包，release:check 全部入口/依赖名称/哈希/文档链接通过，evidence/t12-release-pack.log、t12-release-check.log。全书原生导入与完整回归仍在运行，尚不标记 T12 通过。

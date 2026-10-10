@@ -12,14 +12,15 @@ import { createFakeOpenAI } from './fake-openai.mjs';
 
 const repo = fileURLToPath(new URL('../../', import.meta.url)), base = resolve(repo, '..');
 const questions = process.argv.includes('--questions');
+const retrieval = process.argv.includes('--retrieval');
 const vision = process.argv.includes('--vision') || questions;
 const noModel = process.argv.includes('--no-model');
 const resume = process.argv.includes('--resume');
 const runId = Date.now();
-const evidence = join(base, questions ? 'evidence/t10-native' : vision ? 'evidence/t09-native' : noModel ? 'evidence/t09-no-model' : 'evidence/t06-native');
+const evidence = join(base, retrieval ? 'evidence/t11-native' : questions ? 'evidence/t10-native' : vision ? 'evidence/t09-native' : noModel ? 'evidence/t09-no-model' : 'evidence/t06-native');
 const previous = resume ? JSON.parse(await readFile(join(evidence, 'summary.json'), 'utf8')) : null;
 const home = previous?.home || join(base, `test-harness/native-${runId}`), root = previous?.root || join(base, `test-libraries/native-${runId}`), workspace = join(base, `test-harness/workspace-${runId}`);
-const bin = join(base, 'test-harness/bin.mjs'), pack = join(base, 'packages/dev', String(runId)), env = { ...scrubSecrets(process.env), DSH_HOME: home, SSH_TTY: 'audit', DSH_TELEMETRY_DISABLED: '1', npm_config_offline: 'true' };
+const bin = join(base, 'test-harness/bin.mjs'), pack = join(base, 'packages/dev', String(runId)), env = { ...scrubSecrets(process.env), DSH_HOME: home, TEMP: join(home, 'study/tmp'), TMP: join(home, 'study/tmp'), SSH_TTY: 'audit', DSH_TELEMETRY_DISABLED: '1', npm_config_offline: 'true' };
 let credential = '';
 if (vision) {
   const candidates = (await readFile('C:/Users/Lenovo/Desktop/API-key.txt', 'utf8')).match(/sk-[A-Za-z0-9_-]+/g) || [];
@@ -27,9 +28,9 @@ if (vision) {
   credential = candidates[0];
 }
 const redact = value => (credential ? value.replaceAll(credential, '[credential]') : value).replace(/token=\S+/g, 'token=[redacted]');
-for (const dir of [home, root, workspace, evidence, pack]) await mkdir(dir, { recursive: true });
-const run = (command, args) => {
-  const result = spawnSync(command, args, { cwd: repo, env, encoding: 'utf8', windowsHide: true, shell: command === 'npm', timeout: 300000 });
+for (const dir of [home, root, workspace, evidence, pack, env.TEMP]) await mkdir(dir, { recursive: true });
+const run = (command, args, cwd = repo) => {
+  const result = spawnSync(command, args, { cwd, env, encoding: 'utf8', windowsHide: true, shell: command === 'npm', timeout: 300000 });
   if (result.status !== 0) throw new Error(`QA command failed: ${result.stderr.slice(-1000).replace(/token=\S+/g, 'token=…')}`);
   return result.stdout;
 };
@@ -38,17 +39,24 @@ let dsh, browser, model, page;
 try {
   const tgzName = run('npm', ['pack', '--ignore-scripts', '--pack-destination', pack]).trim().split(/\r?\n/).at(-1);
   if (!resume) run(process.execPath, [bin, '--profile', 'studyhub-e2e', '--from-default-profile', 'web', '--dump-config']);
-  run(process.execPath, [bin, 'plugin', '--profile', 'studyhub-e2e', 'add', join(pack, tgzName)]);
+  run(process.execPath, [bin, 'plugin', '--profile', 'studyhub-e2e', 'add', join(pack, tgzName), '--offline']);
   summary.installedSourceVerified = [];
-  for (const file of ['lib/runtime.js', 'lib/runtime/builtins.js', 'lib/contexts/bank/operations.js', 'lib/contexts/generation/visual-questions.js']) {
+  for (const file of ['lib/runtime.js', 'lib/runtime/builtins.js', 'lib/contexts/bank/operations.js', 'lib/contexts/generation/visual-questions.js', 'lib/retrieval-index.js', 'lib/contexts/materials/visual-retrieval.js']) {
     const hash = value => createHash('sha256').update(value).digest('hex');
     const sourceHash = hash(await readFile(join(repo, file))), installedHash = hash(await readFile(join(home, 'profiles/studyhub-e2e/node_modules/@ericwang1358/dsh-daily-flashcard', file)));
     if (sourceHash !== installedHash) throw new Error(`Installed QA package is stale: ${file}`);
     summary.installedSourceVerified.push({ file, hash: sourceHash });
   }
+  if (retrieval) {
+    const extension = run('npm', ['pack', '--ignore-scripts', '--pack-destination', pack], join(repo, 'packages/studyhub-retrieval')).trim().split(/\r?\n/).at(-1);
+    run(process.execPath, [bin, 'plugin', '--profile', 'studyhub-e2e', 'add', join(pack, extension), '--offline', '--allow-build=onnxruntime-node', '--allow-build=sharp', '--allow-build=protobufjs']);
+    const hash = value => createHash('sha256').update(value).digest('hex');
+    summary.installedExtensionHash = hash(await readFile(join(home, 'profiles/studyhub-e2e/node_modules/@ericwang1358/studyhub-retrieval/index.js')));
+    if (summary.installedExtensionHash !== hash(await readFile(join(repo, 'packages/studyhub-retrieval/index.js')))) throw new Error('Installed search extension is stale');
+  }
   model = await createFakeOpenAI({ port: 43145 });
   const patch = join(base, 'test-harness/scanned.patch.yml');
-  await writeFile(patch, YAML.stringify([...dshPatch({ fakeModelUrl: model.url, documentsDirectory: workspace }), ...(vision ? [{ id: 'agent-default-model', config: { provider: 'deepseek-official', model: 'deepseek-flash' } }] : []), { id: 'daily-flashcard', config: { libraryRoot: root } }]));
+  await writeFile(patch, YAML.stringify([...dshPatch({ fakeModelUrl: model.url, documentsDirectory: workspace }), ...(vision ? [{ id: 'agent-default-model', config: { provider: 'deepseek-official', model: 'deepseek-flash' } }] : []), { id: 'daily-flashcard', config: { libraryRoot: root } }, ...(retrieval ? YAML.parse(await readFile(join(repo, 'packages/studyhub-retrieval/cordis.patch.yml'), 'utf8')) : [])]));
   dsh = await bootDsh(bin, { env: { ...env, STUDYHUB_QA_FAKE_KEY: 'test-only', ...(vision ? { DEEPSEEK_API_KEY: credential } : {}) }, cwd: workspace, patch, port: 43144 });
   browser = await launchChromium(); page = await browser.newPage({ viewport: { width: 1440, height: 1050 } });
   page.on('console', message => { if (message.type() === 'error') summary.consoleErrors.push(message.text().replace(/token=\S+/g, 'token=…')); });
@@ -87,7 +95,7 @@ try {
   await page.locator('.study-app').first().waitFor({ timeout: 30000 });
   await page.locator('[data-tour="nav-sources"]').first().click({ force: true }).catch(() => {});
   if (resume) { await page.locator('.page-scope [role="combobox"]').first().click(); await page.getByRole('option', { name: '全部课程', exact: true }).click(); }
-  await page.locator('.source-doc .source-main').first().click({ force: true });
+  await page.locator(`.source-doc[data-document-key*="${descriptor.documentId}"] .source-main`).first().click({ force: true });
   await page.locator('.scanned-reader').waitFor({ timeout: 30000 });
   await page.locator('.scanned-reader img').first().waitFor({ timeout: 30000 });
   await page.screenshot({ path: join(evidence, 'page200.png'), fullPage: false });
@@ -96,7 +104,7 @@ try {
   await page.screenshot({ path: join(evidence, 'original-page200.png'), fullPage: false });
   await page.getByLabel('图文 PDF 页码').fill('2'); await page.locator('[data-visual-block="p2-b0"]').waitFor({ timeout: 30000 });
   await page.screenshot({ path: join(evidence, 'page201.png'), fullPage: false });
-  if (vision && !questions) {
+  if (vision && !questions && !retrieval) {
     const target = { documentId: descriptor.documentId, revision: descriptor.revision, blockIds: ['p1-b2', 'p2-b9', 'p7-b9'] };
     const explain = await call('materials.visual.explain', target);
     let explanationJob;
@@ -188,6 +196,46 @@ try {
     summary.uiText = (await page.locator('.study-app').innerText()).slice(0, 4000);
     await page.screenshot({ path: join(evidence, 'published-run.png') });
   }
+  if (retrieval) {
+    const course = '扫描教材验收', sourceIds = (await call('snapshot')).sources.filter(item => item.document?.id === descriptor.documentId).map(item => item.id);
+    const ocr = await Promise.all(sourceIds.map(id => call('source.get', { id }).then(source => source.text)));
+    summary.retrievalStatus = await call('retrieval.status');
+    if (!summary.retrievalStatus.companion.running) throw new Error('Native search companion did not mount');
+    await call('retrieval.set', { provider: 'mcp:mcp__studyhub__query_documents' });
+    const index = async label => {
+      const plan = await call('retrieval.index.plan', { course });
+      console.log(JSON.stringify({ stage: label, toIndex: plan.toIndex, pages: plan.pages }));
+      const started = await call('retrieval.index.start', { course }); let job;
+      for (let n = 0; n < 1800; n++) {
+        job = await call('retrieval.index.status');
+        if (job && !['queued', 'running', 'cancelling'].includes(job.status)) break;
+        await new Promise(resolve => setTimeout(resolve, 500));
+      }
+      if (job?.status !== 'complete') throw new Error(`Native index failed: ${JSON.stringify(job)}`);
+      summary.steps.push({ name: label, started, plan, job }); return plan;
+    };
+    await index('real-native-index');
+    const beforeNotes = await call('retrieval.index.plan', { course }); if (beforeNotes.toIndex) throw new Error('Index was not incremental');
+    const result = await call('retrieval.preview', { sourceIds, query: '晶体管链 NMOS 放电 Out GND', limit: 5 }); summary.retrievalHits = result;
+    const hit = result.pages.find(item => item.visual?.citations?.length); if (!hit) throw new Error('Real search hits did not map to original images');
+    const ref = hit.visual.citations[0], actual = await call('materials.visual.asset', { documentId: ref.documentId, revision: ref.revision, assetId: ref.assetId });
+    if (actual.asset.hash !== ref.imageHash) throw new Error('Search image mapping hash mismatch');
+    summary.hitOriginal = await call('materials.visual.preview', { documentId: ref.documentId, revision: ref.revision, page: ref.page });
+    if (vision) {
+      const scope = { documentId: descriptor.documentId, revision: descriptor.revision }, explain = await call('materials.visual.explain', { ...scope, blockIds: ['p1-b2'] }); let job;
+      for (let n = 0; n < 600; n++) { job = (await call('snapshot')).jobs.find(item => item.id === explain.jobId); if (job && !['queued', 'running', 'cancelling'].includes(job.status)) break; await new Promise(resolve => setTimeout(resolve, 500)); }
+      if (job?.status !== 'complete') throw new Error('Native explanation prerequisite failed');
+      summary.explanationJob = job.contract;
+      const notes = (await call('materials.visual.explanations', scope)).notes, note = notes.find(item => item.blockIds.includes('p1-b2') && item.review === 'pending');
+      if (!note) throw new Error('Real image explanation was not retained as pending');
+      const text = '实施代理对原图核对并修订：图 6.14 展示由 Out 到地的串联 NMOS 下拉链，M_N 位于输出端，M₁ 位于接地端；输出接负载电容 C_L，各内部节点有对地电容。此说明是图像解释，不是教材原文。';
+      const reviewed = await call('materials.visual.explanation.review', { ...scope, noteId: note.id, status: 'verified', indexed: true, text });
+      const changed = await index('human-selected-note-reindex'); if (changed.toIndex !== 1) throw new Error('Note-only change did not reindex exactly its page');
+      const after = await Promise.all(sourceIds.map(id => call('source.get', { id }).then(source => source.text)));
+      summary.ocrUnchanged = JSON.stringify(ocr) === JSON.stringify(after); if (!summary.ocrUnchanged) throw new Error('Indexed explanation changed OCR source text');
+      summary.reviewedNote = { result: reviewed, operator: 'implementation-agent-reviewed-original', userManuallyApproved: false };
+    }
+  }
   if (noModel) {
     summary.explanationState = await call('materials.visual.explanations', { documentId: descriptor.documentId });
     if (summary.explanationState.importExplanation?.status !== 'unavailable' || summary.explanationState.notes.length) throw new Error('Model unavailability should retain verified import without creating a fake explanation');
@@ -197,6 +245,7 @@ try {
   summary.ok = summary.consoleErrors.length === 0 && summary.pageErrors.length === 0;
 } catch (error) {
   summary.ok = false; summary.error = error.message;
+  if (dsh) summary.hostDiagnostics = redact(dsh.output().slice(-4000));
   if (page) { summary.pageText = await page.locator('body').innerText().then(text => text.slice(0, 1600), () => 'unavailable'); await page.screenshot({ path: join(evidence, 'failed.png') }).catch(() => {}); }
 }
 finally {

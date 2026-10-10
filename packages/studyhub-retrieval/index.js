@@ -43,6 +43,8 @@ export function serverConfig({ home, entry, execPath = process.execPath, electro
       DB_PATH: join(data, 'lancedb'),
       CACHE_DIR: join(data, 'models'),
       BASE_DIR: join(data, 'documents'),
+      // Node's fetch ignores the configured proxy unless opted in; keep downloads inside the user's existing network route.
+      NODE_USE_ENV_PROXY: '1',
       ...(electron ? { ELECTRON_RUN_AS_NODE: '1' } : {}),
       ...(hfEndpoint ? { HF_ENDPOINT: hfEndpoint } : {}),
     },

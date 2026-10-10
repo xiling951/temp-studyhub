@@ -49,3 +49,5 @@
 
 - T10 阶段通过：真实教材两题（纯图证据，不伪造文字引用）经人工对原图修订及新原生独立图片审阅，2 题正式发布成功；2 次 final subagent 审阅 5376/17101 tokens 均 recorded。答题前原图显示并定位原页、JSON 往返保留哈希且重置为 pending/拒绝直接发布、OCR 不变，console/pageerror=0。evidence/t10-native-result.json、t10-native/summary.json 与截图。初始自动答案实际被拒绝，不冒称无需审阅即可正确。
 - T10 最终相关 27 项测试及 lint/build 通过（evidence/t10-final-tests.log）。复审前先验证草稿必填字段，错误状态不派发模型调用；安装 QA 采用独立 tgz 路径并校验 4 个关键文件 SHA，防止同版本同路径的宿主包缓存冒充当前源码。T11 继续实施，T12 全书、最终回归/定制版本与 Desktop 实测未完成。
+- T11 进行中：通过材料权限域从 sourceId/当前不可变清单恢复原图映射，检索命中优先匹配图注/附近图像或已选图解的块；排除旧版，旧题历史图片仍可读。索引内容/哈希包含图文版本、明确选择的已核对图解及其版本；源 OCR 不接收这些文字。纯图片页仅生成私有索引记录，不写入旧 sources，也不能作为普通文字引用或文字出题页面。检索预览可查看原图、原页并提交原生带图出题。81 项相关检索/生命周期回归及 lint/build 通过，evidence/t11-tests.log、t11-lint.log、t11-build.log。
+- T11 真实检索环境调试：原生 CLI 的同版本包缓存已用独立路径与代码哈希校验规避；真实扩展须应用官方 bundle patch 才会启用。pnpm 11 的必要构建脚本已仅在隔离 profile 对 onnxruntime-node/sharp/protobufjs 配置允许，依赖缓存后离线安装成功，未改全局/正式环境。首次真实索引失败于搜索进程未使用现有代理；已仅在搜索子进程开启 Node 环境代理，22 项 companion/安装测试通过，native 实际索引与搜索重测进行中，不能标记 T11 通过。

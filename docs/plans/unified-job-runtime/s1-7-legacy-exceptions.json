@@ -20,7 +20,10 @@
     "lib/contexts/workflows/jobs/skeleton.js",
     "lib/contexts/study/jobs/assist.js",
     "lib/contexts/notes/jobs/note-generate.js",
-    "lib/contexts/generation/blueprint/jobs/exam-blueprint-build.js"
+    "lib/contexts/generation/blueprint/jobs/exam-blueprint-build.js",
+    "lib/contexts/generation/visual-questions.js",
+    "lib/contexts/materials/visual-explanations.js",
+    "lib/contexts/materials/visual-import.js"
   ],
   "entries": [
     {
@@ -499,17 +502,13 @@
       "calls": [
         {
           "callee": "complete",
-          "count": 7
-        },
-        {
-          "callee": "ctx.llm.stream",
-          "count": 1
+          "count": 8
         }
       ],
       "owner": "existing domain maintainer",
       "reason": "The host model adapter: DSH ctx.llm.stream and the host sub-agent route; the gateway reaches the model through it",
       "removeAt": "retained: the provider leaf",
-      "evidence": "s1-0-runtime-audit.md; s1-7-handoff.md; s6-0-coverage.md",
+      "evidence": "s1-0-runtime-audit.md; s1-7-handoff.md; s6-0-coverage.md; implementation/progress.md T08 pinned native structured/text assembler and actual usage",
       "sites": [
         {
           "what": "modelCompletion and its light and correction variants",
@@ -1744,6 +1743,44 @@
         }
       ],
       "removeAt": "after default flip"
+    },
+    {
+      "file": "lib/contexts/materials/visual-archive.js",
+      "calls": [
+        {
+          "callee": "runLocalCommand",
+          "count": 1
+        }
+      ],
+      "owner": "materials.v1 scanned textbook native Job/read/export boundary",
+      "evidence": "implementation/progress.md T05/T07/T12 real native validation",
+      "sites": [
+        {
+          "what": "Bounded local Python helper: native Job observes parser/render; foreground archive/preview validates immutable resources and passes cancellation; no model or second scheduler",
+          "disposition": "exception",
+          "kind": "not-a-job",
+          "reached": true
+        }
+      ]
+    },
+    {
+      "file": "lib/contexts/materials/visual-parser.js",
+      "calls": [
+        {
+          "callee": "runLocalCommand",
+          "count": 1
+        }
+      ],
+      "owner": "materials.v1 scanned textbook native Job/read/export boundary",
+      "evidence": "implementation/progress.md T05/T07/T12 real native validation",
+      "sites": [
+        {
+          "what": "Bounded local Python helper: native Job observes parser/render; foreground archive/preview validates immutable resources and passes cancellation; no model or second scheduler",
+          "disposition": "exception",
+          "kind": "not-a-job",
+          "reached": true
+        }
+      ]
     }
   ],
   "dispositions": {

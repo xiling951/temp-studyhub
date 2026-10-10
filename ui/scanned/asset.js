@@ -9,7 +9,7 @@ export async function readVisualAsset(call, scope, asset, { signal } = {}) {
     if (chunk.offset !== offset || value.length < 1 || value.length !== chunk.bytes || offset + value.length > bytes.length) throw new Error('图片分块传输不完整');
     bytes.set(value, offset); offset += value.length;
   }
-  const hash = [...new Uint8Array(await crypto.subtle.digest('SHA-256', bytes))].map(value => value.toString(16).padStart(2, '0')).join('');
+  const hash = [...new Uint8Array(await crypto.subtle.digest('SHA-256', bytes))].map(value => (256 + value).toString(16).slice(1)).join('');
   if (hash !== asset.hash) throw new Error('图片完整性校验失败');
   return new Blob([bytes], { type: asset.mime });
 }

@@ -65,10 +65,12 @@ import examPrepSettings from './locales/en.exam-prep-settings.json';
 import modelSetup from './locales/en.model-setup.json';
 import generateShort from './locales/en.generate-short.json';
 import outlineCopy from './locales/en.outline.json';
+import scanned from './locales/en.scanned.json';
 import { localizeAppMessage } from '../lib/application-messages.js';
 import { failureText } from './failure.js';
 
 export const ENGLISH_SOURCES = {
+  'en.scanned.json': scanned,
   'en.json': base,
   'en.components.json': components,
   'en.import.json': importCopy,

@@ -1,0 +1,61 @@
+✔ the field wins; a blank field is filled only by a file name that names one course, and the result says it was a guess (4.1701ms)
+✔ the course is one line with its reason and a way to change it; the field is behind 更改 (18.4648ms)
+✔ a PDF with no text, when the converters are there, is handed to them: the row says why and the file is staged under it (1.082ms)
+✔ only a PDF is offered the converter for being too large; a big text file is split by chapter, as its message says (0.3585ms)
+✔ recordings and subtitles are not imported on the Files tab: they wait for the audio form, which shows the estimate (0.4433ms)
+✔ the converter block is a closed fold, not two cards; the tool is chosen in the panel and not on the Files tab (2.3197ms)
+✔ the panel offers local conversion only: no cloud route, no second choice of how (24.8826ms)
+✔ without the audio component the converter says which component it is, and the materials-off message is not a dead end (3.3009ms)
+✔ the first import goes on to 创建题组 with its materials ticked; anything else it made takes the usual way (0.3915ms)
+✔ a finished background import offers 用它出题 under its card; one that is not finished, or saved nothing, does not (0.6482ms)
+Invalid value for prop `call` on <div> tag. Either remove it from the element, or pass a string or number value to keep it in the DOM. For details, see https://react.dev/link/attribute-behavior 
+✔ source organization and import forms expose local course choices in English (14.5765ms)
+✔ generation displays the source course ahead of global focus and sends an editable destination (27.9127ms)
+✔ page scope remembers explicit all and unassigned per library while unset pages follow their visible default (1.0718ms)
+✔ each source row offers 改课程 in its More menu, so a wrong course can be fixed where it is shown (14.6425ms)
+✔ the course dialog starts from the current course and applies it through the same source.courses.set as the organizer (4.2146ms)
+✔ the row menu lists its actions in one stacked menu instead of putting every button at the same spot (4.8411ms)
+✔ a failed course save is said inside the dialog and never raises the global notice that covers its buttons (0.3977ms)
+✔ a long course path is not cut without a trace: the field shows an ellipsis and the whole path as its title (2.1904ms)
+✔ managed definitions reject lifecycle/model bypasses while ordinary caches and non-model fetches remain legal (9.8666ms)
+✔ single audio definition keeps all execution behind approved runtime and pipeline adapters (11.4254ms)
+✔ model-shaped legacy call sites require an exact registered inventory and phase owner (1415.2042ms)
+✔ inspectStarts sees real starts, not strings, comments or regular expressions (0.6757ms)
+✔ every place background work starts is reviewed: a new start outside the inventory fails, with every switch on (488.2591ms)
+✔ every reviewed site has a disposition that holds: migrate names its step, delete-s6-2 names the switch that bypasses it, an exception says what it is (0.8666ms)
+✔ every migration switch bypasses something in the inventory, and every inventory row appears in the coverage document (2.3905ms)
+✔ with every migration switch on at once the service starts, reads its snapshot and offers the runtime to each context (618.0331ms)
+✔ every English locale file on disk is merged into the catalogue (98.3785ms)
+✔ the same source text translated differently in two files is a conflict (29.1713ms)
+✔ the shipped locale files have no conflicting translations (21.3025ms)
+✔ ui() translates keys that only exist in a fragment (15.8281ms)
+Invalid value for prop `call` on <div> tag. Either remove it from the element, or pass a string or number value to keep it in the DOM. For details, see https://react.dev/link/attribute-behavior 
+✔ Word and PowerPoint files are documents; old Office formats are recognised as legacy (1.3716ms)
+✔ the picker lists documents first: .docx and .pptx right after .pdf, audio last (1.121ms)
+✔ the drop zone hint names the new formats and one limit per format, in both languages (12.9556ms)
+✔ legacy Office files get a specific message and are never sent to the server (1.1434ms)
+✔ size limits depend on the format and share one constant per format (1.1321ms)
+✔ server errors about Office files are explained in plain words (0.4986ms)
+✔ Office imports report slides and skipped slides like PDF pages (0.6928ms)
+Invalid value for prop `call` on <div> tag. Either remove it from the element, or pass a string or number value to keep it in the DOM. For details, see https://react.dev/link/attribute-behavior 
+✔ hub and JSON entries use the shared drop zone with a localized button (54.1024ms)
+✔ a document import reports its skipped pages once, next to what was saved (P25, moved from the retired PdfImport) (0.3408ms)
+Invalid value for prop `call` on <div> tag. Either remove it from the element, or pass a string or number value to keep it in the DOM. For details, see https://react.dev/link/attribute-behavior 
+✔ files are routed by type; audio and subtitles only when the audio component is on (0.8723ms)
+✔ Bilibili subtitle JSON is told apart from a JSON deck (0.2282ms)
+✔ one batch imports documents and decks, each with its own status and plain reasons; subtitles and audio wait for the audio form (4.6207ms)
+✔ a subtitle JSON dropped with the decks goes to the audio form, which shows the estimate first (0.2612ms)
+✔ the success message names the document and its pages, in either language (0.3266ms)
+✔ import errors are rewritten in plain language and keep unknown details (0.1989ms)
+✔ the dialog asks for the course first and offers one drop zone for every file type (12.0747ms)
+✔ the paste tab keeps the existing source.add form (15.75ms)
+✔ the dialog reads in English without Chinese application copy (4.8814ms)
+✔ a file dropped in the hub outside a drop zone is swallowed with a hint and never reaches the host (0.4765ms)
+ℹ tests 49
+ℹ suites 0
+ℹ pass 49
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 2702.657

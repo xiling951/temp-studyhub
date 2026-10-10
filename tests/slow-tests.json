@@ -34,6 +34,7 @@
     "tests/reader-notes-tasks-browser.test.mjs",
     "tests/review-run-context-browser.test.mjs",
     "tests/row-coverage-browser.test.mjs",
+    "tests/scanned-visual-browser.test.mjs",
     "tests/science-settings-browser.test.mjs",
     "tests/select-combobox-browser.test.mjs",
     "tests/settings-entry-targets.test.mjs",

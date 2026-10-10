@@ -55,3 +55,5 @@
 - T11 阶段通过：真实原生 MCP 索引 8 页完成，命中映射图片 SHA 与原页核验成功；只修改一页经实施代理对原图修订并明确选择的图解后，实际仅重新索引 1 页，其余 7 页不变，源 OCR 未变，console/pageerror=0。evidence/t11-native-result.json、t11-native/summary.json。此核对不是用户人工批准。
 - T11 网络修复：Undici 8 会替换 Node dispatcher，单独开启 Node 代理开关不足；搜索子进程使用已打包的 EnvHttpProxyAgent preload，只转发既有代理路由变量，不传模型密钥。8 项 companion/打包测试通过，evidence/t11-proxy-tests.log。正式环境未修改；继续 T12。
 - T11 真实检索/网络修复已提交并推送 a2910951。T12 定制版本为 3.3.0-scanned.1；8 个 TGZ 和两份本地定制安装页已打包，release:check 全部入口/依赖名称/哈希/文档链接通过，evidence/t12-release-pack.log、t12-release-check.log。全书原生导入与完整回归仍在运行，尚不标记 T12 通过。
+- T12 全书实际 native Job 完成：572 页、1321 个资源（含原 PDF），首次解析耗时 2329814 ms；每 10 秒采样的宿主进程树峰值 382509056 字节、解析进程树峰值 2330980352 字节（不是绝对瞬时峰值）。初次后验脚本误把 v4 分片清单当完整 state，已改用 Store.read，并逐项核验资源哈希，evidence/t12-fullbook/verified-after-store-fix.json。
+- T12 实测修复：原 parser 在 PDF149 把图5.2图注挂到图5.1；adapter2 只在明确不同图号且另一图片更近时重新关联，保留原始所属块、原 OCR 和旧清单。真实新 native Job 从已重新核验的 v1 窗口派生 572 页新版本，1321 资源不变，OCR 不变。64 项 caption/导入/模型/UI 守卫及 49 项英文回归、66 项运行时/发布/图片浏览器验证通过。源码修复还覆盖原文题发布的额外读取时序（3 项资源租约测试重新通过）。T12 完整 verify 重跑与 ZIP/原页验收仍进行中。

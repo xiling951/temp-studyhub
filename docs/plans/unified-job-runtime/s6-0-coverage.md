@@ -219,3 +219,7 @@
 
 - 不删除任何旧执行器（S6-2）；不改任何运行时行为；不改变匹配器的"按名字"规则（缺口 5）。
 - 缺口 1、2、3、7、8 的处理属于各自的后续步骤（S2-6、S4-10、S6-5 …），不在本步。
+
+## 扫描教材定制扩展的所有权核对
+
+`lib/contexts/materials/visual-parser.js` 的 Python info/render 在原生 scanned-textbook-import Job 的 gateway observe 中或受权限保护的原页读取中执行，携带取消与超时。`lib/contexts/materials/visual-archive.js` 的 ZIP helper 属于受权限保护的前台导出/恢复资源边界；校验附件、路径和预算，不调用模型，也不创建第二套 Job 数据库。三个图文/图解/带图出题定义已登记 managedDefinitions，模型仍经过 gateway。真实阶段证据见 implementation/progress.md。

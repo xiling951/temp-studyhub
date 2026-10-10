@@ -461,7 +461,7 @@ function DocumentReader({ source, quote, call, data, host, onOpenCard, onOpenDec
       <div className="reader-scroll" ref={scroller} tabIndex={0} role="region" aria-label={localMode ? localContent.title || source.title || ui('资料内容') : ui('资料内容')} data-mode={view}>
         <div className="reader-page">
           <div className="study-document-body" ref={body} onMouseUp={select} onKeyUp={select} onTouchEnd={select} onClick={pick} onCopy={copy}>
-            {view === 'visual' && document?.visual ? <VisualReader document={document} call={call} initialPage={source.document?.page || 1} /> : view === 'original'
+            {view === 'visual' && document?.visual ? <VisualReader document={document} initialPage={source.document?.page || 1} /> : view === 'original'
               ? <div className="reader-original"><iframe src={`${fileUrl}#page=${pdfPage}`} title={source.title || ui('原始 PDF')} /></div>
               : reading
                 ? html ? <div className="reader-html source-md" data-study-text="true" dangerouslySetInnerHTML={{ __html: html }} />

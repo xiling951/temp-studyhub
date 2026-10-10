@@ -7,20 +7,21 @@ import { useStudy } from './study-context.jsx';
 import css from './large-documents.css';
 import QuestionImages from './scanned/QuestionImages.jsx';
 
-function HitImages({ visual, focus, course, disabled, call }) {
+function HitImages({ visual, focus, course, disabled}) {
+  const { call } = useStudy();
   const [open, setOpen] = useState(false), [message, setMessage] = useState(''), [busy, setBusy] = useState(false);
   if (!visual.citations?.length) return null;
   const start = async () => {
     setBusy(true);
     try {
       await call('generation.visual.start', { documentId: visual.documentId, revision: visual.revision, blockIds: visual.citations.map(ref => ref.blockId), count: 3, kind: 'open', focus, ...(course ? { course } : {}) });
-      setMessage('带图出题已提交，请在任务页查看进度和草稿。');
+      setMessage(ui('带图出题已提交，请在任务页查看进度和草稿。'));
     } catch (error) { setMessage(error.message); }
     finally { setBusy(false); }
   };
-  return <div><p>原书 PDF 第 {visual.originalPage} 页 · 检索片段可能包含人工核对图解，不能代替教材原文引用。</p>
-    <Button size="sm" onClick={() => setOpen(!open)}>{open ? '收起关联原图' : '查看关联原图'}</Button>
-    <Button size="sm" disabled={disabled || busy} onClick={start}>结合命中原图出题</Button>
+  return <div><p>{uiFormat('原书 PDF 第 {0} 页 · 检索片段可能包含人工核对图解，不能代替教材原文引用。', [visual.originalPage])}</p>
+    <Button size="sm" onClick={() => setOpen(!open)}>{ui(open ? '收起关联原图' : '查看关联原图')}</Button>
+    <Button size="sm" disabled={disabled || busy} onClick={start}>{ui('结合命中原图出题')}</Button>
     {open && <QuestionImages citations={visual.citations} />}
     {message && <InlineMessage>{message}</InlineMessage>}
   </div>;
@@ -67,9 +68,9 @@ export default function RetrievalPanel({ advice, sourceIds = [], focus = '', cou
               <input type="checkbox" checked={checked.has(page.sourceId)} disabled={disabled || page.visualOnly} onChange={event => toggle(page.sourceId, event.target.checked)} />
               <span className="retrieval-panel__page">{page.page ? uiFormat('第 {0} 页', [page.page]) : page.title}</span>
               <span className="retrieval-panel__snippet">{page.snippet}</span>
-              {page.visualOnly && <span>纯图片页：请结合原图出题</span>}
+              {page.visualOnly && <span>{ui('纯图片页：请结合原图出题')}</span>}
             </label>
-            {page.visual && <HitImages visual={page.visual} focus={topic} course={course} disabled={disabled} call={call} />}
+            {page.visual && <HitImages visual={page.visual} focus={topic} course={course} disabled={disabled} />}
           </li>)}
         </ul>
         {preview.unresolved > 0 && <Hint>{uiFormat('另有 {0} 段没能对应到你资料里的页面，已忽略。', [preview.unresolved])}</Hint>}

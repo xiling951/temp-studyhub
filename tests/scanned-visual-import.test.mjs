@@ -6,8 +6,8 @@ import { join } from 'node:path';
 import { PDFDocument } from 'pdf-lib';
 import { createStudyRuntime } from '../lib/runtime/builtins.js';
 import { importVisualPdf } from '../lib/contexts/materials/visual-import.js';
-import { loadManifest } from '../lib/contexts/materials/visual-storage.js';
-import { adaptWindow, parserFingerprint } from '../lib/contexts/materials/visual-parser.js';
+import { loadManifest, hashFile } from '../lib/contexts/materials/visual-storage.js';
+import { adaptWindow, parserFingerprint, saveWindowCache, verifiedWindowCache } from '../lib/contexts/materials/visual-parser.js';
 
 const PNG = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+/l9sAAAAASUVORK5CYII=';
 const parsed = { pages: [
@@ -52,4 +52,15 @@ test('missing page coverage fails; fingerprints separate parser options and cann
   await assert.rejects(adaptWindow(root, { pages: [] }, { start: 1, end: 1 }), /Missing or duplicate/);
   assert.notEqual(parserFingerprint('a'.repeat(64), 'basic'), parserFingerprint('a'.repeat(64), 'standard'));
   assert.notEqual(parserFingerprint('a'.repeat(64), 'standard', 199), parserFingerprint('a'.repeat(64), 'standard'));
+});
+
+test('verified adapter v1 cache derives v2 associations without another parser call or changing literal OCR', async t => {
+  const { root, path, run, runtime } = await fixture(t), original = await hashFile(path);
+  const result = await adaptWindow(root, structuredClone(parsed), { start: 1, end: 3, pageOffset: 199 });
+  await saveWindowCache(root, parserFingerprint(original.hash, 'standard', 199, 1), 1, 3, result);
+  const imported = await run({ parse: async () => { throw new Error('Unnecessary parser call'); } });
+  const current = await verifiedWindowCache(root, parserFingerprint(original.hash, 'standard', 199), 1, 3);
+  assert.ok(current); assert.equal(current.pages[0].text, result.pages[0].text);
+  assert.equal((await loadManifest(root, (await runtime.storage.read()).documents[0].versions[0].visual)).parser.adapter, 2);
+  assert.equal(imported.pages, 3);
 });

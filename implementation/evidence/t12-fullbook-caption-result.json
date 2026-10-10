@@ -1,0 +1,25 @@
+{
+  "pages": 572,
+  "assets": 1321,
+  "versions": 2,
+  "parserAdapter": 2,
+  "ocrUnchanged": true,
+  "oldManifestHash": "17d28cecb1c0f2189c793bb156e3546228fec968da8ff63538060a1e700679bb",
+  "newManifestHash": "7ad85169a19a9ca7d22edaac41bd57a393ca259381edbfca68d9eb0923a3861a",
+  "figures": [
+    {
+      "blockId": "p149-b0",
+      "figureNumber": "5.2",
+      "assetId": "asset-dbd68a513e97b9b656b6a4baf64228a7e20b38ed1ade8337d0ed18abe0a1a245",
+      "captionCount": 1,
+      "association": "geometry-reassociated"
+    },
+    {
+      "blockId": "p149-b8",
+      "figureNumber": "5.1",
+      "assetId": "asset-9dfb5424ca0255cbb0840cf42b922eeb77019a6488041c3983bbbeb27549b6a1",
+      "captionCount": 1,
+      "association": "parser"
+    }
+  ]
+}

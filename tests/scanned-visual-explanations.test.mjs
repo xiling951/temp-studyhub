@@ -5,7 +5,7 @@ import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { createStudyRuntime } from '../lib/runtime/builtins.js';
 import { storeBytes, saveManifest } from '../lib/contexts/materials/visual-storage.js';
-import { planVisualExplanations, decodeVisualExplanation } from '../lib/contexts/materials/visual-explanations.js';
+import { planVisualExplanations, decodeVisualExplanation } from '../lib/contexts/materials/scanned/visual-explanations.js';
 import { until } from './helpers/wait.mjs';
 import { reportUsage } from '../lib/usage-scope.js';
 const executor = { assertAvailable() {}, witness: () => ({ pid: process.pid, host: 'fixture', instance: 'visual-notes' }),

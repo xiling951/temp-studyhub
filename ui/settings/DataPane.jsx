@@ -10,6 +10,6 @@ export default function DataPane({ data, busy, act, settings, setSettings, legac
     <LegacyImportSection busy={busy} act={act} legacy={legacy} setLegacy={setLegacy} />
     <ScheduleSection key={data.root} root={data.root} settings={settings} saved={data.settings} setSettings={setSettings} act={act} busy={busy} />
     <BackupSection root={data.root} busy={busy} exportData={exportData} act={act} onRestored={onRestored} />
-    <VisualBackup key={data.root} onRestored={onRestored} />
+    <VisualBackup key={`visual-backup:${data.root}`} onRestored={onRestored} />
   </>;
 }

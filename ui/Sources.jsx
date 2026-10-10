@@ -505,7 +505,7 @@ export default function Sources({ data, setModal, sourceForm, openAgent, onGener
         {!filtered.length && <p className="muted">{ui('这个范围还没有资料。可切换到全部课程查看。')}</p>}
       </>}
       <AudioJobs data={data} busy={busy} act={act} openAgent={openAgent} onOpenSources={onOpenSources} onLegacyRetry={onLegacyRetry} onGenerate={onGenerate} />
-      <ScannedOnly revision={data.revision} />
+      {data.settings?.scannedTextbooks === true && <ScannedOnly revision={data.revision} />}
       <PdfConvertJobs data={data} act={act} call={call} onOpenSources={onOpenSources} onOpenSettings={onOpenSettings} onGenerate={onGenerate} />
       <PdfConvertHistory data={data} act={act} call={call} onOpenSources={onOpenSources} onOpenSettings={onOpenSettings} collapsible hideWhenEmpty />
       {!items.length ? (

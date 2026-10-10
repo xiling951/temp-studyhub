@@ -1,0 +1,42 @@
+✔ native Job saves separate pending notes, reuses exact versions, changes model create history, and human review is explicit (245.8266ms)
+✔ invalid image selection and absent model fail before Job admission, preserving material data (39.521ms)
+✔ cancellation preserves completed notes and stops the next call; retry reuses the completed group (135.0412ms)
+✔ a provider failure leaves saved material available and performs no automatic retry loop (72.9635ms)
+✔ context/manifest and route are fingerprinted; malformed replies are never saved as valid notes (62.2517ms)
+✔ structured adapter keeps genuine text separate from image-only/blank pages; repeated import preserves source IDs (486.2825ms)
+✔ parse cancellation and transaction failure cannot publish partial documents or alter the original input (378.4445ms)
+✔ missing page coverage fails; fingerprints separate parser options and cannot reuse text-only cache (4.3491ms)
+✔ verified adapter v1 cache derives v2 associations without another parser call or changing literal OCR (406.5977ms)
+✔ all four native visual stages receive real image blocks; pure-image questions publish only after separate image/answer review (188.3587ms)
+✔ independent image/answer rejection preserves an editable draft and blocks every publication shortcut (115.37ms)
+✔ an edited visual answer invalidates its old review and can be re-reviewed only through fresh actual image calls (193.6838ms)
+✔ a fresh rejection after editing is retained and reported as partial; approval authority is never a public action (198.3157ms)
+✔ invalid edited visual drafts fail structural preflight before another paid image review (151.8825ms)
+✔ the numbers of the exceptions section are the inventory's (1.7617ms)
+✔ no exception is scheduled for a step that is over: nothing is left to "S6-5", and the instant rows say what was decided (0.4971ms)
+✔ every work package of the plan has a line with a merged PR and its SHA, and the earlier phases do too (0.6739ms)
+✔ the switches are counted, the pending gates stay pending and no version is recorded as released (0.2901ms)
+✔ managed definitions reject lifecycle/model bypasses while ordinary caches and non-model fetches remain legal (7.5796ms)
+✔ single audio definition keeps all execution behind approved runtime and pipeline adapters (8.5288ms)
+✔ model-shaped legacy call sites require an exact registered inventory and phase owner (1228.9762ms)
+✔ inspectStarts sees real starts, not strings, comments or regular expressions (0.8892ms)
+✔ every place background work starts is reviewed: a new start outside the inventory fails, with every switch on (543.187ms)
+✔ every reviewed site has a disposition that holds: migrate names its step, delete-s6-2 names the switch that bypasses it, an exception says what it is (0.9494ms)
+✔ every migration switch bypasses something in the inventory, and every inventory row appears in the coverage document (1.312ms)
+✔ with every migration switch on at once the service starts, reads its snapshot and offers the runtime to each context (593.8344ms)
+✔ a Job module that asks a model outside the gateway, imports a provider, writes the public job table, allocates its own queue or writes the lifecycle is rejected, at the API (9.3268ms)
+✔ a plain fetch, domain Maps, a per-file writer queue and a private controller are never caught (3.1111ms)
+✔ a failure names the module, the API and why, in one line (0.4006ms)
+✔ every Job module is clean, except the exact reviewed rows of `boundaries`, and no reviewed row has gone stale (146.0896ms)
+✔ reviewed boundary rows are exact: a module, a rule, an API and a count, each with a reason and a removeAt; no wildcard, no pattern, no directory (4.0577ms)
+✔ a Job definition has no reviewed exception to the model, provider, queue or lifecycle rules; the only rows it may carry are the two control-adapter writes of S6-0, kept on purpose (3.5724ms)
+✔ the persisted shape of the kernel manifest is the one the rollback fixtures were checked against; a change needs them changed in the same commit (104.6239ms)
+✔ the rollback fixtures are still the release's own, and the baseline names the release they belong to (0.9849ms)
+ℹ tests 34
+ℹ suites 0
+ℹ pass 34
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 2555.6767

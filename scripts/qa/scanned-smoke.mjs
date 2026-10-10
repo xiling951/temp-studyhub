@@ -41,7 +41,7 @@ try {
   if (!resume) run(process.execPath, [bin, '--profile', 'studyhub-e2e', '--from-default-profile', 'web', '--dump-config']);
   run(process.execPath, [bin, 'plugin', '--profile', 'studyhub-e2e', 'add', join(pack, tgzName), '--offline']);
   summary.installedSourceVerified = [];
-  for (const file of ['lib/runtime.js', 'lib/runtime/builtins.js', 'lib/contexts/bank/operations.js', 'lib/contexts/generation/visual-questions.js', 'lib/retrieval-index.js', 'lib/contexts/materials/visual-retrieval.js']) {
+  for (const file of ['lib/runtime.js', 'lib/runtime/builtins.js', 'lib/contexts/bank/operations.js', 'lib/contexts/generation/scanned/visual-questions.js', 'lib/retrieval-index.js', 'lib/contexts/materials/visual-retrieval.js']) {
     const hash = value => createHash('sha256').update(value).digest('hex');
     const sourceHash = hash(await readFile(join(repo, file))), installedHash = hash(await readFile(join(home, 'profiles/studyhub-e2e/node_modules/@ericwang1358/dsh-daily-flashcard', file)));
     if (sourceHash !== installedHash) throw new Error(`Installed QA package is stale: ${file}`);

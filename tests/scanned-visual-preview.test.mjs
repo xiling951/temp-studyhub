@@ -5,7 +5,7 @@ import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { PDFDocument, degrees } from 'pdf-lib';
 import { createStudyRuntime } from '../lib/runtime/builtins.js';
-import { importVisualPdf } from '../lib/contexts/materials/visual-import.js';
+import { importVisualPdf } from '../lib/contexts/materials/scanned/visual-import.js';
 import { objectPath } from '../lib/contexts/materials/visual-storage.js';
 
 test('model-free rotated/image-only original preview is scoped, cached and rejects a corrupted resource before serving', async t => {

@@ -33,7 +33,7 @@ try {
   const filename = command('npm', ['pack', '--ignore-scripts', '--pack-destination', pack]);
   command(process.execPath, [join(base, 'test-harness/bin.mjs'), 'plugin', '--profile', 'studyhub-e2e', 'add', join(pack, filename), '--offline']);
   summary.installedSourceHashes = {};
-  for (const file of ['lib/contexts/materials/visual-import.js', 'lib/contexts/materials/visual-parser.js', 'lib/contexts/materials/visual-captions.js', 'lib/jobs/gateway.js', 'lib/client.js']) {
+  for (const file of ['lib/contexts/materials/scanned/visual-import.js', 'lib/contexts/materials/visual-parser.js', 'lib/contexts/materials/visual-captions.js', 'lib/jobs/gateway.js', 'lib/client.js']) {
     const expected = (await hashFile(resolve(file))).hash, actual = (await hashFile(join(home, 'profiles/studyhub-e2e/node_modules/@ericwang1358/dsh-daily-flashcard', file))).hash;
     if (expected !== actual) throw new Error(`Stale installed fullbook source: ${file}`);
     summary.installedSourceHashes[file] = actual;

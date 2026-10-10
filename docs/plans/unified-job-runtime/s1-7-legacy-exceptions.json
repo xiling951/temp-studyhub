@@ -21,9 +21,9 @@
     "lib/contexts/study/jobs/assist.js",
     "lib/contexts/notes/jobs/note-generate.js",
     "lib/contexts/generation/blueprint/jobs/exam-blueprint-build.js",
-    "lib/contexts/generation/visual-questions.js",
-    "lib/contexts/materials/visual-explanations.js",
-    "lib/contexts/materials/visual-import.js"
+    "lib/contexts/generation/scanned/visual-questions.js",
+    "lib/contexts/materials/scanned/visual-explanations.js",
+    "lib/contexts/materials/scanned/visual-import.js"
   ],
   "entries": [
     {

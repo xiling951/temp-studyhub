@@ -6,7 +6,7 @@ import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { PDFDocument, rgb } from 'pdf-lib';
 import { createStudyRuntime } from '../lib/runtime/builtins.js';
-import { importVisualPdf } from '../lib/contexts/materials/visual-import.js';
+import { importVisualPdf } from '../lib/contexts/materials/scanned/visual-import.js';
 import { prepareVisualCardEvidence } from '../lib/contexts/materials/visual-card-evidence.js';
 import { createPreviewServer, previewCall } from '../scripts/preview-server.mjs';
 import { buildPreview } from '../scripts/build.mjs';

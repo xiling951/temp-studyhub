@@ -5,7 +5,7 @@ import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { PDFDocument } from 'pdf-lib';
 import { createStudyRuntime } from '../lib/runtime/builtins.js';
-import { importVisualPdf } from '../lib/contexts/materials/visual-import.js';
+import { importVisualPdf } from '../lib/contexts/materials/scanned/visual-import.js';
 import { digest } from '../lib/contexts/materials/visual-storage.js';
 import { runLocalCommand } from '../lib/local-command.js';
 

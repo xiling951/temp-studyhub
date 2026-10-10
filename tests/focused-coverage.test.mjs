@@ -5,7 +5,7 @@ import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { sectionWeights, weightsPrompts } from '../lib/section-weights.js';
 import { reviewIssues } from '../lib/assessment-quality.js';
-import { reviewPrompts } from '../lib/generation.js';
+import { reviewPrompts, reviewDeck } from '../lib/generation.js';
 import { StudyService } from '../lib/service.js';
 import { createFakeModel } from '../scripts/fake-model.mjs';
 import { qualityReview } from './helpers/assessment.mjs';
@@ -62,6 +62,28 @@ test('each scoped question needs its own topic verdict; generic approval is insu
   const prompt = reviewPrompts({ sources, deck, focus: 'MOS', topicScope });
   assert.match(prompt.system, /topicRelevance/);
   assert.match(prompt.system, /Unsupported decisive premises/);
+});
+
+test('missing topic verdicts use protocol recovery; an explicit rejection is preserved', async () => {
+  const deck = { cards: [{ id: 'a', kind: 'quiz' }, { id: 'b', kind: 'quiz' }] };
+  let calls = 0;
+  const reviewed = await reviewDeck(async (_, payload) => {
+    calls++;
+    const request = JSON.parse(payload);
+    if (calls === 1) {
+      const answer = qualityReview(deck);
+      answer.checks[0].topicRelevance = 'pass';
+      return JSON.stringify(answer);
+    }
+    assert.deepEqual(request.reask.onlyCardIds, ['b']);
+    assert.match(request.reask.rules, /topicRelevance/);
+    const answer = qualityReview({ cards: [deck.cards[1]] });
+    answer.checks[0].topicRelevance = 'fail';
+    return JSON.stringify(answer);
+  }, { sources, deck, topicScope: { focus: 'MOS' }, focus: 'MOS', singleRound: true });
+  assert.equal(calls, 2);
+  assert.deepEqual(reviewed.checks.map(check => check.topicRelevance), ['pass', 'fail']);
+  assert.ok(reviewIssues(reviewed, deck, { topicScope: { focus: 'MOS' } }).some(issue => issue.startsWith('b:')));
 });
 
 test('a real coverage operation scopes the draft and its input identity before authoring', async t => {

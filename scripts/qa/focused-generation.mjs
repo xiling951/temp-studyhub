@@ -11,19 +11,30 @@ import { scrubSecrets } from './env.mjs';
 
 const base = resolve('..'), stamp = Date.now();
 const home = join(base, 'test-harness/final-restore-1791631596795');
-const root = join(base, `test-libraries/mos-quality-${stamp}`), evidence = join(base, `evidence/mos-quality-${stamp}`);
+const resumeFrom = process.argv.find(arg => arg.startsWith('--resume='))?.slice('--resume='.length);
+const previous = resumeFrom ? JSON.parse(await readFile(join(resolve(resumeFrom), 'summary.json'), 'utf8')) : null;
+if (previous && (!previous.root.startsWith(join(base, 'test-libraries/mos-quality-')) || previous.home !== home || !previous.job?.draftId)) throw Error('Resume requires an owned isolated MOS regression');
+const root = previous?.root ?? join(base, `test-libraries/mos-quality-${stamp}`), evidence = join(base, `evidence/mos-quality-${stamp}`);
 const version = JSON.parse(await readFile('package.json', 'utf8')).version;
 const env = { ...scrubSecrets(process.env), DSH_HOME: home, DSH_TELEMETRY_DISABLED: '1', SSH_TTY: 'audit' };
+env.PATH = `${join(base, 'test-harness')};${env.PATH ?? env.Path ?? ''}`;
+delete env.Path;
 const candidates = (await readFile('C:/Users/Lenovo/Desktop/API-key.txt', 'utf8')).match(/sk-[A-Za-z0-9_-]+/g) || [];
 if (candidates.length !== 1) throw Error('Expected one authorized native credential');
 const redact = value => value.replaceAll(candidates[0], '[credential]').replace(/token=[^\s"\\&]+/g, 'token=[redacted]');
 let dsh, browser;
-const result = { root, home, version, startedAt: new Date().toISOString(), actualNativeModel: true, countRequested: 30, pageErrors: [] };
+const result = { root, home, version, ...(resumeFrom ? { resumeFrom: resolve(resumeFrom) } : {}), startedAt: new Date().toISOString(), actualNativeModel: true, countRequested: 30, pageErrors: [] };
 try {
   await mkdir(evidence, { recursive: true });
-  await cp(join(base, 'test-libraries/final-restore-1791631596795'), root, { recursive: true, errorOnExist: true, force: false });
-  const cli = spawnSync(process.execPath, [join(base, 'test-harness/bin.mjs'), 'plugin', '--profile', 'studyhub-e2e', 'add', join(base, `packages/${version}/ericwang1358-dsh-daily-flashcard-${version}.tgz`), '--offline'], { env, encoding: 'utf8', windowsHide: true, timeout: 300000 });
-  if (cli.status !== 0) throw Error('Native isolated installer failed');
+  if (!previous) await cp(join(base, 'test-libraries/final-restore-1791631596795'), root, { recursive: true, errorOnExist: true, force: false });
+  // A unique local archive URI prevents the host from reusing a same-version package cache.
+  const archive = join(evidence, `ericwang1358-dsh-daily-flashcard-${version}.tgz`);
+  await cp(join(base, `packages/${version}/ericwang1358-dsh-daily-flashcard-${version}.tgz`), archive);
+  const cli = spawnSync(process.execPath, [join(base, 'test-harness/bin.mjs'), 'plugin', '--profile', 'studyhub-e2e', 'add', archive, '--offline'], { env, encoding: 'utf8', windowsHide: true, timeout: 300000 });
+  if (cli.status !== 0) {
+    await writeFile(join(evidence, 'installer.log'), redact(`${cli.stdout ?? ''}\n${cli.stderr ?? ''}`));
+    throw Error('Native isolated installer failed; see redacted local installer.log');
+  }
   for (const file of ['lib/section-weights.js', 'lib/generation.js', 'lib/contexts/generation/operations.js']) {
     const hash = data => createHash('sha256').update(data).digest('hex');
     if (hash(await readFile(file)) !== hash(await readFile(join(home, 'profiles/studyhub-e2e/node_modules/@ericwang1358/dsh-daily-flashcard', file)))) throw Error('Stale native package');
@@ -52,8 +63,10 @@ try {
   if (sourceIds.length !== 571) throw Error('Expected current 571 genuine OCR sources');
   result.inputPages = sourceIds.length;
   const before = await new Store(root).read();
-  result.originalSourcesHash = createHash('sha256').update(JSON.stringify(before.sources)).digest('hex');
-  const started = await call('generate', { sourceIds, title: 'MOS · 修复后真实验收', course: '数字集成电路', focus: 'MOS管器件特性、电路计算；考器件结构、工作区、阈值与体效应、电流、电容、短沟道效应及MOS电路中的器件作用。排除参考文献编号、阅读书目、期刊会议、全书组织及与MOS器件无关的系统架构题。', count: 30, coverageLevel: 'full', autoComplete: true, kind: 'quiz', kinds: ['quiz', 'multi', 'flashcard', 'open', 'cloze'], tokenBudget: 400000, performance: { concurrency: 3, batchSize: 5, jobTimeoutMinutes: 20, fillRounds: 1, effortPlanning: 'low', effortReview: 'low', effortWriting: 'low', effortRepair: 'low' } });
+  result.originalSourcesHash = previous?.originalSourcesHash ?? createHash('sha256').update(JSON.stringify(before.sources)).digest('hex');
+  const pending = previous && before.drafts.find(draft => draft.id === previous.job.draftId);
+  if (previous && !pending) throw Error('The retained native draft is missing');
+  const started = await call('generate', pending ? { resumeDraftId: pending.id, draftVersion: pending.draftVersion, coverage: { run: true, autoComplete: true, tokenBudget: 2000000 } } : { sourceIds, title: 'MOS · 修复后真实验收', course: '数字集成电路', focus: 'MOS管器件特性、电路计算；考器件结构、工作区、阈值与体效应、电流、电容、短沟道效应及MOS电路中的器件作用。排除参考文献编号、阅读书目、期刊会议、全书组织及与MOS器件无关的系统架构题。', count: 30, coverageLevel: 'full', autoComplete: true, kind: 'quiz', kinds: ['quiz', 'multi', 'flashcard', 'open', 'cloze'], tokenBudget: 400000, performance: { concurrency: 3, batchSize: 5, jobTimeoutMinutes: 20, fillRounds: 1, effortPlanning: 'low', effortReview: 'low', effortWriting: 'low', effortRepair: 'low' } });
   result.jobId = started.jobId; let job, last = '';
   for (let n = 0; n < 1500; n++) {
     job = (await call('snapshot')).jobs.find(item => item.id === started.jobId);

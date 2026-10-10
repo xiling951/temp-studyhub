@@ -79,3 +79,5 @@
 - 真实问题：MOS请求保存了focus，但覆盖571页/635496字符，长度优先配额只选MOS正文80–111中的86页，参考文献564进入题组；24/30题，全部无图像证据。旧MOS题组和12题练习记录保持原样。
 - 修复：复用原生规划模型和已有sectionWeights，在配额前核验topic relevance，不完整/无模型/无相关页拒绝退回整书；新草稿引用范围、inputRef与覆盖分母跟随实际选材。每题独立复审新增topicRelevance硬检查；证据不足不再作为sourceSupport可选建议。无主题的既有长度回退保持原行为。
 - 7项新增测试及178项相关回归通过，lint仅原DocumentViewer警告；evidence/mos-focused-tests.log、mos-fix-regression.log、mos-fix-lint.log。合成模型测试不冒称真实答案已验证；实际教材/模型验收待执行。新版本3.3.0-scanned.3，正式环境仍为已交付.2，尚未替换。
+- 已提交并推送 f2c5f2cf（主题筛选/证据门禁）与338677a3（编辑后发布继续执行主题门禁及原生验收脚本）。真实DeepSeek Flash低推理原生任务选材571→163页，排除408页，参考文献112/564不再进入选材；第一轮保留29道经审阅题，达到400000软预算后停止（实际累计1312671tokens，预算按调用边界检查，不能保证不超出）。证据evidence/mos-quality-1791638043353/summary.json；未手改答案或审核标记。
+- 原生验收发现个别审阅遗漏topicRelevance，已复用原有有界协议重试，仅重问漏填的题，保留明确fail。新增回归现为9项；最终51项发布/协议/主题测试和14项真实文件名的运行时/严重性回归通过，另54项兼容回归通过（与178项存在重叠，不相加）。lint仍0错误/1原警告，证据mos-fix-final-tests.log、mos-fix-final-runtime-tests.log、mos-topic-protocol.log、mos-fix-compatibility.log。补题继续在同一隔离草稿进行，正式旧MOS题组及作答记录未修改。

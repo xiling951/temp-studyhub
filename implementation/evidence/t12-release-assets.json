@@ -1,0 +1,124 @@
+{
+  "assets": [
+    {
+      "digest": "sha256:2388beb1abc8599b995b7a622a568c2f3b21695a349b479081cc9aaddf6052c5",
+      "name": "artifacts.json",
+      "size": 2586,
+      "state": "uploaded"
+    },
+    {
+      "digest": "sha256:2513e9c43a2173f59dba8fcddf6d65d1113d8028e73ae692428fcc2c0097dadf",
+      "name": "DELIVERY-SHA256SUMS.txt",
+      "size": 1663,
+      "state": "uploaded"
+    },
+    {
+      "digest": "sha256:3dfe8cb7d5e78698c0b98bfd019d6ec05db5ee2b41fe8dccfc703d75de4e2cc5",
+      "name": "ericwang1358-dsh-daily-flashcard-3.3.0-scanned.2.tgz",
+      "size": 4961458,
+      "state": "uploaded"
+    },
+    {
+      "digest": "sha256:bc8c1cbe3674814e6ccec704d9eb34e8d33f9e32d093b49fe324f6f35c26c645",
+      "name": "ericwang1358-dsh-study-audio-3.3.0-scanned.2.tgz",
+      "size": 4959545,
+      "state": "uploaded"
+    },
+    {
+      "digest": "sha256:96704b8fc0f0a1a40779881f1115e57027889603798a2cb47ad538ba9a698609",
+      "name": "ericwang1358-dsh-study-bank-3.3.0-scanned.2.tgz",
+      "size": 4959545,
+      "state": "uploaded"
+    },
+    {
+      "digest": "sha256:5b196a06d234df4d41dae3afedd1bd68bb5749185c66849807b1ef62ef2ed243",
+      "name": "ericwang1358-dsh-study-generation-3.3.0-scanned.2.tgz",
+      "size": 4959549,
+      "state": "uploaded"
+    },
+    {
+      "digest": "sha256:60a6f66eb71a5a004f6613b13b0a0ee7a5832f850c37f13405532be9e7486d11",
+      "name": "ericwang1358-dsh-study-materials-3.3.0-scanned.2.tgz",
+      "size": 4959550,
+      "state": "uploaded"
+    },
+    {
+      "digest": "sha256:5dc85d65775beee4023f724a1a4cb4984afd9e6421f983a05958002abc45cf3a",
+      "name": "ericwang1358-dsh-study-runtime-3.3.0-scanned.2.tgz",
+      "size": 4959547,
+      "state": "uploaded"
+    },
+    {
+      "digest": "sha256:18f337bbeecc38f6ad92c03240b9293d95533741e0bd2019aedb4e536dba982d",
+      "name": "ericwang1358-dsh-study-study-3.3.0-scanned.2.tgz",
+      "size": 4959545,
+      "state": "uploaded"
+    },
+    {
+      "digest": "sha256:88e9f9abd50d68ec5c55ac4ed0c8074b8620c73f9a57de589e08bef560376ec4",
+      "name": "ericwang1358-studyhub-retrieval-3.3.0-scanned.2.tgz",
+      "size": 4400,
+      "state": "uploaded"
+    },
+    {
+      "digest": "sha256:9d9d299336f3c3392cc86eafbd8b32164199ec9e9a148e39fed5998fbeb4158c",
+      "name": "install-and-rollback.md",
+      "size": 5586,
+      "state": "uploaded"
+    },
+    {
+      "digest": "sha256:014263a90d6a1f33e1c30467decdfaa81f1678e2f2bc104d441ec06db56f8ccf",
+      "name": "SHA256SUMS-3.3.0-scanned.2.txt",
+      "size": 1147,
+      "state": "uploaded"
+    },
+    {
+      "digest": "sha256:c4f1c37b58bca1cda63baeaeed307d6c958e78d36a4a0899cd11704e3765f535",
+      "name": "StudyHub-3.3.0-scanned.2-Setup.html",
+      "size": 1373,
+      "state": "uploaded"
+    },
+    {
+      "digest": "sha256:9e6b600217450c12a5d6ba6672656ce79676cde4eedd5a9b13be22248e587d38",
+      "name": "StudyHub-3.3.0-scanned.2-Setup.zh-CN.html",
+      "size": 1376,
+      "state": "uploaded"
+    },
+    {
+      "digest": "sha256:7ac1d5ebeb48a4111cb1cabc40187d128cc811be289330f3bb4290feee59c56e",
+      "name": "StudyHub-3.3.0-scanned.2-Windows-delivery.zip",
+      "size": 34753986,
+      "state": "uploaded"
+    },
+    {
+      "digest": "sha256:32e893d60e89cd915edbe4cb7b9db085c005bb0c3cc1cc1ed474b3a5f11fd885",
+      "name": "StudyHub-3.3.0-scanned.2-Windows-delivery.zip.sha256",
+      "size": 113,
+      "state": "uploaded"
+    },
+    {
+      "digest": "sha256:df0954ffcc3cb753fdec76fcc5bd2c8ead88cddebfdb6453158bf50a15e3be36",
+      "name": "Usage.zh-CN.md",
+      "size": 3602,
+      "state": "uploaded"
+    },
+    {
+      "digest": "sha256:962dc7b7f1f780717c81ef4938bb9ffd4fba9119fa39e92932c0aad9cdebdc84",
+      "name": "Validation.zh-CN.md",
+      "size": 9269,
+      "state": "uploaded"
+    },
+    {
+      "digest": "sha256:5ac46c685a6d4532c39606fecb264b810c3072c262e841696bfc9a6c16b5762e",
+      "name": "verification.json",
+      "size": 1703,
+      "state": "uploaded"
+    }
+  ],
+  "draft": false,
+  "id": 408906671,
+  "remoteDigestsMatched": true,
+  "publishedAt": "2026-10-10T11:37:45Z",
+  "url": "https://github.com/xiling951/temp-studyhub/releases/tag/v3.3.0-scanned.2",
+  "tag": "v3.3.0-scanned.2"
+}

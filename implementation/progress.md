@@ -1,7 +1,7 @@
 # 扫描教材实施进度
 
 ## 当前状态
-- 当前任务：T12；T01–T12 功能与实际验收通过，正在发布最终交付文件。完整回归的基线失败/间歇问题如实保留，见 evidence/final-validation.md。
+- 当前任务：T12；T01–T12 已完成开发、实际验收与最终交付发布。完整回归的基线失败/间歇问题如实保留，见 evidence/final-validation.md。
 - 基线：上游 v3.3.0，daa4df7b3045df14290e10a43d72e0e751e0f72d。
 - 独立源码：D:/studyhub/implementation/source，分支 feat/scanned-textbook-visual。
 - 隔离环境：D:/studyhub/implementation/test-harness；测试库：implementation/test-libraries。
@@ -70,3 +70,7 @@
 - T12 最终题面复核：中性标题修订后4题全部经过新真实独立图片审阅并重新发布，累计11次模型调用80828tokens，全为recorded。正常原快捷方式窗口核验图片、标题、PDF149/印刷131原页；旧库最终40文件SHA再次一致。evidence/t12-desktop-result.json。
 - T12 最终题组附件备份恢复通过：独立新库实际上传/确认恢复572页、2版本、1142sources、1321当前资源、4题及审阅收据，原图与原页通过，console/pageerror=0，付费模型调用0。evidence/t12-final-backup-restore-result.json；脚本首页判断/包路径/版本遮蔽修正均以本次真实运行验证。
 - T12 最终交付：8 TGZ、安装页、使用说明、测试报告、插件/数据回退及两份SHA清单齐全；release:check当前交付目录通过（evidence/t12-delivery-release-check.log）。最终生产代码完整提交：b8010dca0478666b27b7be9c3c988df4456913ac。源码根目录本轮临时操作脚本已删除；隔离日志缓存保留。清理两份失败上传副本被自动审批策略阻止，未绕过，副本留在宿主临时上传目录。
+
+- 最终验收/题组备份/说明提交并推送：d18ae26f2c266425a873f2bee22c7885b274e1de。
+- T12 已完成：GitHub正式发行 v3.3.0-scanned.2 已公开发布，19个交付资产均uploaded，GitHub服务端SHA256与本机逐项一致。evidence/t12-release-assets.json；https://github.com/xiling951/temp-studyhub/releases/tag/v3.3.0-scanned.2 。整合安装ZIP为34753986字节，SHA256 7ac1d5ebeb48a4111cb1cabc40187d128cc811be289330f3bb4290feee59c56e，包含17个交付文件（不含教材）。
+- 最终已验证而不夸大的边界：完整verify仍为8079通过/9失败/13跳过；原版问题、间歇时序、合成fixture范围和正式未执行破坏性数据回退均见final-validation.md。正式Desktop保持定制版，原PDF及旧库不变，新教材库完整可恢复。没有待实施的本轮核心功能。

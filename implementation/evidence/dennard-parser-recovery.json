@@ -1,0 +1,91 @@
+{
+  "startedAt": "2026-10-10T14:51:43.183Z",
+  "failure": {
+    "message": "fetch failed",
+    "cause": "ECONNREFUSED",
+    "address": "127.0.0.1",
+    "port": 16580,
+    "modelRequest": false
+  },
+  "service": {
+    "version": "4.0.11",
+    "state": "ready",
+    "tier": "standard"
+  },
+  "retry": {
+    "jobId": "2a66f8ca-a44a-452f-a37e-7b5bfd1cc114",
+    "attemptId": "9f503424-a790-407e-bd7c-c65eecf8eeaf",
+    "action": "retry",
+    "status": "queued"
+  },
+  "job": {
+    "status": "complete",
+    "progress": {
+      "done": 11,
+      "total": 11,
+      "unit": "page",
+      "percent": 100,
+      "segments": []
+    },
+    "error": null
+  },
+  "calls": [
+    {
+      "kind": "mineru-visual",
+      "status": "failed",
+      "modelRequest": false
+    },
+    {
+      "kind": "mineru-visual",
+      "status": "failed",
+      "modelRequest": false
+    },
+    {
+      "kind": "mineru-visual",
+      "status": "ok",
+      "modelRequest": false
+    }
+  ],
+  "previousSourcesUnchanged": true,
+  "document": {
+    "pages": 11,
+    "assets": 26,
+    "blockCounts": {
+      "doc_title": 1,
+      "text": 65,
+      "paragraph_title": 14,
+      "footer": 12,
+      "page_number": 11,
+      "chart": 13,
+      "equation": 6,
+      "image": 4,
+      "table": 2,
+      "ref_text": 18
+    },
+    "page8Visuals": 3
+  },
+  "ok": true,
+  "finishedAt": "2026-10-10T14:53:28.822Z",
+  "ui": {
+    "visualReader": true,
+    "pdfPage": 8,
+    "renderedImages": [
+      {
+        "width": 657,
+        "height": 911
+      },
+      {
+        "width": 647,
+        "height": 405
+      },
+      {
+        "width": 652,
+        "height": 525
+      }
+    ],
+    "pageErrors": []
+  },
+  "uiInitialProbe": {
+    "issue": "Lazy images require scrolling the figure placeholder before selecting its img; corrected in second probe."
+  }
+}

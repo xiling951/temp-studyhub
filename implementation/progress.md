@@ -86,3 +86,9 @@
 - 安装实测修复记录：普通CLI曾覆盖Desktop的generation投影，导致恢复模式；改用宿主自带upgradePluginToGeneration流程的版本安装器、登记锁及事务投影后正常web启动。额外的迁移peer静态扫描因宿主React闭包未通过，保留失败记录而非写通过；官方升级路径不要求此迁移扫描，实际运行另行验证。宿主agent-preset缺失警告在2026-09-30起已有，未扩展修复；恢复模式将一条不可用router-standard预设迁移为standard，正常预设列表仍无该旧ID，未伪造恢复。StudyHub数据保持原样。
 - 本轮lint/build/release:check通过（lint 1原警告）；未重跑8101项完整套件，历史9失败仍如原报告记录。`.2`交付目录和发行保持不变；新`.3`使用说明明确需重新生成旧偏题题组，图像题使用原图入口，报告记录软预算会超出及选材300字符开头的局限。正在完成新交付校验与推送。
 - 验收及正常Desktop安装证据提交19409a59已推送。`.3`正式发行发布：https://github.com/xiling951/temp-studyhub/releases/tag/v3.3.0-scanned.3 ，19个资产uploaded，GitHub服务端SHA256/字节数与本地全部一致，非draft。整合ZIP17文件、34776419字节、SHA256 8eda656dbe7a651cca2fa6c8bb3405bf282c594cd9625e19b93c69990c0da138，CRC和逐文件哈希实际核验；mos-release-assets.json、mos-delivery-package.json、mos-delivery-release-check.log。原PDF198094368字节及原SHA保持一致。开发、真实验收、安装和新交付均完成；普通批量自动附图及硬预算未实施，不冒称完成。
+
+
+## 后续：Dennard论文图文导入失败诊断与恢复
+- 2026-10-10 22:43/22:46两次失败的真实任务类型为scanned-textbook-import，调用为mineru-visual、boundary=local-process、modelRequest=false；并未调用DeepSeek。错误fetch failed；本机127.0.0.1:16580连接实测ECONNREFUSED，MinerU服务停止。界面把本地任务误称模型调用，并显示不适用的补题提示，该文案问题尚未改动。
+- 通过现有DSH mineru.local.start启动服务：MinerU4.0.11、standard、managed、ready，原生健康接口HTTP200。通过原生job.control retry继续同一任务，11/11页complete，26个资源（含原PDF）、13个chart、4个image、2个table、6个equation；全部资源SHA核验通过，旧文字sources逐条SHA不变。未直接调用外部模型API，未改模型/密钥/正式包。
+- 浏览器实际打开新图文版本第8页，3幅图像按需加载成功（657×911、647×405、652×525），pageErrors=0。第一遍探针选取未挂载的懒加载img等待超时，第二遍按原界面figure滚动后通过；不将探针超时记成应用错误。脱敏证据implementation/evidence/dennard-parser-recovery.json；论文截图仅私有本地保留，不提交公开仓库。

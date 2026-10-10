@@ -74,3 +74,8 @@
 - 最终验收/题组备份/说明提交并推送：d18ae26f2c266425a873f2bee22c7885b274e1de。
 - T12 已完成：GitHub正式发行 v3.3.0-scanned.2 已公开发布，19个交付资产均uploaded，GitHub服务端SHA256与本机逐项一致。evidence/t12-release-assets.json；https://github.com/xiling951/temp-studyhub/releases/tag/v3.3.0-scanned.2 。整合安装ZIP为34753986字节，SHA256 7ac1d5ebeb48a4111cb1cabc40187d128cc811be289330f3bb4290feee59c56e，包含17个交付文件（不含教材）。
 - 最终已验证而不夸大的边界：完整verify仍为8079通过/9失败/13跳过；原版问题、间歇时序、合成fixture范围和正式未执行破坏性数据回退均见final-validation.md。正式Desktop保持定制版，原PDF及旧库不变，新教材库完整可恢复。没有待实施的本轮核心功能。
+
+## 后续：MOS主题出题质量修复（进行中）
+- 真实问题：MOS请求保存了focus，但覆盖571页/635496字符，长度优先配额只选MOS正文80–111中的86页，参考文献564进入题组；24/30题，全部无图像证据。旧MOS题组和12题练习记录保持原样。
+- 修复：复用原生规划模型和已有sectionWeights，在配额前核验topic relevance，不完整/无模型/无相关页拒绝退回整书；新草稿引用范围、inputRef与覆盖分母跟随实际选材。每题独立复审新增topicRelevance硬检查；证据不足不再作为sourceSupport可选建议。无主题的既有长度回退保持原行为。
+- 7项新增测试及178项相关回归通过，lint仅原DocumentViewer警告；evidence/mos-focused-tests.log、mos-fix-regression.log、mos-fix-lint.log。合成模型测试不冒称真实答案已验证；实际教材/模型验收待执行。新版本3.3.0-scanned.3，正式环境仍为已交付.2，尚未替换。

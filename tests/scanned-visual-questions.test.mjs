@@ -27,7 +27,7 @@ async function setup(t, approved = true) {
   const ctx = { llm: { resolveModelInfo: async () => ({ inputModalities: ['text', 'image'] }) }, attachments: { saveImages: async images => images.map(image => ({ attachmentId: 'sha256:fixture', mediaType: image.mediaType, bytes: image.data.length })), readImage: async () => ({ data: Buffer.alloc(1) }) } };
   const services = { complete, jobExecutor: executor, workOwner: Symbol('owner'), jobModelHost: { ctx, sessionId: 'missing', complete, route: { provider: 'fixture', model: 'vision' } } };
   const wait = async result => { await until(() => ['complete', 'failed', 'cancelled'].includes(runtime.work.jobs.get(result.jobId)?.status), 'visual question fixture'); return runtime.work.jobs.get(result.jobId).contract; };
-  return { runtime, services, requests, wait };
+  return { runtime, services, requests, wait, setApproval: value => { approved = value; } };
 }
 test('all four native visual stages receive real image blocks; pure-image questions publish only after separate image/answer review', async t => {
   const { runtime, services, requests, wait } = await setup(t);
@@ -60,4 +60,23 @@ test('an edited visual answer invalidates its old review and can be re-reviewed 
   const reviewed = await wait(await runtime.call('generation.visual.review', { draftId: draft.id, draftVersion: draft.draftVersion }, services));
   assert.equal(reviewed.status, 'complete', reviewed.error?.message); assert.equal(requests.length, 5); assert.equal(reviewed.calls.length, 1);
   assert.equal((await runtime.storage.read()).documents[0].versions[0].visual.cardReviews.length, 2);
+});
+
+test('a fresh rejection after editing is retained and reported as partial; approval authority is never a public action', async t => {
+  const { runtime, services, wait, setApproval } = await setup(t, false);
+  await wait(await runtime.call('generation.visual.start', { documentId: 'book', blockIds: ['b0'], count: 1 }, services));
+  let draft = structuredClone((await runtime.storage.read()).drafts[0]); draft.cards[0].answer = 'Changed candidate that the synthetic independent reviewer still rejects';
+  draft = await runtime.call('draft.save', { deck: draft });
+  assert.deepEqual(draft.editorial.rejectedIssues, {});
+  const result = await wait(await runtime.call('generation.visual.review', { draftId: draft.id, draftVersion: draft.draftVersion }, services));
+  assert.equal(result.result.completeness, 'partial');
+  draft = (await runtime.storage.read()).drafts[0]; assert.ok(draft.editorial.rejectedIssues[draft.cards[0].id].length);
+  for (const action of ['materials.visual.cards.review.commit', 'materials.visual.cards.resolve', 'bank.draft.visual.review.save']) {
+    assert.equal(runtime.hasAction(action), false);
+    await assert.rejects(runtime.call(action, {}), /Capability unavailable/);
+  }
+  assert.ok(runtime.describe().every(domain => domain.operations.every(operation => !['visual.cards.review.commit', 'draft.visual.review.save'].includes(operation.name))));
+  setApproval(true);
+  const approved = await wait(await runtime.call('generation.visual.review', { draftId: draft.id, draftVersion: draft.draftVersion }, services));
+  assert.equal(approved.result.completeness, 'complete');
 });

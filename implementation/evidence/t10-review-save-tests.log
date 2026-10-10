@@ -1,0 +1,28 @@
+✔ both cards pass their review and go into the target deck once; the draft is gone; the job reports what went in; the session is told once (136.5546ms)
+✔ a card that does not pass its review stays in a draft of its own, and the job says how many went in (60.1498ms)
+✔ a draft that changed since it was opened is refused before anything is queued, and one publication per draft at a time (61.9805ms)
+✔ pure image evidence has no invented source; independent review authority binds exact question, image, version and region (96.9265ms)
+✔ actual publication APIs reject client flags and resource tampering; quick publish cannot waive image review (62.3048ms)
+✔ actual bank append validates image resources under its coordination lock and accepts only independent approved cards (54.3568ms)
+✔ an approved visual draft publishes through the existing authoring flow with clean quality and preserved original references (62.1083ms)
+✔ JSON import preserves visual references as a pending draft and does not silently discard bad ordinary evidence (46.8341ms)
+✔ cross-document, wrong revision, wrong region, missing resources and tampered bytes cannot become valid visual evidence (45.1344ms)
+✔ ordinary quote verification stays strict and public question DTOs expose only the required original-image references (44.3168ms)
+✔ structured completion sends a real native image block to the pinned adapter and reports usage once (3.6767ms)
+✔ native content preparation keeps attachment references while retaining the ordinary text sanitizer (0.6667ms)
+✔ unknown/text models, placeholder-only input, oversized images and unreadable native attachments fail before dispatch (0.7416ms)
+✔ structured provider offload/rate-limit errors keep their codes and do not return placeholder success (0.524ms)
+✔ structured calls propagate caller cancellation and timeout to the prepared stream (44.6196ms)
+✔ gateway assembles native child image prompt, books usage once and drains child disposal (2.2078ms)
+✔ all four native visual stages receive real image blocks; pure-image questions publish only after separate image/answer review (170.7265ms)
+✔ independent image/answer rejection preserves an editable draft and blocks every publication shortcut (108.132ms)
+✔ an edited visual answer invalidates its old review and can be re-reviewed only through fresh actual image calls (135.5897ms)
+✔ a fresh rejection after editing is retained and reported as partial; approval authority is never a public action (191.9112ms)
+ℹ tests 20
+ℹ suites 0
+ℹ pass 20
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1475.5591

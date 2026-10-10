@@ -1,0 +1,16 @@
+✔ composed reads keep one committed revision while preserving authorized owner projections (51.4789ms)
+✔ committed read sessions enforce dependencies, grants and readonly owner APIs (14.7495ms)
+✔ borrowed transaction drafts reject nested read-only mutations without changing committed state (41.1107ms)
+✔ unloaded and reinstalled contexts cannot publish captured late state callbacks (5.473ms)
+✔ host cancellation during an async state update prevents its late commit and preserves sibling writes (16.1925ms)
+✔ a view is the shared frozen collection, a read is a private copy (38.5545ms)
+✔ a read or a view can name the fields it needs (14.0506ms)
+✔ the state port's view merges defaults under the shared values and read stays a copy (0.4399ms)
+ℹ tests 8
+ℹ suites 0
+ℹ pass 8
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 244.337

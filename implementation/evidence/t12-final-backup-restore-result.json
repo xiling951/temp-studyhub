@@ -1,0 +1,42 @@
+{
+  "home": "D:\\studyhub\\implementation\\test-harness\\final-restore-1791631596795",
+  "root": "D:\\studyhub\\implementation\\test-libraries\\final-restore-1791631596795",
+  "startedAt": "2026-10-10T11:32:18.017Z",
+  "consoleErrors": [],
+  "pageErrors": [],
+  "paidModelCalls": 0,
+  "startupDialog": [
+    "添加一个 API Key 开始使用\n\n配置 DeepSeek 官方模型，即可开始使用。\n\nAPI 密钥\n稍后配置\n保存并继续"
+  ],
+  "finalQuestions": {
+    "count": 4,
+    "neutralTopics": true,
+    "imagesRetained": true,
+    "independentReviewReceiptsRetained": true
+  },
+  "restored": {
+    "pages": 572,
+    "versions": 2,
+    "sources": 1142,
+    "assetsVerified": 1321,
+    "documentId": "visual-1bee28d307564671e604d8a85860aecc53099221044046e16ad264b21fb8c358",
+    "revision": "visual1-eadf9e35e97d57c70945ae7257c70f6568ddb45b36924f3365997cec481d85b6"
+  },
+  "originalPreview": {
+    "asset": {
+      "assetId": "asset-2bfb808af8f2d39c615147149421d71a6f56d67fdb813400a7b21d26fd564275",
+      "hash": "2bfb808af8f2d39c615147149421d71a6f56d67fdb813400a7b21d26fd564275",
+      "bytes": 394880,
+      "mime": "image/png",
+      "kind": "page-preview",
+      "width": 1323,
+      "height": 1895,
+      "previewKey": "149:page:160",
+      "page": 149,
+      "originalHash": "1bee28d307564671e604d8a85860aecc53099221044046e16ad264b21fb8c358"
+    },
+    "page": 149,
+    "originalPage": 149
+  },
+  "ok": true
+}

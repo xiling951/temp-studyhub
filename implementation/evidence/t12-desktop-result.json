@@ -37,7 +37,7 @@
     ],
     "draftVersion": 2
   },
-  "independentReviews": 4,
+  "independentReviews": 8,
   "calls": [
     {
       "stage": "visual-plan",
@@ -136,9 +136,65 @@
       },
       "accounting": "recorded",
       "appliedEffort": "off"
+    },
+    {
+      "stage": "visual-review:38c70831-8d07-4440-83df-65abe48a8e73",
+      "runner": "subagent",
+      "status": "ok",
+      "tokens": 7191,
+      "tokenUsage": {
+        "uncachedInputTokens": 1775,
+        "outputTokens": 808,
+        "cacheReadTokens": 4608,
+        "cacheWriteTokens": 0
+      },
+      "accounting": "recorded",
+      "appliedEffort": "off"
+    },
+    {
+      "stage": "visual-review:aae09d8c-d88a-41f1-afde-22864b5b8cfc",
+      "runner": "subagent",
+      "status": "ok",
+      "tokens": 7952,
+      "tokenUsage": {
+        "uncachedInputTokens": 1737,
+        "outputTokens": 1607,
+        "cacheReadTokens": 4608,
+        "cacheWriteTokens": 0
+      },
+      "accounting": "recorded",
+      "appliedEffort": "off"
+    },
+    {
+      "stage": "visual-review:bbc8228b-e415-49ba-aa58-b51454f44fa9",
+      "runner": "subagent",
+      "status": "ok",
+      "tokens": 7334,
+      "tokenUsage": {
+        "uncachedInputTokens": 1752,
+        "outputTokens": 974,
+        "cacheReadTokens": 4608,
+        "cacheWriteTokens": 0
+      },
+      "accounting": "recorded",
+      "appliedEffort": "off"
+    },
+    {
+      "stage": "visual-review:17f57237-950d-403e-9b26-5b8e6be145b1",
+      "runner": "subagent",
+      "status": "ok",
+      "tokens": 7394,
+      "tokenUsage": {
+        "uncachedInputTokens": 1767,
+        "outputTokens": 1019,
+        "cacheReadTokens": 4608,
+        "cacheWriteTokens": 0
+      },
+      "accounting": "recorded",
+      "appliedEffort": "off"
     }
   ],
-  "totalTokens": 50957,
+  "totalTokens": 80828,
   "publishedCount": 4,
   "publication": {
     "id": "visual-draft-7b8c9372-9737-4d62-b43a-d254eccdc659",
@@ -147,21 +203,22 @@
     "unchecked": 0,
     "accepted": 4,
     "rejected": 0,
-    "added": 4,
+    "added": 0,
     "total": 4
   },
   "course": "数字集成电路",
   "questionFront": {
-    "runId": "d1c4e19f-be13-4ba7-86f4-063a74f26468",
+    "runId": "fbfa2447-151e-4f7a-81ba-9beda51346d2",
     "cardId": "38c70831-8d07-4440-83df-65abe48a8e73",
     "images": 1,
-    "noAnswerLeak": true
+    "noAnswerLeak": true,
+    "neutralTopic": true
   },
   "actualDesktopUiVerified": true,
   "userBackup": {
     "filename": "数字集成电路-图文与反相器题组.zip",
-    "hash": "04db3bb234648c75a8bc1b3e94071bb1674aa133a8e00cc985c06df5e11952b3",
-    "bytes": 263443829
+    "hash": "bec330e3ceff786bcd4cefda5b667784b6d7c3d1b412a166fb04d33a4657127c",
+    "bytes": 263448464
   },
   "normalRestart": {
     "root": "D:/studyhub/libraries/数字集成电路-图文",
@@ -182,5 +239,18 @@
     "/api/pet/pets 404",
     "/api/pet/state 404"
   ],
-  "ok": true
+  "ok": true,
+  "finalIndependentReviews": 4,
+  "neutralTopicsVerified": true,
+  "finalNativeDesktopUi": {
+    "neutralTopicVisible": true,
+    "originalImageVisible": true,
+    "originalPage": 149,
+    "printedPage": 131,
+    "method": "Windows UI Automation and native window screenshot",
+    "debugPortEnabled": false,
+    "frontScreenshot": "t12-desktop/neutral-front-desktop.png",
+    "originalScreenshot": "t12-desktop/neutral-original-desktop.png"
+  },
+  "oldLibraryFinalHashesVerified": 40
 }

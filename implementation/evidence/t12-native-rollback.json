@@ -1,0 +1,20 @@
+{
+  "home": "D:\\studyhub\\implementation\\test-harness\\restore-1791609715809",
+  "root": "D:\\studyhub\\implementation\\test-libraries\\restore-1791609715809",
+  "actualNativeDsh": true,
+  "paidModelCalls": 0,
+  "phases": [
+    {
+      "version": "3.3.0",
+      "sources": 1142,
+      "originalOcrUnchanged": true
+    },
+    {
+      "version": "3.3.0-scanned.2",
+      "sources": 1142,
+      "originalOcrUnchanged": true,
+      "originalImagesRestored": true
+    }
+  ],
+  "ok": true
+}

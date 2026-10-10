@@ -1,7 +1,7 @@
 # 扫描教材实施进度
 
 ## 当前状态
-- 当前任务：T12；T01–T11 已通过相关阶段验证，T12 未通过验收。
+- 当前任务：T12；T01–T12 功能与实际验收通过，正在发布最终交付文件。完整回归的基线失败/间歇问题如实保留，见 evidence/final-validation.md。
 - 基线：上游 v3.3.0，daa4df7b3045df14290e10a43d72e0e751e0f72d。
 - 独立源码：D:/studyhub/implementation/source，分支 feat/scanned-textbook-visual。
 - 隔离环境：D:/studyhub/implementation/test-harness；测试库：implementation/test-libraries。
@@ -65,3 +65,8 @@
 - T12 Desktop 真实验收通过：572 页/1321 当前资源读回；原 PDF 原生导入复用已验证完整解析；图5.1（PDF149/印刷131）生成4道开放题。初次模型草稿因缺评分标准及无效文字ID被拒绝，实施代理对原图修订后4次原生独立图片复审均通过，4题正式发布，答题前图片/无答案泄漏/定位原页在实际 Desktop 验证通过。7次真实模型调用共50957 tokens，均 recorded，最低可用推理off。evidence/t12-desktop-result.json；用户本人尚未逐题核对，不冒称自动答案无误。
 - T12 正常快捷方式重启通过：临时调试启动参数已移除，脚本和快捷方式哈希与原版一致；密钥经原生 credentials 服务保存，配置来源file，正常启动模型ready=true。StudyHub自动更新检查已关闭；既有宠物组件 /api/pet/pets、/api/pet/state 出现404，未扩大范围修改。
 - T12 独立组件原生安装/卸载/重载通过：按项目约定为generation/study显式设置independent:true，禁用图文入口拒绝导入，卸载材料后相关能力消失、其它模块和3个旧题组保留，重装后能力恢复；完整旧库状态SHA前后一致。默认单组件会自动保留依赖，不能把该设计误判为卸载失败。evidence/t12-modular-result.json。
+- T12 隔离原生插件回退/再升级通过：真实 v3.3.0 包安装后仍读到1142条原书OCR来源，所选真实原文SHA一致；再安装3.3.0-scanned.2后图5.1原图访问恢复。evidence/t12-native-rollback.json；正式环境未降级，保留定制包。
+
+- T12 最终题面复核：中性标题修订后4题全部经过新真实独立图片审阅并重新发布，累计11次模型调用80828tokens，全为recorded。正常原快捷方式窗口核验图片、标题、PDF149/印刷131原页；旧库最终40文件SHA再次一致。evidence/t12-desktop-result.json。
+- T12 最终题组附件备份恢复通过：独立新库实际上传/确认恢复572页、2版本、1142sources、1321当前资源、4题及审阅收据，原图与原页通过，console/pageerror=0，付费模型调用0。evidence/t12-final-backup-restore-result.json；脚本首页判断/包路径/版本遮蔽修正均以本次真实运行验证。
+- T12 最终交付：8 TGZ、安装页、使用说明、测试报告、插件/数据回退及两份SHA清单齐全；release:check当前交付目录通过（evidence/t12-delivery-release-check.log）。最终生产代码完整提交：b8010dca0478666b27b7be9c3c988df4456913ac。源码根目录本轮临时操作脚本已删除；隔离日志缓存保留。清理两份失败上传副本被自动审批策略阻止，未绕过，副本留在宿主临时上传目录。

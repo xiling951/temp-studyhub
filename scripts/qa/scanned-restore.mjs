@@ -15,7 +15,7 @@ const previous = process.argv.includes('--resume') ? JSON.parse(await readFile(j
 const home = previous?.home || join(base, `test-harness/restore-${runId}`), root = previous?.root || join(base, `test-libraries/restore-${runId}`), workspace = join(home, 'workspace');
 const env = { ...scrubSecrets(process.env), DSH_HOME: home, TEMP: join(home, 'study/tmp'), TMP: join(home, 'study/tmp'), SSH_TTY: 'audit', DSH_TELEMETRY_DISABLED: '1' };
 const version = JSON.parse(await readFile(resolve('package.json'), 'utf8')).version;
-const bin = join(base, 'test-harness/bin.mjs'), release = resolve(`output/release-${version}`);
+const bin = join(base, 'test-harness/bin.mjs'), release = join(base, `packages/${version}`);
 const summary = { home, root, startedAt: new Date().toISOString(), consoleErrors: [], pageErrors: [], paidModelCalls: 0 };
 let dsh, browser, model;
 try {
@@ -55,11 +55,11 @@ try {
     await backup.getByLabel('选择完整学习库 ZIP').setInputFiles(join(base, 'packages/fullbook-library.zip'));
     await backup.getByRole('button', { name: '验证并用 ZIP 替换当前学习库', exact: true }).click();
     await page.getByRole('button', { name: '验证并替换', exact: true }).click();
-    // The successful restore navigates home, unmounting the status message.
-    await page.locator('.home-page').waitFor({ timeout: 300000 });
+    // Successful restore leaves settings; a library with decks has a different home layout.
+    await backup.waitFor({ state: 'hidden', timeout: 300000 });
   }
   const state = await new Store(root).read(), document = state.documents[0];
-  const version = document.versions.find(item => item.revision === document.currentRevision), manifest = await loadManifest(root, version.visual);
+  const documentVersion = document.versions.find(item => item.revision === document.currentRevision), manifest = await loadManifest(root, documentVersion.visual);
   if (manifest.pages.length !== 572 || document.versions.length !== 2) throw new Error('Full book/history restore mismatch');
   let verified = 0;
   for (const asset of manifest.assets) { await verifyAsset(root, asset); verified++; }

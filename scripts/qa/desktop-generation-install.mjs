@@ -5,7 +5,9 @@ import { join, resolve } from 'node:path';
 import { pathToFileURL } from 'node:url';
 
 if (!process.execPath.endsWith('DSH Desktop.exe') || process.env.ELECTRON_RUN_AS_NODE !== '1') throw Error('Use the authorized Desktop Node runtime');
-const base = resolve('..'), version = JSON.parse(await readFile('package.json', 'utf8')).version;
+const base = resolve('..');
+const version = process.argv.find(arg => arg.startsWith('--version='))?.slice('--version='.length) ?? JSON.parse(await readFile('package.json', 'utf8')).version;
+if (!/^3\.3\.0-scanned\.[23]$/.test(version)) throw Error('Choose the retained scanned.2 or current scanned.3 package');
 const home = join(process.env.APPDATA, 'dsh-desktop/harness');
 const resources = join(process.env.LOCALAPPDATA, 'Programs/DSH Desktop/resources/app.asar');
 const native = join(resources, 'node_modules/dsh-desktop-market-installer/generations');

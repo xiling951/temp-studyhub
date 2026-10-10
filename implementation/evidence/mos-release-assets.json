@@ -1,0 +1,142 @@
+{
+  "releaseId": 408990142,
+  "tag": "v3.3.0-scanned.3",
+  "draft": false,
+  "url": "https://github.com/xiling951/temp-studyhub/releases/tag/v3.3.0-scanned.3",
+  "assets": [
+    {
+      "name": "artifacts.json",
+      "size": 2586,
+      "digest": "sha256:035f37f14191fafa64f8df1806c44402ba557df0cdc8a770f14e08ad495c0e1b",
+      "state": "uploaded",
+      "url": "https://github.com/xiling951/temp-studyhub/releases/download/untagged-9ba73dba2f2544b66eab/artifacts.json"
+    },
+    {
+      "name": "DELIVERY-SHA256SUMS.txt",
+      "size": 1679,
+      "digest": "sha256:f4606572647d5279788fc05a9572d8865be1bb1f609575d06f27ac1bea2a67c2",
+      "state": "uploaded",
+      "url": "https://github.com/xiling951/temp-studyhub/releases/download/untagged-9ba73dba2f2544b66eab/DELIVERY-SHA256SUMS.txt"
+    },
+    {
+      "name": "ericwang1358-dsh-daily-flashcard-3.3.0-scanned.3.tgz",
+      "size": 4963719,
+      "digest": "sha256:3cdac59327e77691be6f75a51b24b6094556266fa220a56d7712ec73440cdb34",
+      "state": "uploaded",
+      "url": "https://github.com/xiling951/temp-studyhub/releases/download/untagged-9ba73dba2f2544b66eab/ericwang1358-dsh-daily-flashcard-3.3.0-scanned.3.tgz"
+    },
+    {
+      "name": "ericwang1358-dsh-study-audio-3.3.0-scanned.3.tgz",
+      "size": 4961857,
+      "digest": "sha256:84fbbdcb2a062d6442d2813c622dea16094811e27bb68471d62f3052c1f0d905",
+      "state": "uploaded",
+      "url": "https://github.com/xiling951/temp-studyhub/releases/download/untagged-9ba73dba2f2544b66eab/ericwang1358-dsh-study-audio-3.3.0-scanned.3.tgz"
+    },
+    {
+      "name": "ericwang1358-dsh-study-bank-3.3.0-scanned.3.tgz",
+      "size": 4961854,
+      "digest": "sha256:67158451788e75c4016aeb1764d2b63be9605fd20997711e3d2f04fd5702e74b",
+      "state": "uploaded",
+      "url": "https://github.com/xiling951/temp-studyhub/releases/download/untagged-9ba73dba2f2544b66eab/ericwang1358-dsh-study-bank-3.3.0-scanned.3.tgz"
+    },
+    {
+      "name": "ericwang1358-dsh-study-generation-3.3.0-scanned.3.tgz",
+      "size": 4961862,
+      "digest": "sha256:de293bfa7ffe9dce01cd952077aab070dc42f299b559f7007940422d804aa71e",
+      "state": "uploaded",
+      "url": "https://github.com/xiling951/temp-studyhub/releases/download/untagged-9ba73dba2f2544b66eab/ericwang1358-dsh-study-generation-3.3.0-scanned.3.tgz"
+    },
+    {
+      "name": "ericwang1358-dsh-study-materials-3.3.0-scanned.3.tgz",
+      "size": 4961862,
+      "digest": "sha256:394de4597f3217200c6491241ab1779642b05bdde55435ef8f914a755c65b8fd",
+      "state": "uploaded",
+      "url": "https://github.com/xiling951/temp-studyhub/releases/download/untagged-9ba73dba2f2544b66eab/ericwang1358-dsh-study-materials-3.3.0-scanned.3.tgz"
+    },
+    {
+      "name": "ericwang1358-dsh-study-runtime-3.3.0-scanned.3.tgz",
+      "size": 4961858,
+      "digest": "sha256:8207613cf2a58607b459b3db1143e1b6809f78455d9a380967e0e5d5c02523aa",
+      "state": "uploaded",
+      "url": "https://github.com/xiling951/temp-studyhub/releases/download/untagged-9ba73dba2f2544b66eab/ericwang1358-dsh-study-runtime-3.3.0-scanned.3.tgz"
+    },
+    {
+      "name": "ericwang1358-dsh-study-study-3.3.0-scanned.3.tgz",
+      "size": 4961857,
+      "digest": "sha256:aa8836d18be92648cdfa4600b9cc18bfb8cfe74a0ab3a1741cc7649c8d24f046",
+      "state": "uploaded",
+      "url": "https://github.com/xiling951/temp-studyhub/releases/download/untagged-9ba73dba2f2544b66eab/ericwang1358-dsh-study-study-3.3.0-scanned.3.tgz"
+    },
+    {
+      "name": "ericwang1358-studyhub-retrieval-3.3.0-scanned.3.tgz",
+      "size": 4398,
+      "digest": "sha256:8e5f20dee505ade13e2958830ccb6ad1c3ca01db44ece0cf6f0c86c1e5688323",
+      "state": "uploaded",
+      "url": "https://github.com/xiling951/temp-studyhub/releases/download/untagged-9ba73dba2f2544b66eab/ericwang1358-studyhub-retrieval-3.3.0-scanned.3.tgz"
+    },
+    {
+      "name": "install-and-rollback.md",
+      "size": 6623,
+      "digest": "sha256:a7e3006a2980055dcccb1edde5b815929df819c1e5eb6198dd054517baee89ae",
+      "state": "uploaded",
+      "url": "https://github.com/xiling951/temp-studyhub/releases/download/untagged-9ba73dba2f2544b66eab/install-and-rollback.md"
+    },
+    {
+      "name": "SHA256SUMS-3.3.0-scanned.3.txt",
+      "size": 1147,
+      "digest": "sha256:e68d917b1b16e69644bfa8d5582603035a751df13e40e4616a222b04ff34965a",
+      "state": "uploaded",
+      "url": "https://github.com/xiling951/temp-studyhub/releases/download/untagged-9ba73dba2f2544b66eab/SHA256SUMS-3.3.0-scanned.3.txt"
+    },
+    {
+      "name": "StudyHub-3.3.0-scanned.3-Setup.html",
+      "size": 1373,
+      "digest": "sha256:ee7546e41c507b379ffec11e4e74e8e053c4dce264c6f863f3c1f64eb71234a8",
+      "state": "uploaded",
+      "url": "https://github.com/xiling951/temp-studyhub/releases/download/untagged-9ba73dba2f2544b66eab/StudyHub-3.3.0-scanned.3-Setup.html"
+    },
+    {
+      "name": "StudyHub-3.3.0-scanned.3-Setup.zh-CN.html",
+      "size": 1376,
+      "digest": "sha256:9c8dd36aefc9029e504a7fd03b60353c5fa365d7c634f530befbb516eabf90a1",
+      "state": "uploaded",
+      "url": "https://github.com/xiling951/temp-studyhub/releases/download/untagged-9ba73dba2f2544b66eab/StudyHub-3.3.0-scanned.3-Setup.zh-CN.html"
+    },
+    {
+      "name": "StudyHub-3.3.0-scanned.3-Windows-delivery.zip",
+      "size": 34776419,
+      "digest": "sha256:8eda656dbe7a651cca2fa6c8bb3405bf282c594cd9625e19b93c69990c0da138",
+      "state": "uploaded",
+      "url": "https://github.com/xiling951/temp-studyhub/releases/download/untagged-9ba73dba2f2544b66eab/StudyHub-3.3.0-scanned.3-Windows-delivery.zip"
+    },
+    {
+      "name": "StudyHub-3.3.0-scanned.3-Windows-delivery.zip.sha256.txt",
+      "size": 113,
+      "digest": "sha256:3f865fe6b84ff93114debfc798ca125b571c5e1c488ac0d7a32ef178e386f38f",
+      "state": "uploaded",
+      "url": "https://github.com/xiling951/temp-studyhub/releases/download/untagged-9ba73dba2f2544b66eab/StudyHub-3.3.0-scanned.3-Windows-delivery.zip.sha256.txt"
+    },
+    {
+      "name": "Usage.zh-CN.md",
+      "size": 4175,
+      "digest": "sha256:cd50b12e1a9fc13834b44947dd7bf3fc7c2baa8a70355dac7fea728f9dc855a7",
+      "state": "uploaded",
+      "url": "https://github.com/xiling951/temp-studyhub/releases/download/untagged-9ba73dba2f2544b66eab/Usage.zh-CN.md"
+    },
+    {
+      "name": "Validation.zh-CN.md",
+      "size": 13098,
+      "digest": "sha256:5cb3689d678a666f66f60de5d8edcbc8d8e0723eb28f132a2546cde8f5b1f749",
+      "state": "uploaded",
+      "url": "https://github.com/xiling951/temp-studyhub/releases/download/untagged-9ba73dba2f2544b66eab/Validation.zh-CN.md"
+    },
+    {
+      "name": "verification.json",
+      "size": 1703,
+      "digest": "sha256:5ee9dd8098bad668bf0ddd2e167195bd0549fef890f5a368e14a9ee453ba4680",
+      "state": "uploaded",
+      "url": "https://github.com/xiling951/temp-studyhub/releases/download/untagged-9ba73dba2f2544b66eab/verification.json"
+    }
+  ],
+  "localAndGithubDigestsMatch": true
+}

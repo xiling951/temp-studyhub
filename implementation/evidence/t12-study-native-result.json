@@ -1,0 +1,267 @@
+{
+  "root": "D:\\studyhub\\implementation\\test-libraries\\native-1791610579548",
+  "home": "D:\\studyhub\\implementation\\test-harness\\native-1791610579548",
+  "startedAt": "2026-10-10T05:39:08.380Z",
+  "consoleErrors": [],
+  "pageErrors": [],
+  "model": "local-stand-in-no-paid-call",
+  "steps": [
+    {
+      "name": "native-submit",
+      "started": {
+        "jobId": "7ec28311-bd2a-413c-b9b7-caf6fdef39ee",
+        "status": "queued",
+        "filename": "扫描教材",
+        "route": "local",
+        "converter": "mineru"
+      }
+    }
+  ],
+  "installedSourceVerified": [
+    {
+      "file": "lib/runtime.js",
+      "hash": "a6f17633c1b24e3457aa8b3867d14ddb81ff8bebaa329c33399b07f96233daa8"
+    },
+    {
+      "file": "lib/runtime/builtins.js",
+      "hash": "b8abaec7a84d2c2a7a0a512167e8a53353039f109912e672ace0ff4e72046833"
+    },
+    {
+      "file": "lib/contexts/bank/operations.js",
+      "hash": "f9dd080e43eb39061efbedf9424296cc027e5d62261af3d248be7200714d1a13"
+    },
+    {
+      "file": "lib/contexts/generation/scanned/visual-questions.js",
+      "hash": "4998bc543fabf475de13ae415e20829735ae0d8203d33417ec34bb158b8b3360"
+    },
+    {
+      "file": "lib/retrieval-index.js",
+      "hash": "659d0d4719a6555abe6d236a9e5c9c3ed52a65505d161b7209601ae7ceccdc39"
+    },
+    {
+      "file": "lib/contexts/materials/visual-retrieval.js",
+      "hash": "821b3e3d9e1150415d13b9a0844029a172a0d52c1983c495502472618499b49d"
+    }
+  ],
+  "agentPreset": "study",
+  "job": {
+    "status": "complete",
+    "contract": {
+      "contractVersion": 2,
+      "jobId": "02c60f04-5d8a-470c-a7ba-cc7498c23b0a",
+      "attemptId": "baa1d2d5-bd5a-453f-8788-4a216973c006",
+      "kind": "scanned-textbook-import",
+      "title": "数字集成电路-p200-206.pdf",
+      "status": "complete",
+      "stage": {
+        "code": "retain",
+        "text": "保存原 PDF"
+      },
+      "progress": {
+        "done": 0,
+        "total": null,
+        "unit": "page",
+        "percent": null,
+        "segments": []
+      },
+      "actions": {
+        "cancel": {
+          "available": false,
+          "reason": {
+            "code": "job-ended"
+          }
+        },
+        "pause": {
+          "available": false,
+          "reason": {
+            "code": "job-ended"
+          },
+          "mode": "unsupported"
+        },
+        "resume": {
+          "available": false,
+          "reason": {
+            "code": "not-paused"
+          }
+        },
+        "retry": {
+          "available": false,
+          "reason": {
+            "code": "not-retryable"
+          }
+        },
+        "set": {
+          "available": false,
+          "reason": {
+            "code": "capability-unsupported"
+          }
+        }
+      },
+      "result": {
+        "refs": [
+          {
+            "kind": "document",
+            "id": "visual-7e4c79bfc1ee40e43161ff21a7173e3e97fdeb898c3d780dc6cbe123ffc45263"
+          },
+          {
+            "kind": "source",
+            "id": "visual-7e4c79bfc1ee40e43161ff21a7173e3e97fdeb898c3d780dc6cbe123ffc45263-visual1-ada81154d028a92623c30b8e141b4b17cd64d93cb0afc388bedcf5ed3c42facc-p1"
+          },
+          {
+            "kind": "source",
+            "id": "visual-7e4c79bfc1ee40e43161ff21a7173e3e97fdeb898c3d780dc6cbe123ffc45263-visual1-ada81154d028a92623c30b8e141b4b17cd64d93cb0afc388bedcf5ed3c42facc-p2"
+          },
+          {
+            "kind": "source",
+            "id": "visual-7e4c79bfc1ee40e43161ff21a7173e3e97fdeb898c3d780dc6cbe123ffc45263-visual1-ada81154d028a92623c30b8e141b4b17cd64d93cb0afc388bedcf5ed3c42facc-p3"
+          },
+          {
+            "kind": "source",
+            "id": "visual-7e4c79bfc1ee40e43161ff21a7173e3e97fdeb898c3d780dc6cbe123ffc45263-visual1-ada81154d028a92623c30b8e141b4b17cd64d93cb0afc388bedcf5ed3c42facc-p4"
+          },
+          {
+            "kind": "source",
+            "id": "visual-7e4c79bfc1ee40e43161ff21a7173e3e97fdeb898c3d780dc6cbe123ffc45263-visual1-ada81154d028a92623c30b8e141b4b17cd64d93cb0afc388bedcf5ed3c42facc-p5"
+          },
+          {
+            "kind": "source",
+            "id": "visual-7e4c79bfc1ee40e43161ff21a7173e3e97fdeb898c3d780dc6cbe123ffc45263-visual1-ada81154d028a92623c30b8e141b4b17cd64d93cb0afc388bedcf5ed3c42facc-p6"
+          },
+          {
+            "kind": "source",
+            "id": "visual-7e4c79bfc1ee40e43161ff21a7173e3e97fdeb898c3d780dc6cbe123ffc45263-visual1-ada81154d028a92623c30b8e141b4b17cd64d93cb0afc388bedcf5ed3c42facc-p7"
+          }
+        ],
+        "completeness": "complete"
+      },
+      "error": null,
+      "usage": {
+        "tokens": null,
+        "tokenUsage": null,
+        "calls": 0
+      },
+      "execution": {
+        "mode": null
+      },
+      "detail": {
+        "visual": true,
+        "legacy": {
+          "filename": "数字集成电路-p200-206.pdf",
+          "done": 0,
+          "total": null
+        },
+        "usageIncomplete": false
+      },
+      "startedAt": "2026-10-10T05:39:21.426Z",
+      "finishedAt": "2026-10-10T05:39:21.537Z",
+      "calls": [
+        {
+          "callId": "251bdd5c-8a94-424d-ac48-2cc05adf6d7e",
+          "jobId": "02c60f04-5d8a-470c-a7ba-cc7498c23b0a",
+          "attemptId": "baa1d2d5-bd5a-453f-8788-4a216973c006",
+          "stepKey": "parse-textbook",
+          "stepRunId": "8b1e4554-722b-40fe-9914-c99a01fb1e3d",
+          "kind": "mineru-visual",
+          "startedAt": "2026-10-10T05:39:21.427Z",
+          "endedAt": "2026-10-10T05:39:21.522Z",
+          "status": "ok",
+          "runner": "direct",
+          "tokens": null,
+          "observation": {
+            "boundary": "local-process",
+            "requestCount": null
+          },
+          "purpose": "convert",
+          "feature": "scanned-textbook",
+          "budget": null,
+          "tokenUsage": null,
+          "appliedEffort": null,
+          "modelRequest": false
+        }
+      ],
+      "events": [
+        {
+          "eventId": "02c60f04-5d8a-470c-a7ba-cc7498c23b0a:baa1d2d5-bd5a-453f-8788-4a216973c006:settled",
+          "type": "settled",
+          "at": "2026-10-10T05:39:21.537Z",
+          "status": "complete"
+        }
+      ],
+      "capabilities": {
+        "cancel": true,
+        "pauseMode": "unsupported",
+        "recoveryMode": "none",
+        "retry": true,
+        "set": false,
+        "executionModes": [
+          "direct"
+        ]
+      },
+      "runtime": {
+        "schemaVersion": 1,
+        "definitionVersion": 1,
+        "scopeId": "materials.v1",
+        "legacyId": "7ec28311-bd2a-413c-b9b7-caf6fdef39ee",
+        "activeAttemptId": null,
+        "attempts": [
+          {
+            "jobId": "02c60f04-5d8a-470c-a7ba-cc7498c23b0a",
+            "attemptId": "baa1d2d5-bd5a-453f-8788-4a216973c006",
+            "definitionVersion": 1,
+            "status": "complete",
+            "executor": {
+              "service": "dsh-jobs",
+              "handleId": "scanned-textbook-import-1",
+              "ownerAgentId": "session-f8e63f61-2067-45cb-8d82-b0a488909bb4"
+            },
+            "policySnapshot": {},
+            "startedAt": "2026-10-10T05:39:21.426Z",
+            "finishedAt": "2026-10-10T05:39:21.535Z"
+          }
+        ],
+        "steps": [
+          {
+            "jobId": "02c60f04-5d8a-470c-a7ba-cc7498c23b0a",
+            "attemptId": "baa1d2d5-bd5a-453f-8788-4a216973c006",
+            "stepKey": "parse-textbook",
+            "stepRunId": "8b1e4554-722b-40fe-9914-c99a01fb1e3d",
+            "status": "complete"
+          }
+        ]
+      }
+    }
+  },
+  "document": {
+    "documentId": "visual-7e4c79bfc1ee40e43161ff21a7173e3e97fdeb898c3d780dc6cbe123ffc45263",
+    "revision": "visual1-ada81154d028a92623c30b8e141b4b17cd64d93cb0afc388bedcf5ed3c42facc",
+    "pages": 7
+  },
+  "assets": 4,
+  "preview": {
+    "asset": {
+      "assetId": "asset-039ca2e8451922514005d765e9f15c81ddd860661a25b9a84e8cea6c6b84b79a",
+      "hash": "039ca2e8451922514005d765e9f15c81ddd860661a25b9a84e8cea6c6b84b79a",
+      "bytes": 321720,
+      "mime": "image/png",
+      "kind": "page-preview",
+      "width": 1323,
+      "height": 1895,
+      "previewKey": "1:page:160",
+      "page": 1,
+      "originalHash": "7e4c79bfc1ee40e43161ff21a7173e3e97fdeb898c3d780dc6cbe123ffc45263"
+    },
+    "page": 1,
+    "originalPage": 200
+  },
+  "unauthorizedHttpStatus": 401,
+  "unauthorizedRejected": true,
+  "explanationState": {
+    "notes": [],
+    "importExplanation": {
+      "status": "unavailable",
+      "message": "当前模型未声明图像输入能力，请选择支持视觉的模型"
+    }
+  },
+  "ok": true,
+  "finishedAt": "2026-10-10T05:39:29.454Z"
+}

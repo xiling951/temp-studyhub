@@ -5,7 +5,7 @@
 #
 # Derived from the official DSH 0.2 `standard` preset
 # (@deepseek-ai/dsh-web-app/presets/standard.patch.yml), minus everything that
-# runs commands or reads/writes/edits files: bash/pwsh, fs, fs-search, jobs,
+# runs commands or reads/writes/edits files: bash/pwsh, fs, fs-search,
 # present, PTC workflows, plan mode and workspace AGENTS.md instructions.
 # The StudyHub tools (study_workspace, study_capabilities, study_bank,
 # study_materials, study_generate_selection, study_practice, study_audio) are
@@ -84,6 +84,12 @@
                   toolName: subagent
                   modelSelectionSettings: true
                   backgroundMode: continuable
+          # Native StudyHub imports/generation require an owning job controller.
+          # These tools only inspect/cancel jobs; they cannot launch shell commands.
+          - id: tool-jobs
+            name: '@deepseek-ai/dsh-tool-jobs'
+            config:
+              completionDelivery: quiet
           # ── asking, skills, web ───────────────────────────────────────────────
           - id: tool-ask-user
             name: '@deepseek-ai/dsh-tool-ask-user'

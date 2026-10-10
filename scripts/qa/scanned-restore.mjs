@@ -14,7 +14,8 @@ const base = resolve('..'), runId = Date.now(), evidence = join(base, 'evidence/
 const previous = process.argv.includes('--resume') ? JSON.parse(await readFile(join(evidence, 'summary.json'), 'utf8')) : null;
 const home = previous?.home || join(base, `test-harness/restore-${runId}`), root = previous?.root || join(base, `test-libraries/restore-${runId}`), workspace = join(home, 'workspace');
 const env = { ...scrubSecrets(process.env), DSH_HOME: home, TEMP: join(home, 'study/tmp'), TMP: join(home, 'study/tmp'), SSH_TTY: 'audit', DSH_TELEMETRY_DISABLED: '1' };
-const bin = join(base, 'test-harness/bin.mjs'), release = resolve('output/release-3.3.0-scanned.1');
+const version = JSON.parse(await readFile(resolve('package.json'), 'utf8')).version;
+const bin = join(base, 'test-harness/bin.mjs'), release = resolve(`output/release-${version}`);
 const summary = { home, root, startedAt: new Date().toISOString(), consoleErrors: [], pageErrors: [], paidModelCalls: 0 };
 let dsh, browser, model;
 try {
@@ -24,7 +25,7 @@ try {
     if (result.status !== 0) throw new Error(`Native installer failed: ${result.stderr.slice(-800)}`);
   };
   if (!previous) cli(['--profile', 'studyhub-e2e', '--from-default-profile', 'web', '--dump-config']);
-  cli(['plugin', '--profile', 'studyhub-e2e', 'add', join(release, 'ericwang1358-dsh-daily-flashcard-3.3.0-scanned.1.tgz'), '--offline']);
+  cli(['plugin', '--profile', 'studyhub-e2e', 'add', join(release, `ericwang1358-dsh-daily-flashcard-${version}.tgz`), '--offline']);
   model = await createFakeOpenAI({ port: 43145 });
   const patch = join(evidence, 'native.patch.yml');
   await writeFile(patch, YAML.stringify([...dshPatch({ fakeModelUrl: model.url, documentsDirectory: workspace }), { id: 'daily-flashcard', config: { libraryRoot: root } }]));

@@ -1,6 +1,6 @@
 # 安装与回退
 
-目标：Windows 本机 DSH Desktop 0.11.1 / DSH 0.2.0-rc.2，`3.3.0-scanned.1` 定制包。正式安装和真实桌面验收记录尚待补充；此文件目前描述准备好的流程，不冒称已执行。
+目标：Windows 本机 DSH Desktop 0.11.1 / DSH 0.2.0-rc.2，`3.3.0-scanned.2` 定制包。正式安装和真实桌面验收记录尚待补充；此文件目前描述准备好的流程，不冒称已执行。
 
 ## 安装目标
 
@@ -13,7 +13,7 @@
 ## 安装顺序
 
 1. 查看 DSH 是否存在进行中的任务，待任务结束或确认取消后从 Desktop 菜单「退出」关闭。备份原 profile 的清单、锁文件、patch、配置，原学习库及所有附件；原包保留 `D:/studyhub/deploy/studyhub-3.3.0.tgz` 和 `studyhub-retrieval-3.3.0.tgz`。备份中的凭据只留本机，不上传仓库。
-2. 核对交付目录的 `SHA256SUMS-3.3.0-scanned.1.txt`。使用 DSH 原生插件管理把本地定制 TGZ 安装到 web profile。可选检索依赖构建脚本只允许必要的 `onnxruntime-node`、`sharp`、`protobufjs`；不要全局放开所有脚本。Node 需要 >=22.19。
+2. 核对交付目录的 `SHA256SUMS-3.3.0-scanned.2.txt`。使用 DSH 原生插件管理把本地定制 TGZ 安装到 web profile。可选检索依赖构建脚本只允许必要的 `onnxruntime-node`、`sharp`、`protobufjs`；不要全局放开所有脚本。Node 需要 >=22.19。
 3. 整包模式只启用原整包；六个独立组件是另一种部署方式，不能同时叠加启用。原生 installer 返回需要重启后，再从原快捷方式启动 Desktop。
 4. 在新教材验收时先使用独立学习库。原库保持原始数据；必要时通过完整 ZIP 备份/恢复转移经过验证的教材及题组。不要把单教材 ZIP 当全库备份。
 5. 确认界面显示定制版本、原生附件/Jobs/模型可用，开启图文开关后导入原书并核对原页。模型密钥经宿主原生凭据/启动环境提供，不写入插件 patch 或学习库。

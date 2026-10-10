@@ -15,6 +15,7 @@ const questions = process.argv.includes('--questions');
 const retrieval = process.argv.includes('--retrieval');
 const vision = process.argv.includes('--vision') || questions;
 const noModel = process.argv.includes('--no-model');
+const studyPreset = process.argv.includes('--study-preset');
 const resume = process.argv.includes('--resume');
 const runId = Date.now();
 const evidence = join(base, retrieval ? 'evidence/t11-native' : questions ? 'evidence/t10-native' : vision ? 'evidence/t09-native' : noModel ? 'evidence/t09-no-model' : 'evidence/t06-native');
@@ -27,7 +28,7 @@ if (vision) {
   if (candidates.length !== 1) throw new Error('Expected one unambiguous authorized API credential');
   credential = candidates[0];
 }
-const redact = value => (credential ? value.replaceAll(credential, '[credential]') : value).replace(/token=\S+/g, 'token=[redacted]');
+const redact = value => (credential ? value.replaceAll(credential, '[credential]') : value).replace(/token=[^\s"\\&]+/g, 'token=[redacted]');
 for (const dir of [home, root, workspace, evidence, pack, env.TEMP]) await mkdir(dir, { recursive: true });
 const run = (command, args, cwd = repo) => {
   const result = spawnSync(command, args, { cwd, env, encoding: 'utf8', windowsHide: true, shell: command === 'npm', timeout: 300000 });
@@ -36,6 +37,13 @@ const run = (command, args, cwd = repo) => {
 };
 const summary = { root, home, startedAt: new Date().toISOString(), consoleErrors: [], pageErrors: [], model: vision ? 'deepseek-official/deepseek-flash-real' : 'local-stand-in-no-paid-call', steps: [] };
 let dsh, browser, model, page;
+const dismissStartup = async () => {
+  const dialog = page.getByRole('dialog');
+  const continueButton = dialog.getByRole('button', { name: '继续', exact: true });
+  if (await continueButton.isVisible()) await continueButton.click();
+  const later = dialog.getByRole('button', { name: '稍后配置', exact: true });
+  if (await later.waitFor({ timeout: 3000 }).then(() => true, () => false)) await later.click();
+};
 try {
   const tgzName = run('npm', ['pack', '--ignore-scripts', '--pack-destination', pack]).trim().split(/\r?\n/).at(-1);
   if (!resume) run(process.execPath, [bin, '--profile', 'studyhub-e2e', '--from-default-profile', 'web', '--dump-config']);
@@ -56,14 +64,20 @@ try {
   }
   model = await createFakeOpenAI({ port: 43145 });
   const patch = join(base, 'test-harness/scanned.patch.yml');
-  await writeFile(patch, YAML.stringify([...dshPatch({ fakeModelUrl: model.url, documentsDirectory: workspace }), ...(vision ? [{ id: 'agent-default-model', config: { provider: 'deepseek-official', model: 'deepseek-flash' } }] : []), { id: 'daily-flashcard', config: { libraryRoot: root } }, ...(retrieval ? YAML.parse(await readFile(join(repo, 'packages/studyhub-retrieval/cordis.patch.yml'), 'utf8')) : [])]));
+  await writeFile(patch, YAML.stringify([...dshPatch({ fakeModelUrl: model.url, documentsDirectory: workspace }), ...(studyPreset ? [{ id: 'agent-preset-registry', config: { default: 'study' } }] : []), ...(vision ? [{ id: 'agent-default-model', config: { provider: 'deepseek-official', model: 'deepseek-flash' } }] : []), { id: 'daily-flashcard', config: { libraryRoot: root } }, ...(retrieval ? YAML.parse(await readFile(join(repo, 'packages/studyhub-retrieval/cordis.patch.yml'), 'utf8')) : [])]));
   dsh = await bootDsh(bin, { env: { ...env, STUDYHUB_QA_FAKE_KEY: 'test-only', ...(vision ? { DEEPSEEK_API_KEY: credential } : {}) }, cwd: workspace, patch, port: 43144 });
   browser = await launchChromium(); page = await browser.newPage({ viewport: { width: 1440, height: 1050 } });
   page.on('console', message => { if (message.type() === 'error') summary.consoleErrors.push(message.text().replace(/token=\S+/g, 'token=…')); });
   page.on('pageerror', error => summary.pageErrors.push(error.message));
   await page.goto(dsh.url, { waitUntil: 'networkidle' }); await page.locator('.study-app').first().waitFor({ timeout: 90000 });
+  await dismissStartup();
   const rpc = (method, payload) => page.evaluate(async ({ method, payload }) => (await (await fetch(`/api/${method}`, { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ type: 'client-request', rpcId: crypto.randomUUID(), method, payload }) })).json()).result, { method, payload });
   const sessionId = (await rpc('session/list', { args: { _request: {} } })).value.items[0].sessionId;
+  if (studyPreset) {
+    const session = (await rpc('session/list', { args: { _request: {} } })).value.items.find(item => item.sessionId === sessionId);
+    summary.agentPreset = session.projections?.values?.agentPreset;
+    if (summary.agentPreset !== 'study') throw new Error('QA did not enter the study preset');
+  }
   const call = async (action, args = {}) => { const result = await rpc('study-workspace/call', { sessionId, action, args }); if (!result.ok) throw new Error(`${action}: ${result.error?.message || JSON.stringify(result)}`); return result.value; };
   const baseline = await call('materials.visual.status'); if (baseline.enabled && !resume) throw new Error('New isolated library feature should be off');
   await call('settings', { scannedTextbooks: true });
@@ -91,6 +105,7 @@ try {
   const unauthorized = await fetch('http://127.0.0.1:43144/api/study-workspace/call', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ type: 'client-request', rpcId: 'unauthorized-probe', method: 'study-workspace/call', payload: { sessionId, action: 'materials.visual.page', args: { documentId: descriptor.documentId, page: 1 } } }) });
   summary.unauthorizedHttpStatus = unauthorized.status; summary.unauthorizedRejected = !(await unauthorized.json().catch(() => ({}))).result?.ok;
   await page.reload({ waitUntil: 'networkidle' });
+  await dismissStartup();
   if (!await page.locator('.study-app').first().isVisible().catch(() => false)) await page.getByRole('button', { name: 'StudyHub', exact: true }).first().click({ timeout: 15000 });
   await page.locator('.study-app').first().waitFor({ timeout: 30000 });
   await page.locator('[data-tour="nav-sources"]').first().click({ force: true }).catch(() => {});

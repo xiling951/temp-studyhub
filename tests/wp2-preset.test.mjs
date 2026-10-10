@@ -21,9 +21,9 @@ const STANDARD_ROWS = new Set([
   '@deepseek-ai/dsh-tool-ask-user', '@deepseek-ai/dsh-tool-todo', '@deepseek-ai/dsh-tool-web',
   '@deepseek-ai/dsh-tool-present', '@deepseek-ai/dsh-plugin-manager/tools',
 ]);
-// Shell, filesystem read/write/edit, background shell jobs, PTC workflows and
+// Shell, filesystem read/write/edit, PTC workflows and
 // coding-only plan mode: none of these belong to a study tutor.
-const FORBIDDEN = /dsh-tool-(bash|pwsh)|dsh-tool-fs|dsh-tool-str-replace-editor|dsh-tool-jobs|dsh-ptc|dsh-workflow-ptc|dsh-tool-workflow|dsh-tool-ralph|dsh-plan-mode|dsh-tool-present|dsh-plugin-manager|dsh-agent-instructions/;
+const FORBIDDEN = /dsh-tool-(bash|pwsh)|dsh-tool-fs|dsh-tool-str-replace-editor|dsh-ptc|dsh-workflow-ptc|dsh-tool-workflow|dsh-tool-ralph|dsh-plan-mode|dsh-tool-present|dsh-plugin-manager|dsh-agent-instructions/;
 
 function rows(list, out = []) {
   for (const row of list || []) {
@@ -76,6 +76,12 @@ test('the study preset row is a valid agent preset based on the standard composi
 test('the study preset never composes shell, file or edit tools', async () => {
   const names = rows((await preset()).config.plugins).map(plugin => plugin.name);
   assert.deepEqual(names.filter(name => FORBIDDEN.test(name)), []);
+});
+
+test('the study preset admits native StudyHub tasks through the host controller without duplicate wakeups', async () => {
+  const controllers = rows((await preset()).config.plugins).filter(plugin => plugin.name === '@deepseek-ai/dsh-tool-jobs');
+  assert.equal(controllers.length, 1);
+  assert.equal(controllers[0].config.completionDelivery, 'quiet');
 });
 
 test('the study persona makes the library the default meaning and asks once when ambiguous', async () => {

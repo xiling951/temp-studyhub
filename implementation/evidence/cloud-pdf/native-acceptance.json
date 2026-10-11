@@ -624,5 +624,112 @@
     "d9923e03",
     "7b652781",
     "a27c89d0"
-  ]
+  ],
+  "ordinaryImageBatch": {
+    "date": "2026-10-12",
+    "baselineHead": "ad5bc882b530028d829d72f65f6ca254a699121a",
+    "route": {
+      "provider": "qwen",
+      "model": "qwen3.8-flash"
+    },
+    "realModel": true,
+    "formalProfileChanged": false,
+    "formalLibraryChanged": false,
+    "samplePage": 2,
+    "sourceBookPage": 149,
+    "sampleHash": "5b2b9fc683165c4e4c9095056b5fcd597f5c488ec5229929b1ebfe4845885b9f",
+    "imageHashes": [
+      "2112d44840fdff12b116607dccba7c32622bdbb6212b1cc8e53d7f76e5aa19e9"
+    ],
+    "generation": {
+      "privateRun": "native-1791738752162",
+      "calls": 7,
+      "usage": {
+        "tokens": 92144,
+        "tokenUsage": {
+          "uncachedInputTokens": 41727,
+          "outputTokens": 28913,
+          "cacheReadTokens": 21504,
+          "cacheWriteTokens": 0
+        },
+        "calls": 7
+      },
+      "stages": [
+        "plan",
+        "blueprint",
+        "blueprint",
+        "author",
+        "author",
+        "review",
+        "review"
+      ],
+      "accepted": 0,
+      "candidates": 1,
+      "result": "Independent image review rejected an incorrect explanation; editable candidate retained."
+    },
+    "repair": {
+      "privateRun": "native-1791739208437",
+      "calls": 6,
+      "usage": {
+        "tokens": 92465,
+        "tokenUsage": {
+          "uncachedInputTokens": 33417,
+          "outputTokens": 33192,
+          "cacheReadTokens": 25856,
+          "cacheWriteTokens": 0
+        },
+        "calls": 6
+      },
+      "stages": [
+        "repair",
+        "review",
+        "review",
+        "repair",
+        "review",
+        "review"
+      ],
+      "accepted": 0,
+      "roundLimit": 2,
+      "result": "Both repairs failed independent image review. No authority was fabricated."
+    },
+    "currentRuntimeAudit": {
+      "privateRun": "native-1791739743091",
+      "outcome": "native-image-rejection-and-reader-verified",
+      "newModelCalls": 0,
+      "pendingCards": 1,
+      "publicationBlocked": true,
+      "ui": {
+        "reading": true,
+        "original": true,
+        "chunkRequests": 1,
+        "wholeBookRequests": 0,
+        "cloudModelSelection": true
+      },
+      "pageErrors": [],
+      "installedSourceHashes": {
+        "lib/contexts/generation/jobs/gateway-model.js": "94dec202a8909b140999d51c278f5177e021740ade142e07b4f173e566b17bee",
+        "lib/contexts/generation/scanned/batch-visual-evidence.js": "93ff9d47f672382502b6c6d9054d39f7406ee3d59a83df100850b8c5fd2574f0",
+        "lib/contexts/generation/draft-repair.js": "a662822e4f7b32031885a4f8d5163243bf38f2ecbfb2c61e28d2c381cf2950dc",
+        "lib/contexts/generation/operations.js": "9d415fe2a00386a8693246d14844a8c02b8f640a9ef010d47960bad49b9f0bc1",
+        "lib/generation.js": "33d89b9588f306a31082898d9decc5a2f2d75bfe64174270984611b85dd65a3c",
+        "lib/runtime/builtins.js": "3c9b7ec0a94c6bf7697059239a2a5e52ceca0719b88bfe38f1e0b27a4a206093",
+        "lib/client.js": "e54bec23926a144e800061fddd19c25c57115a2e3f9730ae885b0f0f2d6b097d"
+      }
+    },
+    "tests": {
+      "core": 157,
+      "readerAndUI": 16,
+      "failures": 0,
+      "nativeRejectedCandidateCountedAsAccepted": false,
+      "fixtureAndRealResultsSeparate": true
+    },
+    "humanVerified": false,
+    "mos30Acceptance": false,
+    "limitations": [
+      "General Create-deck and chapter/retrieval image picking remains incomplete.",
+      "This real Qwen candidate did not pass content acceptance.",
+      "Full-book cloud parsing and release/rollback remain unaccepted."
+    ],
+    "implementationCommit": "ad174fa9a2f7eb5de21d61b562550d2c38627ce2"
+  }
 }

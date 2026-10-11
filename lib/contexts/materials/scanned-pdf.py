@@ -7,7 +7,36 @@ import pymupdf
 mode, source = sys.argv[1:3]
 with pymupdf.open(source) as doc:
     if mode == "info":
-        print(json.dumps({"pages": [{"width": p.rect.width, "height": p.rect.height, "rotation": p.rotation} for p in doc]}))
+        print(json.dumps({"pages": [{"width": p.rect.width, "height": p.rect.height, "rotation": p.rotation,
+                                    "cropBox": list(p.cropbox), "mediaBox": list(p.mediabox),
+                                    "rotationMatrix": list(p.rotation_matrix), "derotationMatrix": list(p.derotation_matrix),
+                                    "coordinateSystem": "normalized-rotated-page"} for p in doc]}))
+    elif mode == "cloud-render":
+        page_number, target, bbox, dpi = sys.argv[3:7]
+        page = doc[int(page_number) - 1]
+        scale = min(float(dpi) / 72, math.sqrt(11900000 / (page.rect.width * page.rect.height)))
+        # Crop in the rendered, rotated pixel frame. PDF clip coordinates vary with rotation/CropBox.
+        full = page.get_pixmap(matrix=pymupdf.Matrix(scale, scale), alpha=False)
+        w, h = full.width, full.height
+        region = [0, 0, 1, 1] if bbox == "null" else json.loads(bbox)
+        x0, y0, x1, y1 = region
+        if not (0 <= x0 < x1 <= 1 and 0 <= y0 < y1 <= 1):
+            raise ValueError("Invalid normalized crop rectangle")
+        clip = pymupdf.IRect(math.floor(x0 * w), math.floor(y0 * h), math.ceil(x1 * w), math.ceil(y1 * h))
+        pix = pymupdf.Pixmap(full.colorspace, clip, False)
+        pix.copy(full, clip)
+        pix.save(target)
+        samples = pix.samples
+        stride = max(1, pix.width * pix.height // 20000)
+        dark, count = 0, 0
+        for pos in range(0, pix.width * pix.height, stride):
+            count += 1
+            dark += min(samples[pos * pix.n:pos * pix.n + 3]) < 235
+        print(json.dumps({"width": pix.width, "height": pix.height, "rotation": page.rotation,
+                          "bbox": [clip.x0 / w, clip.y0 / h, clip.x1 / w, clip.y1 / h],
+                          "renderWidth": w, "renderHeight": h, "pixelOrigin": [clip.x0, clip.y0],
+                          "nonWhiteFraction": dark / max(count, 1), "dpi": scale * 72,
+                          "coordinateSystem": "normalized-rotated-page", "deskew": False}))
     elif mode == "render":
         page_number, target, bbox, dpi = sys.argv[3:7]
         page = doc[int(page_number) - 1]

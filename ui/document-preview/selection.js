@@ -106,6 +106,23 @@ export function captureSelection(container, selection = window.getSelection()) {
   if (!selection?.rangeCount || selection.isCollapsed) return null;
   const range = selection.getRangeAt(0);
   if (container && (!container.contains(range.startContainer) || !container.contains(range.endContainer))) return null;
+  const first = range.startContainer.nodeType === 1 ? range.startContainer : range.startContainer.parentElement;
+  const last = range.endContainer.nodeType === 1 ? range.endContainer : range.endContainer.parentElement;
+  if (first?.closest('[data-study-marker],button') || last?.closest('[data-study-marker],button')) return null;
+  const mapped = first?.closest('[data-study-anchor-start]'), mappedEnd = last?.closest('[data-study-anchor-start]');
+  if (!mapped && !mappedEnd && (first?.closest('[data-study-reflow]') || last?.closest('[data-study-reflow]'))) {
+    return { unsupported: true, message: '请将选区缩小到同一个正文块；跨块与跨页选区尚未支持。' };
+  }
+  if (mapped || mappedEnd) {
+    if (mapped !== mappedEnd || !mapped.contains(range.endContainer)) return { unsupported: true, message: '请将选区缩小到同一个正文块；跨块与跨页选区尚未支持。' };
+    const before = range.cloneRange(); before.selectNodeContents(mapped); before.setEnd(range.startContainer, range.startOffset);
+    const start = Number(mapped.dataset.studyAnchorStart) + before.toString().length, quote = range.toString(), end = start + quote.length;
+    const page = mapped.closest('[data-study-page]');
+    if (!quote.trim() || !page?.dataset.studySource || end > Number(mapped.dataset.studyAnchorEnd)) return null;
+    const localStart = start - Number(mapped.dataset.studyAnchorStart), localEnd = localStart + quote.length;
+    return { quote, start, end, prefix: (mapped.dataset.studyPrefix + mapped.textContent.slice(0, localStart)).slice(-80), suffix: (mapped.textContent.slice(localEnd) + mapped.dataset.studySuffix).slice(0, 80),
+      page: Number(page.dataset.studyPage), sourceId: page.dataset.studySource, range: range.cloneRange(), element: mapped };
+  }
   // A formula is quoted whole: a selection that starts or ends inside a drawn one is widened, on screen too.
   if (spanFormulas(range)) { selection.removeAllRanges(); selection.addRange(range); }
   // A translation block (data-tr-key) is not the document: text selected inside one is never a passage of it.

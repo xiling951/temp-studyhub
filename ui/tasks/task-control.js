@@ -135,8 +135,8 @@ export const actionText = (action, job) => ({ pause: ui('已暂停：新的调�
   cancel: job && keepsOf(job, 'cancel') === 'nothing' ? ui('正在停止；这次不会保存任何结果') : ui('正在停止；已完成的部分会保留'), retry: ui('已接着做') })[action] || '';
 
 /** The words under 接着做: what pressing it does with the work already done (the title of the button), and what an ended job left (the note of 即时控制). */
-export const retryTitle = (job) => (keepsOf(job, 'retry') === 'nothing' ? ui('重新开始：会从头读取，已用的模型调用会再次计费') : ui('已完成的部分会直接复用，不会重复付费'));
-export const endedNote = (job, interrupted) => (keepsOf(job, 'retry') === 'nothing' ? ui('没有保存任何结果，点「接着做」会从头开始')
+export const retryTitle = (job) => taskKindOf(job) === 'visual-import' ? ui('重试解析：已校验页会复用，未保存的页可能再次调用') : (keepsOf(job, 'retry') === 'nothing' ? ui('重新开始：会从头读取，已用的模型调用会再次计费') : ui('已完成的部分会直接复用，不会重复付费'));
+export const endedNote = (job, interrupted) => taskKindOf(job) === 'visual-import' ? ui('解析未完成；保留原件和已校验结果，点「接着做」重试解析。') : (keepsOf(job, 'retry') === 'nothing' ? ui('没有保存任何结果，点「接着做」会从头开始')
   : interrupted ? ui('任务被中断了，已完成的部分都保留着；点「接着做」继续。') : ui('任务没有做完，已出的题都保留着；点「接着做」继续。'));
 
 /**

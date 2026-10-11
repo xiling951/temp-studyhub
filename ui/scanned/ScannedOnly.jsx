@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { ui } from '../i18n.js';
 import { Button, Dialog, InlineMessage } from '../components/index.js';
-import VisualReader from './VisualReader.jsx';
+import DocumentViewer from '../document-preview/DocumentViewer.jsx';
 import { useStudy } from '../study-context.jsx';
 
 /** Image-only textbooks are documents, never fabricated OCR sources. */
@@ -21,6 +21,6 @@ export default function ScannedOnly({ revision }) {
   return <section aria-label={ui('无正文的图文教材')}>
     {error && <InlineMessage tone="error">{error}</InlineMessage>}
     {items.map(item => <Button key={item.documentId} onClick={() => open(item)}>{item.title} · {ui('图片资料')}</Button>)}
-    {opened && <Dialog title={opened.title} size="full" onClose={() => setOpened(null)}><VisualReader document={opened} /></Dialog>}
+    {opened && <Dialog title={opened.title} size="full" onClose={() => setOpened(null)}><DocumentViewer documentId={opened.documentId || opened.id} revision={opened.revision} title={opened.title} call={call} initialMode="visual" /></Dialog>}
   </section>;
 }

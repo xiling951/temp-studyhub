@@ -3,6 +3,7 @@ import { WorkerMessageHandler } from 'pdfjs-dist/build/pdf.worker.mjs';
 import { peekCanvasSize, undecodedImages } from './peek-logic.js';
 import { createBinaryDataFactory, peekDocumentOptions } from './pdf-assets.js';
 import { peekAssetLoaders } from './pdf-asset-data.js';
+import { visualPdfRange } from '../../scanned/pdf-range.js';
 
 /* 看原页: pdf.js behind a tiny interface. This module (pdf.js, about a megabyte, and its worker) is only ever imported by PagePeek.jsx,
    which the viewer loads lazily on the first peek, never with the reader; the worker runs on the main thread (the page is a bundle with no worker file to point at). One document is open
@@ -27,16 +28,24 @@ export const isCancelled = error => error?.name === 'RenderingCancelledException
  */
 export async function createPeekRenderer(bytes, deps = {}) {
   const BinaryDataFactory = createBinaryDataFactory(deps.loaders || peekAssetLoaders);
-  const task = (deps.pdfjs || loadPdfjs()).getDocument(peekDocumentOptions(bytes, BinaryDataFactory));
+  const library = deps.pdfjs || loadPdfjs();
+  const transport = deps.visual ? visualPdfRange(library.PDFDataRangeTransport, deps.visual.call, deps.visual.scope, deps.visual.asset) : null;
+  const options = peekDocumentOptions(bytes, BinaryDataFactory);
+  if (transport) { delete options.data; Object.assign(options, { range: transport.range, length: deps.visual.asset.bytes, rangeChunkSize: 262144, disableAutoFetch: true, disableStream: true }); }
+  const task = library.getDocument(options);
+  const cancel = () => { transport?.close(); void task.destroy().catch(() => {}); };
+  deps.signal?.addEventListener('abort', cancel, { once: true });
+  if (deps.signal?.aborted) cancel();
+  const checked = promise => transport ? Promise.race([promise, transport.failure]) : promise;
   let doc;
-  try { doc = await task.promise; }
-  catch (error) { await task.destroy().catch(() => {}); throw error; }
+  try { doc = await checked(task.promise); }
+  catch (error) { deps.signal?.removeEventListener('abort', cancel); transport?.close(); await task.destroy().catch(() => {}); throw error; }
   const sizes = new Map();
   return {
     numPages: doc.numPages,
     async pageSize(number) {
       if (!sizes.has(number)) {
-        const page = await doc.getPage(number);
+        const page = await checked(doc.getPage(number));
         const unit = page.getViewport({ scale: 1 });
         sizes.set(number, { width: unit.width, height: unit.height });
         page.cleanup();
@@ -44,7 +53,7 @@ export async function createPeekRenderer(bytes, deps = {}) {
       return sizes.get(number);
     },
     async render(number, { scale, signal, onReport }) {
-      const page = await doc.getPage(number);
+      const page = await checked(doc.getPage(number));
       try {
         signal?.throwIfAborted();
         const unit = page.getViewport({ scale: 1 });
@@ -54,7 +63,7 @@ export async function createPeekRenderer(bytes, deps = {}) {
         const render = page.render({ canvas, canvasContext: canvas.getContext('2d'), viewport: page.getViewport({ scale: size.scale }) });
         const cancel = () => render.cancel();
         signal?.addEventListener('abort', cancel, { once: true });
-        try { await render.promise; } finally { signal?.removeEventListener('abort', cancel); }
+        try { await checked(render.promise); } finally { signal?.removeEventListener('abort', cancel); }
         signal?.throwIfAborted();
         onReport?.({ undecoded: undecodedImages(page.objs, page.commonObjs).length }); // before cleanup() lets the page's objects go
         const bitmap = await createImageBitmap(canvas);
@@ -62,6 +71,6 @@ export async function createPeekRenderer(bytes, deps = {}) {
         return bitmap;
       } finally { page.cleanup(); }
     },
-    async destroy() { sizes.clear(); try { await task.destroy(); } catch { /* already gone */ } },
+    async destroy() { deps.signal?.removeEventListener('abort', cancel); transport?.close(); sizes.clear(); try { await task.destroy(); } catch { /* already gone */ } },
   };
 }

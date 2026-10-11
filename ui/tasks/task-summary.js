@@ -12,7 +12,7 @@ import { partTitle } from '../deck-parts.js';
 
 const KIND_LABEL = {
   audio: '音频批量转写', pdf: 'PDF 转换', translation: '翻译', supplement: '补题', repair: '修题', publish: '发布检查',
-  generation: '出题', extension: '后台任务', coach: '为你定制',
+  generation: '出题', extension: '后台任务', coach: '为你定制', 'visual-import': '图文解析',
 };
 export const taskKindLabel = (kind) => ui(KIND_LABEL[kind] || KIND_LABEL.extension);
 

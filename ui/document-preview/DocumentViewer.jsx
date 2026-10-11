@@ -42,6 +42,7 @@ import { applyOutline, clearOutlineTags } from './reader/ai-outline.js';
 import { findRanges, paintMatches } from './reader/find.js';
 import css from './document-preview.css';
 import VisualReader from '../scanned/VisualReader.jsx';
+import { downloadVisualAsset } from '../scanned/asset.js';
 import readerCss from './reader/reader.css';
 import linksCss from './links/links.css';
 import translationCss from './translation/translation.css';
@@ -49,6 +50,7 @@ import translationCss from './translation/translation.css';
 const useIsoLayoutEffect = typeof window === 'undefined' ? useEffect : useLayoutEffect;
 // 看原页 (pdf.js and its worker) is fetched on the first peek, never with the reader.
 const PagePeek = lazy(() => import('./peek/PagePeek.jsx'));
+const VisualPdf = lazy(() => import('../scanned/VisualPdf.jsx'));
 
 /** HTML is inert reading content. Only Markdown already filtered by renderNoteMarkdown may keep its safe images. */
 export function safeDocumentHtml(text, { markdownImages = false } = {}) {
@@ -104,11 +106,13 @@ function QuotedText({ text, quote, anchor, format }) {
 export default function DocumentViewer(props) {
   const { data, onOpenModelSettings, onOpenSettings } = props, model = modelReadiness(data);
   const services = useMemo(() => ({ model, openModelSettings: onOpenModelSettings, openSettings: onOpenSettings }), [model.ready, model.reason, model.label, onOpenModelSettings, onOpenSettings]); // eslint-disable-line react-hooks/exhaustive-deps
-  return <ReaderModelContext.Provider value={services}><DocumentReader {...props} /></ReaderModelContext.Provider>;
+  // A document-only entry has no source ID and never creates a synthetic source record.
+  const entry = useMemo(() => props.source || { title: props.title || ui('图文教材'), text: '', document: { id: props.documentId } }, [props.source, props.documentId, props.title]);
+  return <ReaderModelContext.Provider value={services}><DocumentReader {...props} source={entry} /></ReaderModelContext.Provider>;
 }
 
 function DocumentReader({ source, quote, call, data, host, onOpenCard, onOpenDeck, onPractice, onStarted, onPublished, onCaseFromPassage, onGenerate, generateDisabled = false, initialMode = 'read',
-  onPracticePages, onGeneratePages, onOpenDraftPages, resume, backLabel, onBack, localContent }) {
+  onPracticePages, onGeneratePages, onOpenDraftPages, resume, backLabel, onBack, localContent, documentId, revision }) {
   const language = useUiLanguage();
   const localMode = localContent != null;
   useInjectCss(css, 'study-document-preview');
@@ -131,6 +135,7 @@ function DocumentReader({ source, quote, call, data, host, onOpenCard, onOpenDec
   const [pdfPage, setPdfPage] = useState(() => source.document?.page || source.selection?.page || 1);
   const [attaching, setAttaching] = useState(null), [reload, setReload] = useState(0), attachTarget = useRef(null); // 补全原文件 (OriginalFile.jsx)
   const [peek, setPeek] = useState(null); // 看原页 (peek/PagePeek.jsx): { page, figure }
+  const [visualRender, setVisualRender] = useState(0);
   const root = useRef(null), body = useRef(null), scroller = useRef(null), findInput = useRef(null), ranges = useRef([]), openedAt = useRef('');
   const outlineId = useId(), toolsId = useId();
   useEffect(() => {
@@ -140,11 +145,11 @@ function DocumentReader({ source, quote, call, data, host, onOpenCard, onOpenDec
     if (localMode) { setLoading(false); return undefined; }
     (async () => {
       try {
-        const value = await call('materials.document.get', { sourceId: source.id,
-          ...(source.selection?.revision ? { revision: source.selection.revision } : {}) });
+        const value = await call('materials.document.get', { ...(documentId ? { documentId } : { sourceId: source.id }),
+          ...(source.selection?.revision || revision ? { revision: source.selection?.revision || revision } : {}) });
         if (!current) return;
         setDocument(value);
-        if (value.visual && initialMode === 'read') setMode('visual');
+        if (value.visual && !value.visual.reading && initialMode === 'read') setMode('visual');
         const backlink = await call('materials.links.list', { documentId: value.documentId || value.id });
         if (current) setLinks(backlink.links || []);
         const original = originalHandling(value);
@@ -168,11 +173,13 @@ function DocumentReader({ source, quote, call, data, host, onOpenCard, onOpenDec
       } finally { if (current) setLoading(false); }
     })();
     return () => { current = false; if (objectUrl) URL.revokeObjectURL(objectUrl); };
-  }, [call, source.id, source.text, source.selection?.revision, reload, localMode]);
+  }, [call, source.id, source.text, source.selection?.revision, reload, localMode, documentId, revision]);
   const format = localMode ? 'md' : viewerFormat(document, source), paged = PAGED.has(format);
-  const view = mode === 'original' && !(format === 'pdf' && fileUrl) ? 'read' : mode, reading = view === 'read';
+  const view = mode === 'original' && !(format === 'pdf' && (fileUrl || document?.visual)) ? 'read' : mode, reading = view === 'read';
+  const visualReading = reading && !!document?.visual?.reading;
   const downloadOriginal = async () => {
     try {
+      if (document.visual) { await downloadVisualAsset(call, { documentId: document.documentId || document.id, revision: document.revision }, document.visual.original, document.filename); return; }
       const bytes = await call('materials.document.bytes', { documentId: document.documentId || document.id, revision: document.revision });
       const data = Uint8Array.from(atob(bytes.dataBase64), char => char.charCodeAt(0));
       const url = URL.createObjectURL(new Blob([data], { type: bytes.mime || 'application/octet-stream' }));
@@ -226,14 +233,14 @@ function DocumentReader({ source, quote, call, data, host, onOpenCard, onOpenDec
   const outlineItems = aiOn ? aiItems : autoOutline;
   const outline = useMemo(() => structureOutline(outlineItems, { fold: !aiOn }), [outlineItems, aiOn]);
   const [position, jump] = useReadingPosition(scroller, outline, `${view}:${html.length}:${sections.length}:${aiItems.length}`);
-  const activeId = view === 'original' ? textOutline.find(item => item.page === pdfPage)?.id ?? null : position.activeId;
+  const activeId = view === 'original' || visualReading ? textOutline.find(item => item.page === pdfPage)?.id ?? null : position.activeId;
   // Previous / next walk the sections; once the learner has applied the outline as the document's chapters, they walk the chapters.
   const chapterLevel = aiOn && aiOutline?.segmentation?.level;
   const around = useMemo(() => chapterLevel ? chapterNeighbours(outline, activeId, chapterLevel) : sectionNeighbours(outline, activeId), [outline, activeId, chapterLevel]);
   const here = outline.find(item => item.id === activeId);
   const where = here ? [itemLabel(here), outlinePath(outline, here.id).join(' › ')].filter(Boolean).join(' · ') : '';
   const jumpTo = item => {
-    if (view === 'original') { if (item.page) setPdfPage(item.page); }
+    if (view === 'original' || visualReading) { if (item.page) setPdfPage(item.page); }
     else if (item.range && item.tagged === false) scrollToNode(scroller.current, item.range);
     else jump(item.id);
     if (narrow) setOverlay(null);
@@ -264,6 +271,7 @@ function DocumentReader({ source, quote, call, data, host, onOpenCard, onOpenDec
     if (localMode) return;
     const value = captureSelection(body.current);
     if (!value) return;
+    if (value.unsupported) { setError(value.message); setCapture(null); return; }
     setCapture(value);
     if (!narrow && !settings.tools) updateSettings({ tools: true });
   };
@@ -282,7 +290,7 @@ function DocumentReader({ source, quote, call, data, host, onOpenCard, onOpenDec
     await onPublished?.(value);
   };
   // Link layer: [n] markers, underlines (when shown) and their click. Ranges are located once per links/text change.
-  const rendered = useMemo(() => ({ html, content, view, sections, document, language }), [html, content, view, sections, document, language]);
+  const rendered = useMemo(() => ({ html, content, view, sections, document, language, visualRender }), [html, content, view, sections, document, language, visualRender]);
   const linkTitle = group => groupTitle(group, linkTitleWords());
   // A kept thread is opened in the learning panel: its passage becomes the selection there, and the panel brings its answers back.
   const openAnnotation = link => {
@@ -359,7 +367,7 @@ function DocumentReader({ source, quote, call, data, host, onOpenCard, onOpenDec
     ranges.current = finding && view !== 'original' && deferredQuery.trim() ? findRanges(body.current, deferredQuery) : [];
     setTotal(ranges.current.length);
     setMatch(0);
-  }, [finding, deferredQuery, view, html, sections, content, model]);
+  }, [finding, deferredQuery, view, html, sections, content, model, visualRender]);
   useEffect(() => {
     if (!total) return undefined;
     const index = Math.min(match, total - 1), clear = paintMatches(ranges.current, index);
@@ -384,13 +392,14 @@ function DocumentReader({ source, quote, call, data, host, onOpenCard, onOpenDec
   };
 
   // The 原始 PDF tab without a file is not dead: it explains and offers 补全原文件.
-  const chooseView = value => value === 'original' && !fileUrl ? (document && setAttaching(issueOf(document.original)?.kind === 'none' ? 'attach' : 'relink')) : setMode(value);
+  const chooseView = value => value === 'original' && !fileUrl && !document?.visual ? (document && setAttaching(issueOf(document.original)?.kind === 'none' ? 'attach' : 'relink')) : setMode(value);
   if (document) attachTarget.current = { documentId: document.documentId || document.id, revision: document.revision, title: document.filename || document.title || source.title, format };
   const modes = [...(document?.visual ? [{ value: 'visual', label: '图文教材' }] : []), { value: 'read', label: ui('阅读') }, { value: 'text', label: ui('原文') },
-    ...(format === 'pdf' && !document?.visual ? [{ value: 'original', label: ui('原始 PDF'), title: fileUrl ? undefined : ui('还没有原始 PDF，点击查看如何补全') }] : [])];
+    ...(format === 'pdf' ? [{ value: 'original', label: ui('原始 PDF'), title: fileUrl || document?.visual ? undefined : ui('还没有原始 PDF，点击查看如何补全') }] : [])];
   const notices = [
     loading && <LoadingState key="loading" label={ui('正在打开资料…')} />,
-    !localMode && <OriginalNotice key="original" document={document} onAction={setAttaching} />,
+    !localMode && !document?.visual && <OriginalNotice key="original" document={document} onAction={setAttaching} />,
+    document?.capabilities?.selection === false && <p key="image-only">{ui('纯图资料没有文字选区；可选图提问或出题，文字翻译与批注暂不可用。')}</p>,
     view === 'original' && <p key="pdf">{ui('原始 PDF 可核对排版与图表；要选中文字提问或补题，请切换到「阅读」。')}</p>,
     !localMode && error && <InlineMessage key="error" tone="error">{error}</InlineMessage>,
     (quoteState?.status === 'ambiguous' || (reading && placed === 'ambiguous')) && <InlineMessage key="ambiguous" tone="warning">{ui('引用在资料中出现多次，请结合上下文核对位置。')}</InlineMessage>,
@@ -406,7 +415,10 @@ function DocumentReader({ source, quote, call, data, host, onOpenCard, onOpenDec
   const pageText = (section, index) => sources[index]?.text ?? '';
   // 看原页: one page of the attached original PDF in a small panel, from the text views of a page-based document (never in the PDF tab).
   const canPeek = paged && format === 'pdf' && view !== 'original' && !loading && !!document;
-  const openPeek = (page, { figure = false } = {}) => setPeek({ page, figure });
+  const openPeek = (page, { figure = false } = {}) => {
+    if (document?.visual) { setPdfPage(page); setMode('original'); }
+    else setPeek({ page, figure });
+  };
   useEffect(() => { if (!canPeek) setPeek(null); }, [canPeek]);
   const peekBytes = async () => fileUrl ? new Uint8Array(await (await fetch(fileUrl)).arrayBuffer()) : null;
 
@@ -461,8 +473,8 @@ function DocumentReader({ source, quote, call, data, host, onOpenCard, onOpenDec
       <div className="reader-scroll" ref={scroller} tabIndex={0} role="region" aria-label={localMode ? localContent.title || source.title || ui('资料内容') : ui('资料内容')} data-mode={view}>
         <div className="reader-page">
           <div className="study-document-body" ref={body} onMouseUp={select} onKeyUp={select} onTouchEnd={select} onClick={pick} onCopy={copy}>
-            {view === 'visual' && document?.visual ? <VisualReader document={document} initialPage={source.document?.page || 1} /> : view === 'original'
-              ? <div className="reader-original"><iframe src={`${fileUrl}#page=${pdfPage}`} title={source.title || ui('原始 PDF')} /></div>
+            {(view === 'visual' || visualReading) && document?.visual ? <VisualReader document={document} page={pdfPage} onPage={setPdfPage} reflow={visualReading} outlineId={sections.find(section => section.page === pdfPage)?.id} onRendered={() => setVisualRender(value => value + 1)} /> : view === 'original'
+              ? document?.visual ? <Suspense fallback={<LoadingState label={ui('正在打开原 PDF…')} />}><VisualPdf document={document} page={pdfPage} onPage={setPdfPage} /></Suspense> : <div className="reader-original"><iframe src={`${fileUrl}#page=${pdfPage}`} title={source.title || ui('原始 PDF')} /></div>
               : reading
                 ? html ? <div className="reader-html source-md" data-study-text="true" dangerouslySetInnerHTML={{ __html: html }} />
                   : <ReadingSections sections={sections} labelOf={labelOf} onPeek={canPeek ? openPeek : undefined} />

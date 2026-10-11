@@ -24,7 +24,8 @@ export const timelineLegend = (family, contractKind) => family === 'audio' ? aud
 /** A call as a short phrase: "校对 6/9", "限流等待"; `file` adds the recording it belongs to. */
 export function callLabel(call, { file = false } = {}) {
   if (!call) return '';
-  const base = ui(KIND_LABEL[call.kind] || KIND_LABEL.other);
+  const local = call.modelRequest === false && call.observation?.boundary === 'local-process';
+  const base = local ? ui(call.kind === 'mineru-visual' ? '本地 MinerU 解析' : call.kind === 'cloud-metadata' ? '读取 PDF 信息' : call.kind.startsWith('cloud-render:') ? '本地渲染原页' : call.kind.startsWith('cloud-regions:') ? '校验和裁图' : '本地处理') : ui(KIND_LABEL[call.kind] || (call.kind === 'convert' ? '云端识别' : KIND_LABEL.other));
   const counted = call.kind !== 'wait' && call.part != null && call.parts ? uiFormat('{0} {1}/{2}', [base, call.part, call.parts]) : base;
   // A review asked again because its reply could not be used (lib/generation.js) is a retry of the same review, and is called that.
   const numbered = call.kind === 'review' && call.retry > 0 ? uiFormat('{0} · 第 {1} 次重新审阅', [counted, call.retry]) : counted;
@@ -37,6 +38,7 @@ const RUNNER = { subagent: 'DSH 子代理', direct: '直接模型调用', gemini
 /** Who runs a call, and at what reasoning level when one was asked for. */
 export function runnerLabel(call) {
   if (!call?.runner) return '';
+  if (call.modelRequest === false && call.observation?.boundary === 'local-process') return ui('本地处理');
   const who = ui(RUNNER[call.runner] || call.runner);
   const level = call.reasoning && call.reasoning !== 'default' ? uiFormat('推理 {0}', [ui(STRENGTH_LABEL[call.reasoning] || call.reasoning)]) : '';
   return joinMeta([who, level]);
@@ -46,7 +48,7 @@ export function runnerLabel(call) {
 export function outputMode(call) {
   if (!call) return 'idle';
   if (call.status !== 'running') return 'ended';
-  if (call.kind === 'wait' || call.runner === 'gemini' || call.kind === 'transcribe') return 'none';
+  if (call.modelRequest === false || call.kind === 'wait' || call.runner === 'gemini' || call.kind === 'transcribe') return 'none';
   return 'stream';
 }
 

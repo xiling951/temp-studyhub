@@ -1,0 +1,138 @@
+{
+  "checkedAt": "2026-10-11T18:11:02.725Z",
+  "version": "3.3.0-scanned.4",
+  "retrievalVersion": "3.3.0-scanned.3",
+  "formalDesktop": true,
+  "mechanism": "Desktop native generation installer",
+  "installedCode": [
+    {
+      "file": "lib/contexts/materials/scanned/cloud-import.js",
+      "matches": true
+    },
+    {
+      "file": "lib/contexts/materials/visual-reading.js",
+      "matches": true
+    },
+    {
+      "file": "lib/contexts/generation/scanned/batch-visual-evidence.js",
+      "matches": true
+    },
+    {
+      "file": "lib/generation.js",
+      "matches": true
+    },
+    {
+      "file": "lib/runtime/builtins.js",
+      "matches": true
+    },
+    {
+      "file": "lib/client.js",
+      "matches": true
+    }
+  ],
+  "dataUnchangedBeforeProbe": true,
+  "launchUnchanged": true,
+  "backupVerifiedFiles": 2945,
+  "credentialsUntouched": true,
+  "visionDeclarations": [
+    "qwen/qwen3.8-flash",
+    "qwen/qwen3.8-max"
+  ],
+  "realCloudProbe": {
+    "pages": 3,
+    "status": "complete",
+    "calls": 3,
+    "hostUsage": {
+      "tokens": 34892,
+      "tokenUsage": {
+        "uncachedInputTokens": 12481,
+        "outputTokens": 16267,
+        "cacheReadTokens": 6144,
+        "cacheWriteTokens": 0
+      },
+      "calls": 3
+    },
+    "quality": {
+      "reviewRequired": true,
+      "humanVerified": false,
+      "pages": 3,
+      "assets": 10,
+      "uncertainPages": [
+        1,
+        2,
+        3
+      ],
+      "originalPageFallback": [],
+      "reconstruction": "page-order",
+      "limitations": [
+        "跨页段落及续表尚未自动合并",
+        "模型坐标与转写需人工核对"
+      ],
+      "explanation": "not-requested"
+    },
+    "ui": {
+      "reading": true,
+      "original": true,
+      "chunkRequests": 1,
+      "wholeBookRequests": 0,
+      "cloudModelSelection": true
+    },
+    "pageErrors": [],
+    "contentHumanVerified": false
+  },
+  "libraries": [
+    {
+      "root": "D:/studyhub/.dsh-study",
+      "oldSourcesPreserved": 9,
+      "oldDocumentsPreserved": 3,
+      "newSources": 0,
+      "newDocuments": 0,
+      "oldStudyRecordsUnchanged": true
+    },
+    {
+      "root": "D:/studyhub/libraries/数字集成电路-图文",
+      "oldSourcesPreserved": 1153,
+      "oldDocumentsPreserved": 2,
+      "newSources": 3,
+      "newDocuments": 1,
+      "oldStudyRecordsUnchanged": true
+    }
+  ],
+  "resourcePackage": {
+    "bytes": 4365424,
+    "sha256": "9ecdf385151fd046d397173a11fca413518bab72e66a2a962ead326aeb90d433",
+    "zipIntegrity": true,
+    "requiredFiles": true,
+    "originalPdfUnchanged": true,
+    "markdownCharacters": 5246,
+    "images": 10,
+    "chapters": 4,
+    "entries": 63,
+    "offlineHtmlOpened": true,
+    "imagesLoaded": 7,
+    "pageErrors": []
+  },
+  "bundle": {
+    "name": "@ericwang1358/dsh-daily-flashcard",
+    "version": "3.3.0-scanned.4",
+    "filename": "ericwang1358-dsh-daily-flashcard-3.3.0-scanned.4.tgz",
+    "bytes": 4987414,
+    "sha256": "af10dfdd8fd1d909a1b74628f0452cdc2287eb3c0148f883a8057f5ff440256d"
+  },
+  "publishedRelease": false,
+  "limitations": [
+    "Cross-page paragraphs and continued tables remain unmerged.",
+    "Full-book cloud parsing and human transcription accuracy remain unaccepted.",
+    "The real image-question sample and two repair rounds remain rejected.",
+    "A live Desktop downgrade has not been executed."
+  ],
+  "qaNotes": [
+    "Initial UI probes were corrected for Desktop sidebar placement, course filtering and the course combobox selector; successful rechecks reused the existing document without new paid calls.",
+    "Offline images were checked individually because lazy images are loaded on scroll."
+  ],
+  "cleanup": {
+    "status": "blocked-by-automatic-approval",
+    "reason": "blocked by policy",
+    "retained": "release staging directory and temporary navigation screenshots"
+  }
+}

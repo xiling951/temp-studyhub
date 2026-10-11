@@ -1,13 +1,14 @@
 /* Use Desktop's shipped generation installer for its registered core bundle.
    Run with Desktop.exe in ELECTRON_RUN_AS_NODE mode after quitting Desktop and backing up the profile/library. */
-import { readFile, writeFile } from 'node:fs/promises';
+import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import { join, resolve } from 'node:path';
 import { pathToFileURL } from 'node:url';
 
 if (!process.execPath.endsWith('DSH Desktop.exe') || process.env.ELECTRON_RUN_AS_NODE !== '1') throw Error('Use the authorized Desktop Node runtime');
 const base = resolve('..');
 const version = process.argv.find(arg => arg.startsWith('--version='))?.slice('--version='.length) ?? JSON.parse(await readFile('package.json', 'utf8')).version;
-if (!/^3\.3\.0-scanned\.[23]$/.test(version)) throw Error('Choose the retained scanned.2 or current scanned.3 package');
+if (!/^3\.3\.0-scanned\.[234]$/.test(version)) throw Error('Choose a retained scanned.2, scanned.3 or scanned.4 package');
+const evidence = resolve(process.argv.find(arg => arg.startsWith('--evidence-dir='))?.slice('--evidence-dir='.length) ?? join(base, 'evidence/mos-desktop-upgrade'));
 const home = join(process.env.APPDATA, 'dsh-desktop/harness');
 const resources = join(process.env.LOCALAPPDATA, 'Programs/DSH Desktop/resources/app.asar');
 const native = join(resources, 'node_modules/dsh-desktop-market-installer/generations');
@@ -34,5 +35,6 @@ const result = await withRegistryLock(home, async () => {
   catch (error) { await writeDesired(home, desired); throw error; }
   return { ok: true, target, version, generationId: installed.generation.id, mechanism: 'Desktop upgradePluginToGeneration path: shipped generation installer and transactional projection', runtimeValidationRequired: true };
 });
-await writeFile(join(base, 'evidence/mos-desktop-upgrade/generation-install.json'), JSON.stringify(result, null, 2));
+await mkdir(evidence, { recursive: true });
+await writeFile(join(evidence, 'generation-install.json'), JSON.stringify(result, null, 2));
 console.log(JSON.stringify(result));

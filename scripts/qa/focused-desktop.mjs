@@ -7,7 +7,8 @@ import { launchChromium } from './browser.mjs';
 
 const phase = process.argv.find(arg => arg.startsWith('--phase='))?.slice(8);
 if (!['before', 'after'].includes(phase)) throw Error('Choose --phase=before or after');
-const base = resolve('..'), evidence = join(base, 'evidence/mos-desktop-upgrade');
+const base = resolve('..'), evidence = resolve(process.argv.find(arg => arg.startsWith('--evidence-dir='))?.slice('--evidence-dir='.length) ?? join(base, 'evidence/mos-desktop-upgrade'));
+const version = process.argv.find(arg => arg.startsWith('--version='))?.slice('--version='.length) ?? JSON.parse(await readFile('package.json', 'utf8')).version;
 const home = 'C:/Users/Lenovo/AppData/Roaming/dsh-desktop/harness';
 const root = 'D:/studyhub/libraries/数字集成电路-图文';
 const hash = data => createHash('sha256').update(data).digest('hex');
@@ -37,7 +38,7 @@ try {
   result.installedVersion = JSON.parse(await readFile(join(installed, 'package.json'), 'utf8')).version;
   result.retrievalVersion = JSON.parse(await readFile(join(home, 'profiles/web/node_modules/@ericwang1358/studyhub-retrieval/package.json'), 'utf8')).version;
   result.sourceChecks = [];
-  for (const file of ['lib/section-weights.js', 'lib/generation.js', 'lib/contexts/generation/operations.js', 'lib/contexts/authoring/publication.js']) {
+  for (const file of phase === 'before' ? ['lib/section-weights.js'] : ['lib/contexts/materials/scanned/cloud-import.js', 'lib/contexts/materials/visual-reading.js', 'lib/contexts/generation/scanned/batch-visual-evidence.js', 'lib/generation.js', 'lib/runtime/builtins.js', 'lib/client.js']) {
     result.sourceChecks.push({ file, matches: hash(await readFile(file)) === hash(await readFile(join(installed, file))) });
   }
   result.libraries = [];
@@ -51,7 +52,7 @@ try {
     const before = JSON.parse(await readFile(join(evidence, 'before.json'), 'utf8'));
     result.dataUnchanged = result.libraries.every((library, index) => library.stateHash === before.libraries[index].stateHash);
     result.launchUnchanged = result.launcherHash === before.launcherHash && result.shortcutHash === before.shortcutHash;
-    if (!result.dataUnchanged || !result.launchUnchanged || result.sourceChecks.some(check => !check.matches) || result.installedVersion !== '3.3.0-scanned.3') throw Error('Desktop upgrade verification failed');
+    if (!result.dataUnchanged || !result.launchUnchanged || result.sourceChecks.some(check => !check.matches) || result.installedVersion !== version) throw Error('Desktop upgrade verification failed');
   } else if (result.activeJobs.length) throw Error('Active StudyHub jobs must finish before upgrade');
   result.ok = result.pageErrors.length === 0;
   if (!result.ok) throw Error('StudyHub page errors detected');

@@ -1,0 +1,81 @@
+{
+  "checkedDate": "2026-10-11",
+  "scope": "plan-architecture-audit-and-documents-only",
+  "reviewedAgainstHead": "8892fd55",
+  "codeChanged": false,
+  "formalProfileOrLibraryChanged": false,
+  "actualModelCalls": 0,
+  "auditFindings": [
+    "A01",
+    "A02",
+    "A03",
+    "A04",
+    "A05",
+    "A06",
+    "A07",
+    "A08",
+    "A09",
+    "A10"
+  ],
+  "implementationTasks": [
+    "01",
+    "02",
+    "03",
+    "04",
+    "05",
+    "06",
+    "07",
+    "08",
+    "09",
+    "10",
+    "11",
+    "12"
+  ],
+  "explicitExistingSourcePathsChecked": 24,
+  "proposedPathsNotMislabelledExisting": [
+    "lib/contexts/materials/scanned/cloud-import.js"
+  ],
+  "generatedPathsNotToEdit": [
+    "lib/client*.js"
+  ],
+  "existingTestPathsChecked": [
+    "tests/document-preview.test.mjs",
+    "tests/generation-lifecycle.test.mjs",
+    "tests/generation-restart.test.mjs",
+    "tests/generation-stage-effort.test.mjs",
+    "tests/job-contract.test.mjs",
+    "tests/job-model-choice.test.mjs",
+    "tests/json-import.test.mjs",
+    "tests/materials-annotation.test.mjs",
+    "tests/materials-outline.test.mjs",
+    "tests/materials-segmentation.test.mjs",
+    "tests/oral-exam.test.mjs",
+    "tests/original-attach.test.mjs",
+    "tests/page-peek.test.mjs",
+    "tests/review-integrity.test.mjs",
+    "tests/runtime-contracts.test.mjs",
+    "tests/runtime-transaction-isolation.test.mjs",
+    "tests/scanned-visual-archive.test.mjs",
+    "tests/scanned-visual-browser.test.mjs",
+    "tests/scanned-visual-citations.test.mjs",
+    "tests/scanned-visual-import.test.mjs",
+    "tests/scanned-visual-model.test.mjs",
+    "tests/scanned-visual-preview.test.mjs",
+    "tests/scanned-visual-questions.test.mjs",
+    "tests/scanned-visual-retrieval.test.mjs",
+    "tests/scanned-visual-storage.test.mjs"
+  ],
+  "packAndReleaseCheckOutputPathsMatch": true,
+  "costEstimatesRemoved": true,
+  "credentialsScan": "passed",
+  "documentCopySha256": "a5db5cba2979b23a5e80086de01cc5f99122d6dcf15c22dd35143aebac504b27",
+  "focusedBaselineTests": {
+    "files": 8,
+    "tests": 58,
+    "passed": 58,
+    "failed": 0,
+    "log": "implementation/evidence/cloud-pdf-plan-audit-tests.log",
+    "realCloudCapabilityVerified": false
+  },
+  "limits": "No claim of cloud implementation, new UI verification or complete-suite pass; future task completion depends on actual evidence"
+}

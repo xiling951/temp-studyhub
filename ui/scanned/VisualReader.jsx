@@ -77,7 +77,7 @@ export default function VisualReader({ document, initialPage = 1, page: controll
       </article>)}
       </div>
       <div data-study-marker="true">
-      <VisualQuestions key={`${scope.documentId}:${scope.revision}:${page}`} scope={scope} blocks={value.page.blocks} />
+      <VisualQuestions key={`${scope.documentId}:${scope.revision}:${page}`} scope={scope} blocks={value.page.blocks} sourceId={value.page.sourceId} />
       <VisualExplanations scope={scope} page={page} pageCount={document.visual.pageCount} />
       </div>
     </>}

@@ -70,6 +70,25 @@ test('shared cloud reader resolves the second repeated phrase and renders the ac
   await page.goto(server.url); await page.locator('[data-tour="nav-sources"]').first().click();
   await page.getByRole('button', { name: 'Pure image fixture · 图片资料', exact: true }).click();
   const dialog = page.getByRole('dialog'); await dialog.locator('.scanned-reader').waitFor();
+  // UI submission fixture only; real ordinary native generation is tested separately.
+  let imageRequest;
+  await page.route('**/api/call', async route => {
+    const payload = route.request().postDataJSON();
+    if (payload.action !== 'generate') return route.fallback();
+    imageRequest = payload.args;
+    await route.fulfill({ json: { ok: true, value: { jobId: 'explicit-ui-fixture', status: 'running' } } });
+  });
+  const questionTools = dialog.getByRole('complementary', { name: '结合原图出题', exact: true });
+  await questionTools.getByRole('checkbox').first().click();
+  assert.equal(await questionTools.getByLabel('带图题数', { exact: true }).getAttribute('max'), '6');
+  await questionTools.getByLabel('原图出题方式', { exact: true }).click();
+  await page.getByRole('option', { name: '普通批量出题', exact: true }).click();
+  await questionTools.getByLabel('带图题数', { exact: true }).fill('7');
+  await questionTools.getByRole('button', { name: '结合所选原图生成题组', exact: true }).click();
+  await until(() => imageRequest, 'ordinary image UI submission');
+  assert.deepEqual(imageRequest.sourceIds, []);
+  assert.deepEqual(imageRequest.visualTargets, [{ documentId: pureId, revision: 'r1', blockIds: ['pure-p1-b0'] }]);
+  assert.equal(imageRequest.count, 7);
   await dialog.getByRole('button', { name: '原始 PDF', exact: true }).click();
   await dialog.locator('[aria-label="原始 PDF 分页阅读"] canvas').waitFor();
   await page.waitForFunction(() => document.querySelector('[role="dialog"] [aria-label="PDF 1"]')?.width > 0);

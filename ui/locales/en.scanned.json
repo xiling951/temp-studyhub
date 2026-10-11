@@ -90,5 +90,9 @@
   "放大{0}": "Enlarge {0}",
   "图解 · {0} · {1}": "Explanation · {0} · {1}",
   "待核对：{0}": "Needs review: {0}",
-  "图文已保存；图解未启动：{0}": "Text and images saved; explanation unavailable: {0}"
+  "图文已保存；图解未启动：{0}": "Text and images saved; explanation unavailable: {0}",
+  "原图出题方式": "Image question workflow",
+  "原图专项出题": "Focused image questions",
+  "普通批量出题": "Standard batch questions",
+  "（需要先核对图片范围）": " (Review the image region first)"
 }

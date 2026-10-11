@@ -1,0 +1,628 @@
+{
+  "date": "2026-10-11",
+  "baselineHead": "a1ab3f02",
+  "sourceVersion": "3.3.0-scanned.3",
+  "releasedOrInstalled": false,
+  "credentials": {
+    "resolvedBy": "native DSH credentials service",
+    "keyReadByScript": false,
+    "formalProfileChanged": false,
+    "formalLibraryChanged": false
+  },
+  "catalog": {
+    "provider": "qwen",
+    "entries": 175,
+    "defaultDesktopInput": [
+      "text"
+    ],
+    "entryImageMetadataMissing": true,
+    "catalogIsNotAccountPermissionEvidence": true
+  },
+  "isolatedModelMetadata": {
+    "models": [
+      "qwen3-vl-plus",
+      "qwen3.8-max",
+      "qwen3.8-flash"
+    ],
+    "input": [
+      "text",
+      "image"
+    ],
+    "reasoningEfforts": false,
+    "exactModelsOnly": true
+  },
+  "input": {
+    "originalHash": "1bee28d307564671e604d8a85860aecc53099221044046e16ad264b21fb8c358",
+    "originalBytes": 198094368,
+    "originalPages": 572,
+    "sampleHash": "5b2b9fc683165c4e4c9095056b5fcd597f5c488ec5229929b1ebfe4845885b9f",
+    "sampledOriginalPages": [
+      100,
+      149,
+      201
+    ],
+    "samplePdfPages": 3
+  },
+  "probes": {
+    "restrictedVisualModel": {
+      "evidence": "2026-10-11T11:59:27.265Z",
+      "route": {
+        "provider": "qwen",
+        "model": "qwen3-vl-plus"
+      },
+      "outcome": "failed",
+      "error": "Native cloud job ended failed: Study subagent error: 403: {\"message\":\"Access denied by API-Key restrictions.\",\"id\":\"0f4a716f-d9c0-96c8-b2e5-7eda2c1790de\",\"type\":\"access_denied\",\"code\":\"access_denied\"}",
+      "usage": {
+        "tokens": 0,
+        "tokenUsage": {
+          "uncachedInputTokens": 0,
+          "outputTokens": 0,
+          "cacheReadTokens": 0,
+          "cacheWriteTokens": 0
+        },
+        "calls": 1
+      },
+      "pageErrors": [],
+      "calls": [
+        {
+          "provider": "qwen",
+          "model": "qwen3-vl-plus",
+          "page": 1,
+          "imageHash": "11b6e3463865b586f5dd391f36d0610226db8aca6ec97d61a4a212c8fdd22ff0",
+          "status": "failed",
+          "budget": {
+            "timeoutMs": 240000,
+            "maxOutputTokens": 12000
+          },
+          "tokenUsage": {
+            "uncachedInputTokens": 0,
+            "outputTokens": 0,
+            "cacheReadTokens": 0,
+            "cacheWriteTokens": 0
+          },
+          "startedAt": "2026-10-11T11:59:37.353Z"
+        }
+      ]
+    },
+    "maxInterrupted": {
+      "evidence": "2026-10-11T12:02:43.681Z",
+      "route": {
+        "provider": "qwen",
+        "model": "qwen3.8-max"
+      },
+      "outcome": "failed",
+      "error": "page.evaluate: TypeError: Failed to fetch\n    at eval (eval at evaluate (:311:30), <anonymous>:1:46)\n    at UtilityScript.evaluate (<anonymous>:313:16)\n    at UtilityScript.<anonymous> (<anonymous>:1:44)",
+      "usage": null,
+      "pageErrors": [],
+      "calls": [],
+      "completedFirstPageKnownFromPersistedCheckpoint": true,
+      "persistedFirstPageTokens": 11236,
+      "incompleteUsage": true
+    },
+    "maxTimeout": {
+      "evidence": "2026-10-11T12:18:11.809Z",
+      "route": {
+        "provider": "qwen",
+        "model": "qwen3.8-max"
+      },
+      "outcome": "failed",
+      "error": "Native cloud job ended failed: $.error expected Schema<const> | any but got {\"message\":\"The operation was aborted due to timeout\",\"code\":23}",
+      "usage": {
+        "tokens": 0,
+        "tokenUsage": {
+          "uncachedInputTokens": 0,
+          "outputTokens": 0,
+          "cacheReadTokens": 0,
+          "cacheWriteTokens": 0
+        },
+        "calls": 1
+      },
+      "pageErrors": [],
+      "calls": [
+        {
+          "provider": "qwen",
+          "model": "qwen3.8-max",
+          "page": 1,
+          "imageHash": "11b6e3463865b586f5dd391f36d0610226db8aca6ec97d61a4a212c8fdd22ff0",
+          "status": "cancelled",
+          "budget": {
+            "timeoutMs": 240000,
+            "maxOutputTokens": 12000
+          },
+          "tokenUsage": {
+            "uncachedInputTokens": 0,
+            "outputTokens": 0,
+            "cacheReadTokens": 0,
+            "cacheWriteTokens": 0
+          },
+          "startedAt": "2026-10-11T12:18:24.262Z"
+        }
+      ]
+    },
+    "flashProtocolFailure": {
+      "evidence": "2026-10-11T12:24:05.986Z",
+      "route": {
+        "provider": "qwen",
+        "model": "qwen3.8-flash"
+      },
+      "outcome": "failed",
+      "error": "Native cloud job ended failed: Invalid cloud page coverage",
+      "usage": {
+        "tokens": 30767,
+        "tokenUsage": {
+          "uncachedInputTokens": 7965,
+          "outputTokens": 16402,
+          "cacheReadTokens": 6400,
+          "cacheWriteTokens": 0
+        },
+        "calls": 3
+      },
+      "pageErrors": [],
+      "calls": [
+        {
+          "provider": "qwen",
+          "model": "qwen3.8-flash",
+          "page": 1,
+          "imageHash": "11b6e3463865b586f5dd391f36d0610226db8aca6ec97d61a4a212c8fdd22ff0",
+          "status": "ok",
+          "budget": {
+            "timeoutMs": 240000,
+            "maxOutputTokens": 12000
+          },
+          "tokenUsage": {
+            "uncachedInputTokens": 4787,
+            "outputTokens": 4983,
+            "cacheReadTokens": 0,
+            "cacheWriteTokens": 0
+          },
+          "startedAt": "2026-10-11T12:24:17.147Z"
+        },
+        {
+          "provider": "qwen",
+          "model": "qwen3.8-flash",
+          "page": 2,
+          "imageHash": "43de413f8331522cd5dd9ec7a62c22269e4500bc8a013198a73dc443799aee16",
+          "status": "ok",
+          "budget": {
+            "timeoutMs": 240000,
+            "maxOutputTokens": 12000
+          },
+          "tokenUsage": {
+            "uncachedInputTokens": 2995,
+            "outputTokens": 4485,
+            "cacheReadTokens": 1792,
+            "cacheWriteTokens": 0
+          },
+          "startedAt": "2026-10-11T12:25:21.258Z"
+        },
+        {
+          "provider": "qwen",
+          "model": "qwen3.8-flash",
+          "page": 3,
+          "imageHash": "7f4395972a197d1e1fc029d137d5ea01d464a4d39dafa057c2d151306f5803fa",
+          "status": "ok",
+          "budget": {
+            "timeoutMs": 240000,
+            "maxOutputTokens": 12000
+          },
+          "tokenUsage": {
+            "uncachedInputTokens": 183,
+            "outputTokens": 6934,
+            "cacheReadTokens": 4608,
+            "cacheWriteTokens": 0
+          },
+          "startedAt": "2026-10-11T12:26:11.997Z"
+        }
+      ],
+      "exactInvalidFieldUnknown": true
+    },
+    "flashRestoredRetry": {
+      "evidence": "2026-10-11T12:31:56.403Z",
+      "route": {
+        "provider": "qwen",
+        "model": "qwen3.8-flash"
+      },
+      "outcome": "native-cloud-candidate-saved-content-unverified",
+      "error": null,
+      "usage": {
+        "tokens": 42719,
+        "tokenUsage": {
+          "uncachedInputTokens": 11202,
+          "outputTokens": 23581,
+          "cacheReadTokens": 7936,
+          "cacheWriteTokens": 0
+        },
+        "calls": 4
+      },
+      "pageErrors": [],
+      "calls": [
+        {
+          "provider": "qwen",
+          "model": "qwen3.8-flash",
+          "page": 1,
+          "imageHash": "11b6e3463865b586f5dd391f36d0610226db8aca6ec97d61a4a212c8fdd22ff0",
+          "status": "ok",
+          "budget": {
+            "timeoutMs": 240000,
+            "maxOutputTokens": 12000
+          },
+          "tokenUsage": {
+            "uncachedInputTokens": 4787,
+            "outputTokens": 4983,
+            "cacheReadTokens": 0,
+            "cacheWriteTokens": 0
+          },
+          "startedAt": "2026-10-11T12:24:17.147Z"
+        },
+        {
+          "provider": "qwen",
+          "model": "qwen3.8-flash",
+          "page": 2,
+          "imageHash": "43de413f8331522cd5dd9ec7a62c22269e4500bc8a013198a73dc443799aee16",
+          "status": "ok",
+          "budget": {
+            "timeoutMs": 240000,
+            "maxOutputTokens": 12000
+          },
+          "tokenUsage": {
+            "uncachedInputTokens": 2995,
+            "outputTokens": 4485,
+            "cacheReadTokens": 1792,
+            "cacheWriteTokens": 0
+          },
+          "startedAt": "2026-10-11T12:25:21.258Z"
+        },
+        {
+          "provider": "qwen",
+          "model": "qwen3.8-flash",
+          "page": 3,
+          "imageHash": "7f4395972a197d1e1fc029d137d5ea01d464a4d39dafa057c2d151306f5803fa",
+          "status": "ok",
+          "budget": {
+            "timeoutMs": 240000,
+            "maxOutputTokens": 12000
+          },
+          "tokenUsage": {
+            "uncachedInputTokens": 183,
+            "outputTokens": 6934,
+            "cacheReadTokens": 4608,
+            "cacheWriteTokens": 0
+          },
+          "startedAt": "2026-10-11T12:26:11.997Z"
+        },
+        {
+          "provider": "qwen",
+          "model": "qwen3.8-flash",
+          "page": 3,
+          "imageHash": "7f4395972a197d1e1fc029d137d5ea01d464a4d39dafa057c2d151306f5803fa",
+          "status": "ok",
+          "budget": {
+            "timeoutMs": 240000,
+            "maxOutputTokens": 12000
+          },
+          "tokenUsage": {
+            "uncachedInputTokens": 3237,
+            "outputTokens": 7179,
+            "cacheReadTokens": 1536,
+            "cacheWriteTokens": 0
+          },
+          "startedAt": "2026-10-11T12:32:04.675Z"
+        }
+      ],
+      "newModelCalls": 1,
+      "document": {
+        "documentId": "visual-5b2b9fc683165c4e4c9095056b5fcd597f5c488ec5229929b1ebfe4845885b9f",
+        "revision": "cloud1-b81525681a7c28d4b5dcfdfd3439cf9c5867fd9bf0701e5b074f15f558b1da5e",
+        "pages": 3,
+        "quality": {
+          "reviewRequired": true,
+          "humanVerified": false,
+          "pages": 3,
+          "assets": 10,
+          "uncertainPages": [
+            1,
+            2,
+            3
+          ],
+          "originalPageFallback": [],
+          "reconstruction": "page-order",
+          "limitations": [
+            "跨页段落及续表尚未自动合并",
+            "模型坐标与转写需人工核对"
+          ],
+          "explanation": "not-requested"
+        },
+        "originalHash": "5b2b9fc683165c4e4c9095056b5fcd597f5c488ec5229929b1ebfe4845885b9f"
+      },
+      "pages": [
+        {
+          "page": 1,
+          "characters": 1120,
+          "types": [
+            "page_number",
+            "page_header",
+            "image",
+            "text",
+            "title",
+            "text",
+            "text",
+            "title",
+            "text",
+            "text",
+            "text"
+          ],
+          "assets": 1,
+          "uncertaintyCount": 2
+        },
+        {
+          "page": 2,
+          "characters": 727,
+          "types": [
+            "page_header",
+            "page_number",
+            "text",
+            "text",
+            "text",
+            "text",
+            "text",
+            "image",
+            "image",
+            "text"
+          ],
+          "assets": 2,
+          "uncertaintyCount": 3
+        },
+        {
+          "page": 3,
+          "characters": 1259,
+          "types": [
+            "page_header",
+            "page_number",
+            "title",
+            "text",
+            "text",
+            "equation",
+            "text",
+            "equation",
+            "text",
+            "text",
+            "table",
+            "text",
+            "text",
+            "table",
+            "text"
+          ],
+          "assets": 4,
+          "uncertaintyCount": 2
+        }
+      ]
+    }
+  },
+  "lifecycle": {
+    "paused": {
+      "evidence": "2026-10-11T12:44:07.745Z",
+      "route": {
+        "provider": "qwen",
+        "model": "qwen3.8-flash"
+      },
+      "outcome": "native-checkpoint-paused",
+      "error": null,
+      "usage": {
+        "tokens": 9208,
+        "tokenUsage": {
+          "uncachedInputTokens": 4772,
+          "outputTokens": 4436,
+          "cacheReadTokens": 0,
+          "cacheWriteTokens": 0
+        },
+        "calls": 1
+      },
+      "pageErrors": [],
+      "calls": [
+        {
+          "provider": "qwen",
+          "model": "qwen3.8-flash",
+          "page": 1,
+          "imageHash": "11b6e3463865b586f5dd391f36d0610226db8aca6ec97d61a4a212c8fdd22ff0",
+          "status": "ok",
+          "budget": {
+            "timeoutMs": 240000,
+            "maxOutputTokens": 12000
+          },
+          "tokenUsage": {
+            "uncachedInputTokens": 4772,
+            "outputTokens": 4436,
+            "cacheReadTokens": 0,
+            "cacheWriteTokens": 0
+          },
+          "startedAt": "2026-10-11T12:44:19.454Z"
+        }
+      ]
+    },
+    "resumed": {
+      "evidence": "2026-10-11T12:46:08.585Z",
+      "route": {
+        "provider": "qwen",
+        "model": "qwen3.8-flash"
+      },
+      "outcome": "native-cloud-candidate-saved-content-unverified",
+      "error": null,
+      "usage": {
+        "tokens": 31920,
+        "tokenUsage": {
+          "uncachedInputTokens": 10736,
+          "outputTokens": 17600,
+          "cacheReadTokens": 3584,
+          "cacheWriteTokens": 0
+        },
+        "calls": 3
+      },
+      "pageErrors": [],
+      "calls": [
+        {
+          "provider": "qwen",
+          "model": "qwen3.8-flash",
+          "page": 1,
+          "imageHash": "11b6e3463865b586f5dd391f36d0610226db8aca6ec97d61a4a212c8fdd22ff0",
+          "status": "ok",
+          "budget": {
+            "timeoutMs": 240000,
+            "maxOutputTokens": 12000
+          },
+          "tokenUsage": {
+            "uncachedInputTokens": 4772,
+            "outputTokens": 4436,
+            "cacheReadTokens": 0,
+            "cacheWriteTokens": 0
+          },
+          "startedAt": "2026-10-11T12:44:19.454Z"
+        },
+        {
+          "provider": "qwen",
+          "model": "qwen3.8-flash",
+          "page": 2,
+          "imageHash": "43de413f8331522cd5dd9ec7a62c22269e4500bc8a013198a73dc443799aee16",
+          "status": "ok",
+          "budget": {
+            "timeoutMs": 240000,
+            "maxOutputTokens": 12000
+          },
+          "tokenUsage": {
+            "uncachedInputTokens": 2980,
+            "outputTokens": 5419,
+            "cacheReadTokens": 1792,
+            "cacheWriteTokens": 0
+          },
+          "startedAt": "2026-10-11T12:46:17.601Z"
+        },
+        {
+          "provider": "qwen",
+          "model": "qwen3.8-flash",
+          "page": 3,
+          "imageHash": "7f4395972a197d1e1fc029d137d5ea01d464a4d39dafa057c2d151306f5803fa",
+          "status": "ok",
+          "budget": {
+            "timeoutMs": 240000,
+            "maxOutputTokens": 12000
+          },
+          "tokenUsage": {
+            "uncachedInputTokens": 2984,
+            "outputTokens": 7745,
+            "cacheReadTokens": 1792,
+            "cacheWriteTokens": 0
+          },
+          "startedAt": "2026-10-11T12:47:18.383Z"
+        }
+      ],
+      "newModelCalls": 2
+    },
+    "sameLogicalJob": true,
+    "completedFirstPageNotRepeated": true,
+    "candidateSaved": true,
+    "humanVerified": false
+  },
+  "originalReader": {
+    "fixture": "original-PDF-reader-only-no-OCR",
+    "outcome": "passed-original-reader",
+    "original": {
+      "hash": "1bee28d307564671e604d8a85860aecc53099221044046e16ad264b21fb8c358",
+      "bytes": 198094368,
+      "pageCount": 572
+    },
+    "pages": [
+      {
+        "number": 1,
+        "width": 595,
+        "height": 852,
+        "ms": 4336
+      },
+      {
+        "number": 149,
+        "width": 595,
+        "height": 852,
+        "ms": 105
+      },
+      {
+        "number": 286,
+        "width": 595,
+        "height": 852,
+        "ms": 59
+      },
+      {
+        "number": 572,
+        "width": 612,
+        "height": 792,
+        "ms": 43
+      }
+    ],
+    "chunkRequests": 285,
+    "maximumChunk": 262144,
+    "requestedBytes": 74624544,
+    "wholeBookRequests": 0,
+    "pageErrors": []
+  },
+  "visualInspection": {
+    "reviewer": "Codex original/crop image inspection",
+    "human": false,
+    "pmosGateCirclePreserved": true,
+    "portsAndCaptionPreserved": true,
+    "cropIncludesAdjacentText": true,
+    "formulaCaseUncertaintyRetained": true,
+    "continuedTableNotMerged": true
+  },
+  "limits": [
+    "usage is host-reported token usage, not an invoice",
+    "only three actual cloud pages verified as saved candidates",
+    "Qwen Max latency/host interruption unresolved",
+    "formal Desktop Qwen image metadata remains unchanged",
+    "no deskew or overlapping page slices yet",
+    "cross-page paragraphs and continued tables are not reconstructed",
+    "no full-book cloud run or human quality acceptance",
+    "ordinary generation all-stage image integration and new release are not implemented"
+  ],
+  "hostVersion": "0.2.0-rc.2",
+  "nativeCurrentBuildReadOnly": {
+    "outcome": "native-existing-candidate-read-only",
+    "ui": {
+      "reading": true,
+      "original": true,
+      "chunkRequests": 1,
+      "wholeBookRequests": 0,
+      "cloudModelSelection": true
+    },
+    "newModelCalls": 0,
+    "pageErrors": []
+  },
+  "sourceHashes": [
+    {
+      "path": "lib/contexts/materials/scanned/cloud-import.js",
+      "hash": "3c4a85144971dbeec94a76b031a1d5db13b7a21e755bea565f325b738946d3c2",
+      "installedHash": "3c4a85144971dbeec94a76b031a1d5db13b7a21e755bea565f325b738946d3c2"
+    },
+    {
+      "path": "lib/contexts/materials/scanned/cloud-persistence.js",
+      "hash": "342eed8e7bc5752b29f4666dad5d4eae2096987ef0a9d5c9b09521e0ef452398",
+      "installedHash": "342eed8e7bc5752b29f4666dad5d4eae2096987ef0a9d5c9b09521e0ef452398"
+    },
+    {
+      "path": "lib/contexts/materials/visual-reading.js",
+      "hash": "5f084a27cfbc4a89175fdc677ae373a41949b4d8ff5549fc965d3e3de7615917",
+      "installedHash": "5f084a27cfbc4a89175fdc677ae373a41949b4d8ff5549fc965d3e3de7615917"
+    },
+    {
+      "path": "lib/runtime/builtins.js",
+      "hash": "43a0b4157217aee0453c0e35eecd2ea87f46715127bc45a01b592ab807b69182",
+      "installedHash": "43a0b4157217aee0453c0e35eecd2ea87f46715127bc45a01b592ab807b69182"
+    },
+    {
+      "path": "lib/client.js",
+      "hash": "d57d3ff0fff6bf78b8d0b528407fb5d7b966af2ca1de02b3e733f2dfd895ecbf",
+      "installedHash": "d57d3ff0fff6bf78b8d0b528407fb5d7b966af2ca1de02b3e733f2dfd895ecbf"
+    }
+  ],
+  "implementationCommits": [
+    "d9923e03",
+    "7b652781",
+    "a27c89d0"
+  ]
+}

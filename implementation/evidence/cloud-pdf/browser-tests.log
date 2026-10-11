@@ -1,0 +1,24 @@
+✔ shared cloud reader resolves the second repeated phrase and renders the actual PDF via bounded chunks (6755.8076ms)
+✔ the control is a persistent button and the panel says what is about to be practised before it starts (Chinese) (11.6606ms)
+✔ the same panel in English has no Han characters and the counts line reads naturally (1.5273ms)
+✔ the range chooser lists this page / this chapter / the pages just read, each with its question count (3.5277ms)
+✔ with no question yet the panel says so and offers exactly one button, 为这几页出题 (2.272ms)
+✔ questions of a parked course are offered and said to be parked, not hidden (3.3046ms)
+✔ loading, unavailable and failed states are plain and offer a retry (1.5475ms)
+✔ every state has its own shape and says its state in words, so it never depends on colour (1.7023ms)
+✔ a row says 掌握 62% · 12 题, 未学 or 还没出题, and labels the questions of parked courses (1.7499ms)
+✔ the outline shows a meter per entry, a whole chapter counted at its own row, and none when the document has no questions (4.6752ms)
+✔ the 资料 chapter rows carry their mastery, 还没出题 where there is none (13.4838ms)
+✔ the result page of a run from reading says the mastery change and offers 回到阅读 as the next step (1.3388ms)
+✔ no change is said plainly, and an unreadable change is not invented (0.152ms)
+✔ the way back from an open run, and the source of an answered question with a way back to it (1.2773ms)
+✔ the keyboard shortcut is documented in the shortcut sheet and does not collide with another shortcut (3.1397ms)
+✔ original evidence renders before answering in all five kinds, written/oral exam and wrong-book; zoom and original page work (12759.9811ms)
+ℹ tests 16
+ℹ suites 0
+ℹ pass 16
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 15398.5549

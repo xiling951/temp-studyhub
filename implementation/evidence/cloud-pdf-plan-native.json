@@ -1,0 +1,84 @@
+{
+  "checkedAt": "2026-10-11T09:26:06.206Z",
+  "readOnly": true,
+  "paidModelCalls": 0,
+  "pageErrors": [],
+  "nativeSnapshotAvailable": true,
+  "snapshotKeys": [
+    "today",
+    "next",
+    "progress",
+    "root",
+    "storageIssues",
+    "revision",
+    "settings",
+    "experimental",
+    "focus",
+    "courses",
+    "inactive",
+    "notes",
+    "noteBadges",
+    "materialMastery",
+    "materialCoverage",
+    "csdnHome",
+    "examPointLists",
+    "sources",
+    "decks",
+    "drafts",
+    "attempts",
+    "runs",
+    "exams",
+    "oralExams",
+    "jobs",
+    "archivedJobs",
+    "modelReady",
+    "topicGrouping",
+    "coach",
+    "fingerprint",
+    "ingest",
+    "inbox",
+    "skeletons",
+    "lastRun",
+    "assist",
+    "contexts",
+    "features",
+    "model",
+    "sample"
+  ],
+  "model": {
+    "ready": true,
+    "reason": "ok",
+    "label": "DeepSeek · DeepSeek-V41-Flash",
+    "provider": "deepseek-official",
+    "model": "deepseek-flash",
+    "session": {
+      "provider": "deepseek-official",
+      "model": "deepseek-flash",
+      "reasoningEffort": "high"
+    }
+  },
+  "presetResultShape": {
+    "ok": false,
+    "keys": [],
+    "entries": []
+  },
+  "installedVersion": "3.3.0-scanned.3",
+  "sourceChecks": [
+    {
+      "file": "lib/contexts/materials/scanned/visual-import.js",
+      "matches": true
+    },
+    {
+      "file": "lib/contexts/materials/visual-export-html.js",
+      "matches": true
+    },
+    {
+      "file": "lib/visual-model-content.js",
+      "matches": true
+    },
+    {
+      "file": "lib/contexts/generation/operations.js",
+      "matches": true
+    }
+  ]
+}

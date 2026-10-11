@@ -92,3 +92,11 @@
 - 2026-10-10 22:43/22:46两次失败的真实任务类型为scanned-textbook-import，调用为mineru-visual、boundary=local-process、modelRequest=false；并未调用DeepSeek。错误fetch failed；本机127.0.0.1:16580连接实测ECONNREFUSED，MinerU服务停止。界面把本地任务误称模型调用，并显示不适用的补题提示，该文案问题尚未改动。
 - 通过现有DSH mineru.local.start启动服务：MinerU4.0.11、standard、managed、ready，原生健康接口HTTP200。通过原生job.control retry继续同一任务，11/11页complete，26个资源（含原PDF）、13个chart、4个image、2个table、6个equation；全部资源SHA核验通过，旧文字sources逐条SHA不变。未直接调用外部模型API，未改模型/密钥/正式包。
 - 浏览器实际打开新图文版本第8页，3幅图像按需加载成功（657×911、647×405、652×525），pageErrors=0。第一遍探针选取未挂载的懒加载img等待超时，第二遍按原界面figure滚动后通过；不将探针超时记成应用错误。脱敏证据implementation/evidence/dennard-parser-recovery.json；论文截图仅私有本地保留，不提交公开仓库。
+
+
+## 后续：云端 PDF 解析与电子书资源包计划（2026-10-11）
+- 本轮交付计划，不实施新的云解析功能：implementation/STUDYHUB-CLOUD-PDF-IMPLEMENTATION-PLAN.md，覆盖 C01–C12 原生 DSH 模型/附件/任务、轻量分页、JSON→HTML/MD、原页对照、普通批量全阶段传图、兼容与回退。C01–C12 尚未完成，GPT-6 Luna 本机路由及真实识别用量未验证。
+- 只读原生 Desktop snapshot 成功，当前3.3.0-scanned.3、DeepSeek V4.1 Flash，四个相关安装文件 SHA 匹配源码，pageerror=0；模型预设列表探针失败不推断 Luna 不存在。本轮付费模型调用0。evidence/cloud-pdf-plan-native.json。
+- 原教材重新核验572页/198094368字节/原SHA不变，原生文字1079字符；当前版本595111块文字字符/1321资产。原页149、201、292已目视查看电路、公式/续表和空白页。只提交计数、哈希与抽查结论，不提交扫描图片/全文；evidence/cloud-pdf-plan-book.json、cloud-pdf-plan-structure.json。
+- 官方 GPT-6 Luna 文档核对支持图像与当前价格；专用图像换算系数未明确，估算普通方案300万–800万tokens、充分精修600万–1500万，假设中间场景5818080tokens/约$1.17，不冒称真实账单。计划要求分层20–30页实测后外推。
+- 文档验证：12项任务编号、引用源码路径、JSON证据、预算算术和根目录/仓库副本哈希核验；仅修改计划、现有进度和脱敏证据，未改程序/正式库/桌面配置。文档修改未重跑程序测试；历史9项完整套件失败仍按旧报告保留。

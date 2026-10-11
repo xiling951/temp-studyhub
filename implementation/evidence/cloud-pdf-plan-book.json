@@ -1,0 +1,216 @@
+{
+  "checkedDate": "2026-10-11",
+  "readOnly": true,
+  "paidModelCalls": 0,
+  "pages": 572,
+  "bytes": 198094368,
+  "sha256": "1bee28d307564671e604d8a85860aecc53099221044046e16ad264b21fb8c358",
+  "nativeTextCharacters": 1079,
+  "samples": [
+    {
+      "page": 1,
+      "widthPt": 595.2755737304688,
+      "heightPt": 852.326416015625,
+      "rotation": 0,
+      "nativeTextCharacters": 0,
+      "images": [
+        {
+          "width": 2112,
+          "height": 3024
+        }
+      ],
+      "render200dpi": [
+        1654,
+        2368
+      ]
+    },
+    {
+      "page": 20,
+      "widthPt": 595.2755737304688,
+      "heightPt": 852.326416015625,
+      "rotation": 0,
+      "nativeTextCharacters": 0,
+      "images": [
+        {
+          "width": 2112,
+          "height": 3024
+        }
+      ],
+      "render200dpi": [
+        1654,
+        2368
+      ]
+    },
+    {
+      "page": 80,
+      "widthPt": 595.2755737304688,
+      "heightPt": 845.9910278320312,
+      "rotation": 0,
+      "nativeTextCharacters": 0,
+      "images": [
+        {
+          "width": 2144,
+          "height": 3047
+        }
+      ],
+      "render200dpi": [
+        1654,
+        2350
+      ]
+    },
+    {
+      "page": 100,
+      "widthPt": 595.2755737304688,
+      "heightPt": 849.0451049804688,
+      "rotation": 0,
+      "nativeTextCharacters": 0,
+      "images": [
+        {
+          "width": 2144,
+          "height": 3058
+        }
+      ],
+      "render200dpi": [
+        1654,
+        2359
+      ]
+    },
+    {
+      "page": 149,
+      "widthPt": 595.2755737304688,
+      "heightPt": 852.326416015625,
+      "rotation": 0,
+      "nativeTextCharacters": 0,
+      "images": [
+        {
+          "width": 2112,
+          "height": 3024
+        }
+      ],
+      "render200dpi": [
+        1654,
+        2368
+      ]
+    },
+    {
+      "page": 200,
+      "widthPt": 595.2755737304688,
+      "heightPt": 852.326416015625,
+      "rotation": 0,
+      "nativeTextCharacters": 0,
+      "images": [
+        {
+          "width": 2112,
+          "height": 3024
+        }
+      ],
+      "render200dpi": [
+        1654,
+        2368
+      ]
+    },
+    {
+      "page": 201,
+      "widthPt": 595.2755737304688,
+      "heightPt": 852.326416015625,
+      "rotation": 0,
+      "nativeTextCharacters": 0,
+      "images": [
+        {
+          "width": 2112,
+          "height": 3024
+        }
+      ],
+      "render200dpi": [
+        1654,
+        2368
+      ]
+    },
+    {
+      "page": 206,
+      "widthPt": 595.2755737304688,
+      "heightPt": 852.326416015625,
+      "rotation": 0,
+      "nativeTextCharacters": 0,
+      "images": [
+        {
+          "width": 2112,
+          "height": 3024
+        }
+      ],
+      "render200dpi": [
+        1654,
+        2368
+      ]
+    },
+    {
+      "page": 292,
+      "widthPt": 595.2755737304688,
+      "heightPt": 852.326416015625,
+      "rotation": 0,
+      "nativeTextCharacters": 0,
+      "images": [
+        {
+          "width": 2112,
+          "height": 3024
+        }
+      ],
+      "render200dpi": [
+        1654,
+        2368
+      ]
+    },
+    {
+      "page": 450,
+      "widthPt": 595.2755737304688,
+      "heightPt": 852.326416015625,
+      "rotation": 0,
+      "nativeTextCharacters": 0,
+      "images": [
+        {
+          "width": 2112,
+          "height": 3024
+        }
+      ],
+      "render200dpi": [
+        1654,
+        2368
+      ]
+    },
+    {
+      "page": 564,
+      "widthPt": 595.2755737304688,
+      "heightPt": 852.326416015625,
+      "rotation": 0,
+      "nativeTextCharacters": 0,
+      "images": [
+        {
+          "width": 2112,
+          "height": 3024
+        }
+      ],
+      "render200dpi": [
+        1654,
+        2368
+      ]
+    },
+    {
+      "page": 572,
+      "widthPt": 612.0,
+      "heightPt": 792.0,
+      "rotation": 0,
+      "nativeTextCharacters": 1079,
+      "images": [],
+      "render200dpi": [
+        1700,
+        2200
+      ]
+    }
+  ],
+  "visualChecks": {
+    "149": "静态CMOS反相器及开关模型，印刷页131",
+    "201": "公式6.5/6.6、表6.4及跨页表6.5，印刷页183",
+    "292": "130DPI原页目视为空白页，仍应保留页记录"
+  },
+  "tokenEstimate": "planning-scenario-only; no GPT-6 Luna API usage measured"
+}

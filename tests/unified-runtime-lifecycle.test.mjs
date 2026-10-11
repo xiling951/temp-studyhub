@@ -42,6 +42,13 @@ test('S1-2 uses the existing work.jobs, validates real owner identity and reject
   assert.equal(f.port.status(job.jobId).events.filter(e => e.type === 'settled').length, 1);
 });
 
+test('native numeric timeout codes settle as valid failed contracts', async t => {
+  const f = fixture(t, { run: async () => { throw new DOMException('The operation was aborted due to timeout', 'TimeoutError'); } });
+  const started = await f.port.submit('probe', {}), ended = await f.port.wait(started.jobId);
+  assert.equal(ended.status, 'failed'); assert.equal(ended.error.code, '23');
+  assert.match(ended.error.message, /timeout/); assert.equal(ended.runtime.activeAttemptId, null);
+});
+
 test('S1-2 stop is idempotent and waits for physical cleanup; observer timeout never stops execution', async t => {
   const release = deferred(), started = deferred();
   const f = fixture(t, { run: async context => { started.resolve(context); await release.promise; return { refs: [{ kind: 'source', id: 'late' }] }; } });

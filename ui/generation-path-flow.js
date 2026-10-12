@@ -2,6 +2,7 @@
    with the AI, and queuing the steps as generation jobs. Pure; the host call is injected, so it is tested without a host. */
 import { groupSourcesByDocument } from '../lib/source-groups.js';
 import { CALL_PAGES, CALL_QUESTIONS } from '../lib/generation-path.js';
+import { targetsForEvidence } from './scanned/image-selection.js';
 
 /** The documents of a selection, restricted to the selected pages (each item keeps only what is selected: pages, chapters and chars follow). */
 export function selectedItems(sources, selectedIds) {
@@ -102,14 +103,15 @@ export function pathBrief({ steps, course = '', goal = '', indexed = false, lang
  * Queue one generation job per step, in order, with the choices of the form (kind, difficulty, language, …). A step that fails to start is reported and the rest
  * still go. Resolves { started: [{ step, job }], failed: [{ step, message }] }.
  */
-export async function queueSteps(call, steps, form, { course = '' } = {}) {
+export async function queueSteps(call, steps, form, { course = '', visualEvidence = [] } = {}) {
   const started = [], failed = [];
   // A step is a plain request with its OWN count. The form-only fields stay at home: its empty spending limit ('') made the backend take every step for a coverage run and refuse
   // all of them (「tokenBudget 需要是不小于 1000 的整数」), and the level / auto-complete / typed total belong to a whole-material run, not to one step of a path.
   const { customCount: _typed, tokenBudget: _budget, autoComplete: _auto, coverageLevel: _level, ...base } = form || {};
   for (const step of steps) {
     try {
-      const job = await call('generate', { ...base, course, count: step.count, sourceIds: step.sourceIds, focus: step.focus || form?.focus || '' });
+      const visualTargets = targetsForEvidence(visualEvidence, step.sourceIds);
+      const job = await call('generate', { ...base, course, count: step.count, sourceIds: step.sourceIds, focus: step.focus || form?.focus || '', ...(visualTargets.length ? { visualTargets } : {}) });
       started.push({ step, job });
     } catch (error) { failed.push({ step, message: String(error?.message || error) }); }
   }

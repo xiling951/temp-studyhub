@@ -14,7 +14,7 @@ import { stepTitle } from './generation-path-titles.js';
  * Props: sources, selectedIds, gen (the form: kind, difficulty, language, … for each step's request), course, goal, indexCoverage, onQueued(result).
  * Returns { available, total, steps, included, questions, indexed, ai, aiState, queueing, report, patch, refine, chat, queue, groups }.
  */
-export function useGenerationPath({ sources, selectedIds, gen, course = '', goal = '', indexCoverage = null, onQueued }) {
+export function useGenerationPath({ sources, selectedIds, gen, course = '', goal = '', indexCoverage = null, onQueued, visualEvidence = [] }) {
   const { call, askInChat } = useStudy();
   const toast = useToast();
   const items = useMemo(() => selectedItems(sources, selectedIds), [sources, selectedIds]);
@@ -41,7 +41,7 @@ export function useGenerationPath({ sources, selectedIds, gen, course = '', goal
   }
   async function queue() {
     setQueueing(true); setReport(null);
-    const result = await queueSteps(call, included, gen, { course });
+    const result = await queueSteps(call, included, gen, { course, visualEvidence });
     setQueueing(false); setReport(result);
     if (result.started.length) { toast.success(uiFormat('已按顺序排队 {0} 个出题任务。', [result.started.length])); onQueued?.(result); }
   }

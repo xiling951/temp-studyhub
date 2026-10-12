@@ -149,7 +149,6 @@ function DocumentReader({ source, quote, call, data, host, onOpenCard, onOpenDec
           ...(source.selection?.revision || revision ? { revision: source.selection?.revision || revision } : {}) });
         if (!current) return;
         setDocument(value);
-        if (value.visual && !value.visual.reading && initialMode === 'read') setMode('visual');
         const backlink = await call('materials.links.list', { documentId: value.documentId || value.id });
         if (current) setLinks(backlink.links || []);
         const original = originalHandling(value);
@@ -176,7 +175,7 @@ function DocumentReader({ source, quote, call, data, host, onOpenCard, onOpenDec
   }, [call, source.id, source.text, source.selection?.revision, reload, localMode, documentId, revision]);
   const format = localMode ? 'md' : viewerFormat(document, source), paged = PAGED.has(format);
   const view = mode === 'original' && !(format === 'pdf' && (fileUrl || document?.visual)) ? 'read' : mode, reading = view === 'read';
-  const visualReading = reading && !!document?.visual?.reading;
+  const visualReading = reading && !!document?.visual;
   const downloadOriginal = async () => {
     try {
       if (document.visual) { await downloadVisualAsset(call, { documentId: document.documentId || document.id, revision: document.revision }, document.visual.original, document.filename); return; }

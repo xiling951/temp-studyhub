@@ -1,0 +1,186 @@
+{
+  "schema": 1,
+  "verifiedDate": "2026-10-12",
+  "desktop": {
+    "version": "3.3.0-scanned.21",
+    "retrievalVersion": "3.3.0-scanned.5",
+    "nativeInstallation": true,
+    "matchedSourceAndClientFiles": 145,
+    "bothLibraryStatesUnchangedThroughUpgrade": true,
+    "launchChainUnchanged": true,
+    "pageErrors": 0,
+    "verifiedBackupFiles": 5206,
+    "verifiedBackupBytes": 553395244
+  },
+  "fullBook": {
+    "parser": "MinerU API",
+    "pages": 572,
+    "nonblankPages": 571,
+    "resources": 1321,
+    "originalPdfBytes": 198094368,
+    "originalPdfSha256": "1bee28d307564671e604d8a85860aecc53099221044046e16ad264b21fb8c358",
+    "archiveBytes": 259170104,
+    "archiveSha256": "4a17372e145144c484bc8fb819a0882908c5c2537934bbd3f691c49a4a036dfc",
+    "archiveVerification": {
+      "status": "passed",
+      "pages": 572,
+      "indexedBookSources": 571,
+      "resources": 1321,
+      "entries": 1401,
+      "numberedChapters": 12,
+      "readingNodes": 5411,
+      "joinedNodes": 185,
+      "literalSourcesMatchRevision": true,
+      "versionedCorrections": 3,
+      "allResourceHashesVerified": true,
+      "allReadingBlocksMappedOnce": true,
+      "maxTransferBytes": 262144
+    },
+    "readerVerification": {
+      "actualBook": true,
+      "desktop": true,
+      "crossPageParagraph": true,
+      "actualInverterFigure": true,
+      "inlineMath": true,
+      "exactSelectionAfterMath": true,
+      "continuedTable": true,
+      "windowBoundaryDoesNotLoseTable": true,
+      "blankPagePreserved": true,
+      "chapterJump": true,
+      "originalPdfReadable": true,
+      "boundedTransfers": true,
+      "offlineChapterReadable": true,
+      "offlineTableAndOrigins": true,
+      "pageErrors": 0,
+      "status": "passed"
+    },
+    "historicalSourceIdsAndTextPreserved": 571,
+    "developerSourceCorrections": 3,
+    "full572PageQwenReparse": false
+  },
+  "autonomousCloudSample": {
+    "pages": 2,
+    "resources": 17,
+    "model": {
+      "provider": "qwen",
+      "model": "qwen3.8-flash"
+    },
+    "manualSourceTextEdits": 0,
+    "independentOriginalPageReview": true,
+    "onePageRepairedAndIndependentlyReviewed": true,
+    "pagesRetainingScanOrLayoutUncertainty": 1,
+    "humanVerified": false,
+    "latestSuccessfulAttemptCalls": 8,
+    "latestSuccessfulAttemptTokens": 67997,
+    "usageScope": "Successful attempt only; earlier failed attempts also incurred usage.",
+    "archiveBytes": 1634378,
+    "archiveSha256": "612d0f395e125925a24c31d16528c10fc3653473aa1d566fcad94d5581341b60",
+    "archiveVerification": {
+      "status": "passed",
+      "pages": 2,
+      "resources": 17,
+      "entries": 67,
+      "literalAndReviewPreserved": true,
+      "allHashesVerified": true,
+      "allReadingBlocksOnce": true
+    },
+    "readerVerification": {
+      "mode": "native",
+      "actualDesktop": true,
+      "pages": 2,
+      "inlineMath": true,
+      "realCrops": true,
+      "uncertaintyVisible": true,
+      "repairedPageChecked": true,
+      "originalPdfCanvas": true,
+      "status": "passed"
+    },
+    "offlineVerification": {
+      "mode": "offline",
+      "actualDesktop": true,
+      "pages": 2,
+      "indexReadingBlocks": 35,
+      "inlineMath": true,
+      "images": 14,
+      "originalPageLinks": 35,
+      "chapterFilesReadable": true,
+      "status": "passed"
+    }
+  },
+  "autonomousTopicSample": {
+    "status": "passed",
+    "questions": 6,
+    "imageQuestions": 3,
+    "updatedQuestions": 1,
+    "peerQuestionsUnchanged": 5,
+    "questionIdsPreserved": true,
+    "oldSixDecksAndSchedulesUnchanged": true,
+    "noGradesRecorded": true,
+    "literalAndVisualEvidenceValid": true,
+    "currentBlindReviewVersion": 4,
+    "route": {
+      "provider": "qwen",
+      "model": "qwen3.8-flash"
+    },
+    "manualQuestionTextEdits": 0,
+    "frontVerification": {
+      "actualDesktop": true,
+      "autonomousTopic": true,
+      "decks": [
+        {
+          "deckId": "66ff8a98-827e-4f31-b86a-c6b49fee4a04",
+          "cardId": "85d60169-dace-4360-8437-32eff65903aa",
+          "images": 1,
+          "originalPageReadable": true,
+          "frontAnswerHidden": true
+        }
+      ],
+      "pageErrors": [],
+      "oldDecksAndSchedulesUnchanged": true,
+      "noGradesRecorded": true,
+      "status": "passed"
+    },
+    "filledCandidateDraftResumedWithoutNewPlanning": true,
+    "nativeBoundedAutomaticRepair": true,
+    "originalImageMisreadDetectedByBlindObservationThenIndependentRejection": true,
+    "completedBlindObservationReusedAfterNativeTimeoutAndRetry": true,
+    "maximumRepairRoundsPerUnchangedFingerprint": 2,
+    "newPublicationRequiresCurrentReviewCriteria": true,
+    "otherFiveCardsUnchanged": true,
+    "qualityScope": "Six Qwen-authored questions, three image questions; one real source-fact defect corrected by Qwen after independent blind-image rejection. Existing MOS thirty-question baseline includes development curation and is separate."
+  },
+  "index": {
+    "indexed": 587,
+    "missing": 0,
+    "stale": 0
+  },
+  "validation": {
+    "imageGenerationReviewRepairAndPublicationTestsAtScanned20": 58,
+    "scanned21OutputBudgetTests": 8,
+    "testCountsOverlap": true,
+    "lint": "passed",
+    "releaseArchivesVerified": 8,
+    "releaseInstallerPagesVerified": 2
+  },
+  "memory": {
+    "dshProcessTreeSampleCount": 12,
+    "sampleWindowSeconds": 36,
+    "maximumSampledMiB": 4351,
+    "minimumSampledSystemFreeMiB": 2403,
+    "sampleContext": "Qwen concurrency two and full-book indexing",
+    "outOfMemoryObserved": false,
+    "fullRunPeakMeasured": false,
+    "originalPdfTransferLimitBytes": 262144
+  },
+  "remainingAcceptance": {
+    "manual10000CharacterGroundTruth": false,
+    "formal30RegionAnnotation": false,
+    "formalNewVersionDowngradeDrill": false,
+    "allRecoveryCombinations": false
+  },
+  "privacy": {
+    "credentialsPublished": false,
+    "bookTextOrImagesPublished": false,
+    "rawModelResponsesPublished": false
+  }
+}

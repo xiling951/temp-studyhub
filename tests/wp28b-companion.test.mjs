@@ -59,6 +59,7 @@ test('the server runs on DSH\'s own Node with absolute paths under the StudyHub 
 
 test('under DSH Desktop (Electron as Node) the child is told to run as Node; a documented download endpoint is passed on', () => {
   const config = serverConfig({ home: '/h', entry: '/h/x.js', execPath: '/app/DSH.exe', electron: true, hfEndpoint: 'https://models.example.org' });
+  assert.equal(config.env.CHUNK_MIN_LENGTH, '1', 'short actual source text must reach the embedding index');
   assert.equal(config.env.ELECTRON_RUN_AS_NODE, '1');
   assert.equal(config.env.HF_ENDPOINT, 'https://models.example.org');
   assert.equal(config.command, '/app/DSH.exe');

@@ -1,3 +1,4 @@
+import { syntheticImageObservation } from './helpers/visual-observation.mjs';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { mkdtemp, rm } from 'node:fs/promises';
@@ -5,21 +6,22 @@ import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { StudyService } from '../lib/service.js';
 import { storeBytes, saveManifest } from '../lib/contexts/materials/visual-storage.js';
-import { withQualityStages, qualityReview } from './helpers/assessment.mjs';
+import { withQualityStages, qualityReview, qualityPlan } from './helpers/assessment.mjs';
 import { managedRuntimeOptions } from './helpers/runtime-switch.mjs';
 import { settleJob } from './helpers/wait.mjs';
 import { modelKey } from '../lib/job-model.js';
 import { inputRefOf } from '../lib/contexts/generation/jobs/input-ref.js';
+import { resumeArgs } from '../lib/contexts/generation/jobs/resume-args.js';
 
 const source = { id: 'p1', title: 'Synthetic device page', text: 'A controlled switch closes the current path when enabled and opens the path when disabled. This determines whether the output node follows the input state.' };
 const targets = [{ documentId: 'book', blockIds: ['figure'] }];
 
-async function fixture(t, { approved = true, failImageReview = false, gateFirst = false, pureImage = false, rejectFirstEditor = false, legacyDefault = false } = {}) {
+async function fixture(t, { approved = true, failImageReview = false, gateFirst = false, pureImage = false, rejectFirstEditor = false, legacyDefault = false, selectiveImages = false, rejectFirstImage = false, requireRepair = false, failFirstRepair = false } = {}) {
   const root = await mkdtemp(join(tmpdir(), 'ordinary-visual-batch-'));
   const requests = [], attachments = new Map();
   let entered, release;
   const first = new Promise(resolve => { entered = resolve; }), gate = new Promise(resolve => { release = resolve; });
-  let editors = 0;
+  let editors = 0, imageReviews = 0;
   const inner = withQualityStages(async (system, prompt) => {
     if (system.startsWith('Act as a strict assessment editor')) {
       const deck = JSON.parse(prompt).candidate, review = qualityReview(deck);
@@ -28,7 +30,7 @@ async function fixture(t, { approved = true, failImageReview = false, gateFirst 
     }
     const data = JSON.parse(prompt.split('REQUEST DATA:\n')[1]);
     return JSON.stringify({ title: 'Synthetic switching questions', cards: Array.from({ length: data.count }, (_, i) => ({
-      id: `q${i}`, kind: 'open', topic: 'Switching path', objective: `Device role ${i}`, prompt: `For ${data.assessmentPlan.targets[i].objective}, explain how the switch controls the current path shown in the attached image.`,
+      id: `q${i}`, kind: 'open', topic: 'Switching path', objective: `Device role ${i}`, prompt: selectiveImages && i % 2 ? 'Explain how enabling or disabling a controlled switch changes the conducting path.' : `For ${data.assessmentPlan.targets[i].objective}, explain how the switch controls the current path shown in the attached image.`,
       answer: 'Enabling the switch closes the path; disabling it interrupts conduction.', hint: 'Trace the two device terminals.',
       explanation: 'The material states the switching rule; the diagram identifies the terminal path to which that rule applies.',
       misconception: 'Treating a controlled path as an always connected conductor.', rubric: 'Identify the switched connection and distinguish enabled and disabled states.',
@@ -38,17 +40,27 @@ async function fixture(t, { approved = true, failImageReview = false, gateFirst 
   const complete = Object.assign(async () => { throw new Error('An image batch must never fall back to text'); }, { completeContent: async (system, parts, options) => {
     assert.equal(parts.length, 2); assert.equal(parts[1].type, 'image');
     assert.deepEqual(Buffer.from(attachments.get(parts[1].attachment.attachmentId).data), Buffer.from('explicit synthetic device image'));
+    if (system.startsWith('你是盲图观察者')) { const blind = JSON.parse(parts[0].text); assert.deepEqual(Object.keys(blind), ['image']); return JSON.stringify(syntheticImageObservation); }
     requests.push({ system, parts, route: options.route });
     if (requests.length === 1) { entered(); if (gateFirst) await gate; }
     if (system.includes('独立图像题审阅者')) {
       if (failImageReview) throw new Error('Synthetic image review connection lost');
       const card = JSON.parse(parts[0].text.split('\n\nORIGINAL IMAGE EVIDENCE:')[0]).card;
-      return JSON.stringify({ evidenceValid: approved, answerCorrect: approved, reason: 'Synthetic independent terminal-path check', issues: approved ? [] : ['Synthetic wrong device connection'], checks: qualityReview({ cards: [card] }).checks });
+      const passed = approved && !(rejectFirstImage && imageReviews++ === 0) && (!requireRepair || card.prompt.includes('Trace both terminals.'));
+      return JSON.stringify({ evidenceValid: passed, answerCorrect: passed, reason: 'Synthetic independent terminal-path check', issues: passed ? [] : ['Synthetic wrong device connection'], checks: qualityReview({ cards: [card] }).checks });
     }
     const prompt = parts[0].text.split('\n\nORIGINAL IMAGE EVIDENCE:')[0];
     if (system.startsWith('Repair one draft card')) {
+      if (failFirstRepair) { failFirstRepair = false; throw Error('Synthetic interrupted repair connection'); }
       const data = JSON.parse(prompt);
       return JSON.stringify({ card: { ...data.card, prompt: `${data.card.prompt} Trace both terminals.`, visualCitations: [{ assetId: 'untrusted-model-image' }] } });
+    }
+    if (selectiveImages && system.startsWith('Plan a source-grounded')) {
+      const data = JSON.parse(prompt.split('REQUEST DATA:\n')[1]), plan = qualityPlan(data);
+      assert.equal(data.visualEvidence.citations.length, 1, 'planner receives trusted indices for actual images');
+      assert.equal(data.visualEvidence.citations[0].blockId, 'figure');
+      plan.targets.forEach((target, i) => { target.imageEvidenceIndices = i % 2 ? [] : [0]; });
+      return JSON.stringify(plan);
     }
     if (pureImage && system.startsWith('Plan a source-grounded')) {
       const data = JSON.parse(prompt.split('REQUEST DATA:\n')[1]);
@@ -98,7 +110,8 @@ test('independent image rejection preserves a pending ordinary draft and blocks 
   const draft = (await service.store.read()).drafts[0];
   assert.equal(draft.cards[0].visualCitations[0].reviewState, 'pending');
   assert.ok(draft.editorial.rejectedIssues[draft.cards[0].id].length);
-  assert.equal(requests.length, 5);
+  assert.equal(requests.length, 9, 'two bounded repairs, each independently rejected');
+  assert.equal(draft.editorial.visualRepairAttempts[draft.cards[0].id].rounds, 2);
   await assert.rejects(service.call('draft.publish.quick', { id: draft.id, allowIssues: true }), /independent/);
 });
 
@@ -181,20 +194,98 @@ test('pure-image requests larger than one planning group remain bounded and keep
   assert.equal(state.documents[0].versions[0].visual.cardReviews.length, 11, 'unchanged checkpoints do not spend another independent review');
 });
 
-test('ordinary repair of a rejected pure-image card sends fresh native images to repair, editor and independent review', async t => {
+test('ordinary repair of an edited pure-image card sends fresh native images to repair and one independent review', async t => {
   const { service, requests, start, setApproval } = await fixture(t, { pureImage: true, approved: false, legacyDefault: true });
   await settleJob(service, (await start()).jobId);
   let draft = (await service.store.read()).drafts[0];
   const originalId = draft.cards[0].id, before = requests.length;
+  // A new user edit can be repaired; retrying an unchanged exhausted candidate cannot restart the budget.
+  draft = structuredClone(draft);
+  draft.cards[0].prompt += ' Include both device terminals in the analysis.';
+  draft = await service.call('draft.save', { deck: draft, requireExisting: true });
+  await service.store.update(state => {
+    const live = state.drafts.find(item => item.id === draft.id);
+    live.editorial.rejectedIssues = { [originalId]: ['Synthetic independent review rejected the edited device connection'] };
+  });
   setApproval(true);
   const repair = await service.call('draft.repair', { id: draft.id, draftVersion: draft.draftVersion });
   assert.equal((await settleJob(service, repair.jobId)).status, 'complete');
   draft = (await service.store.read()).drafts[0];
-  assert.equal(requests.length - before, 3); assert.equal(draft.cards[0].id, originalId);
+  assert.equal(requests.length - before, 2); assert.equal(draft.cards[0].id, originalId);
   assert.equal(draft.cards[0].visualCitations[0].blockId, 'figure', 'a repair reply cannot replace authoritative image identities');
   assert.equal(draft.cards[0].visualCitations[0].reviewState, 'verified');
   assert.deepEqual(draft.editorial.rejectedIssues, {});
   assert.equal((await service.call('draft.publish', { id: draft.id, draftVersion: draft.draftVersion })).accepted, 1);
+});
+
+test('ordinary generation automatically repairs a rejected image candidate and independently verifies the repair', async t => {
+  const { service, requests, start } = await fixture(t, { rejectFirstImage: true });
+  const job = await settleJob(service, (await start()).jobId);
+  assert.equal(job.status, 'complete', JSON.stringify(job));
+  const draft = (await service.store.read()).drafts[0];
+  assert.equal(requests.filter(request => request.system.startsWith('Repair one draft card')).length, 1);
+  assert.equal(requests.filter(request => request.system.includes('独立图像题审阅者')).length, 2);
+  assert.deepEqual(draft.editorial.rejectedIssues, {});
+  assert.equal(draft.cards[0].visualCitations[0].reviewState, 'verified');
+  assert.equal((await service.call('draft.publish', { id: draft.id, draftVersion: draft.draftVersion, requireReviewed: true })).accepted, 1);
+});
+
+test('a plain continuation automatically repairs an older interrupted candidate and preserves approved peers', async t => {
+  const { service, start } = await fixture(t, { requireRepair: true, failFirstRepair: true });
+  await settleJob(service, (await start(2)).jobId);
+  // An interrupted generation saved two of the three requested cards before repair failed.
+  await service.store.update(state => { state.drafts[0].editorial.requested = 3; });
+  const before = (await service.store.read()).drafts[0];
+  const rejectedId = Object.keys(before.editorial.rejectedIssues)[0];
+  assert.ok(rejectedId);
+  const approved = before.cards.find(card => card.id !== rejectedId);
+  assert.equal(approved.visualCitations[0].reviewState, 'verified');
+  const continuation = await service.call('generate', { resumeDraftId: before.id, draftVersion: before.draftVersion,
+    count: 1, performance: { concurrency: 1, fillRounds: 0 } });
+  await settleJob(service, continuation.jobId);
+  const after = (await service.store.read()).drafts[0];
+  assert.deepEqual(after.editorial.rejectedIssues, {});
+  assert.equal(after.cards.find(card => card.id === rejectedId).visualCitations[0].reviewState, 'verified');
+  assert.deepEqual(after.cards.find(card => card.id === approved.id), approved);
+  assert.equal(after.editorial.visualRepairAttempts[rejectedId].rounds, 2, 'uses the remaining saved round instead of resetting its budget');
+});
+
+test('a filled visual draft resumes only unfinished review and repair without planning new cards', async t => {
+  const { service, start, requests } = await fixture(t, { requireRepair: true, failFirstRepair: true });
+  await settleJob(service, (await start(2)).jobId);
+  const before = (await service.store.read()).drafts[0];
+  const rejectedId = Object.keys(before.editorial.rejectedIssues)[0];
+  const approved = before.cards.find(card => card.id !== rejectedId);
+  const startCalls = requests.length;
+  const continuation = await service.call('generate', { resumeDraftId: before.id, draftVersion: before.draftVersion });
+  const ended = await settleJob(service, continuation.jobId);
+  assert.equal(ended.status, 'complete', JSON.stringify(ended));
+  const after = (await service.store.read()).drafts[0];
+  assert.equal(after.editorial.requested, 2);
+  assert.deepEqual(after.cards.map(card => card.id), before.cards.map(card => card.id));
+  assert.deepEqual(after.cards.find(card => card.id === approved.id), approved);
+  assert.deepEqual(after.editorial.rejectedIssues, {});
+  assert.equal(after.editorial.visualRepairAttempts[rejectedId].rounds, 2);
+  assert.notEqual(after.editorial.generation.runId, before.editorial.generation.runId);
+  assert.equal(resumeArgs({ draftVersion: before.draftVersion }, await service.store.read(), after.editorial.generation.runId).draftVersion, after.draftVersion);
+  assert.equal(requests.length - startCalls, 2, 'one repair plus one independent original-image review; genuine approval is reused');
+  await assert.rejects(service.call('generate', { resumeDraftId: after.id, draftVersion: after.draftVersion }), /无需补题/);
+});
+
+test('a filled draft with a pending decision resumes original-image review without a rejection record', async t => {
+  const { service, start, requests } = await fixture(t, { failImageReview: true });
+  await settleJob(service, (await start()).jobId);
+  await service.store.update(state => { state.drafts[0].editorial.rejectedIssues = {}; });
+  const before = (await service.store.read()).drafts[0], startCalls = requests.length;
+  const continuation = await service.call('generate', { resumeDraftId: before.id, draftVersion: before.draftVersion });
+  await settleJob(service, continuation.jobId);
+  const after = (await service.store.read()).drafts[0];
+  assert.deepEqual(after.cards.map(card => card.id), before.cards.map(card => card.id));
+  assert.equal(after.editorial.requested, 1);
+  assert.equal(requests.length - startCalls, 1, 'only the unfinished image review is attempted');
+  assert.equal(after.cards[0].visualCitations[0].reviewState, 'pending');
+  assert.notEqual(after.editorial.generation.runId, before.editorial.generation.runId);
+  assert.equal(resumeArgs({ draftVersion: before.draftVersion }, await service.store.read(), after.editorial.generation.runId).draftVersion, after.draftVersion);
 });
 
 test('ordinary image supplementation publishes into the exact deck while keeping existing card and schedule data', async t => {
@@ -209,4 +300,18 @@ test('ordinary image supplementation publishes into the exact deck while keeping
   state = await service.store.read(); assert.equal(state.decks.length, 1); assert.equal(state.decks[0].cards.length, 2);
   assert.deepEqual(state.decks[0].cards.find(card => card.id === before.id), before);
   assert.ok(state.decks[0].cards.every(card => card.visualCitations[0].reviewState === 'verified'));
+});
+
+test('planned image indices bind only the genuine image-dependent card and preserve source-supported text questions', async t => {
+  const { service, start, requests } = await fixture(t, { selectiveImages: true });
+  const ended = await settleJob(service, (await start(2)).jobId);
+  assert.equal(ended.status, 'complete', JSON.stringify(ended));
+  const draft = (await service.store.read()).drafts[0];
+  assert.equal(draft.cards.length, 2);
+  assert.equal(draft.cards[0].visualCitations[0].blockId, 'figure');
+  assert.equal(draft.cards[0].visualCitations[0].reviewState, 'verified');
+  assert.equal(draft.cards[1].visualCitations, undefined);
+  assert.equal(requests.filter(request => request.system.startsWith('你是独立图像题审阅者')).length, 1);
+  assert.deepEqual(draft.quality.errors, []);
+  assert.equal((await service.call('draft.publish', { id: draft.id, draftVersion: draft.draftVersion, requireReviewed: true })).accepted, 2);
 });

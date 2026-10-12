@@ -39,6 +39,8 @@ import ReferenceQuestions from './ReferenceQuestions.jsx';
 import { referenceSelection } from './reference-questions.js';
 import { useLiveEffect } from './use-async.js';
 import { settingsSectionOr } from './settings-groups.js';
+import ImageEvidencePicker from './scanned/ImageEvidencePicker.jsx';
+import { targetsForEvidence } from './scanned/image-selection.js';
 
 /* 创建题组 (D1): generating from the learner's own materials comes first;
    importing questions that already exist is the second way in. Generation is
@@ -66,6 +68,7 @@ export default function Generate({
 }) {
   useInjectCss(homeCss, "study-generate-home");
   const { notify, call, busy, act, askInChat, openSettings: openSettingsSection } = useStudy();
+  const [visualEvidence, setVisualEvidence] = React.useState([]);
   useInjectCss(formCss, "study-generate-form");
   const [sourceScope, setSourceScope] = usePageScope(data.root, 'generate-sources', data.focus?.course ?? '*');
   // Whether each material's search index is built: the picker rows say so (and follow a running build).
@@ -92,7 +95,7 @@ export default function Generate({
   const selectionKey = `${generationCourse}|${selectedSources.join(',')}`;
   React.useEffect(() => { assistToken.current += 1; setAssist({ phase: 'idle', result: null, applied: false }); }, [selectionKey]);
   // 分步出题: the plan of steps and what it does live in one hook so the form's own button can queue it; the choice of how to go on is this page's (TooBigChoice).
-  const path = useGenerationPath({ sources: data.sources, selectedIds: selectedSources, gen, course: generationCourse, goal, indexCoverage,
+  const path = useGenerationPath({ sources: data.sources, selectedIds: selectedSources, gen, course: generationCourse, goal, indexCoverage, visualEvidence,
     onQueued: () => { setGen(current => freshGeneration(current, data.settings?.generation)); setPage("library"); } });
   const [chosenMode, setChosenMode] = React.useState(initialGenerationMode);
   const modes = availableModes({ advice, pathReady: path.available, retrieval });
@@ -154,7 +157,8 @@ export default function Generate({
     if (pathMode) { if (model.ready && !busy && !path.queueing && path.included.length && !referenceState.reason) path.queue(); return; }
     if (!model.ready || busy || !selectedSources.length || advice.blocked || referenceState.reason) return;
     const materials = documentCount(data.sources.filter((source) => selectedSources.includes(source.id)));
-    act("generate", generationRequest(gen, { course: generationCourse, sourceIds: selectedSources }), (job) => {
+    const visualTargets = targetsForEvidence(visualEvidence, selectedSources);
+    act("generate", { ...generationRequest(gen, { course: generationCourse, sourceIds: selectedSources }), ...(visualTargets.length ? { visualTargets } : {}) }, (job) => {
       // Confirm with the deck's name, start the next deck from a clean form (P27),
       // and land where the progress card is (P26).
       notify(generationStartedNotice(job, gen, materials));
@@ -216,6 +220,7 @@ export default function Generate({
               {/* One row per document with its pages on demand; counts are in documents (WP3, P18). */}
               <SourcePicker sources={evidenceSources} selected={selectedSources} onChange={setSelectedSources} indexCoverage={indexCoverage} indexSlot={indexStatus !== "unavailable"}
                 courses={data.focus?.courses} scope={sourceScope} onScopeChange={setSourceScope} disabled={busy} />
+              {data.settings?.scannedTextbooks && <ImageEvidencePicker sourceIds={selectedSources} value={visualEvidence} onChange={setVisualEvidence} disabled={busy} />}
               <div className="generate-sources-actions">
                 {/* The one way to add material from here: the shared import dialog (WP3). */}
                 <Button variant="link" icon="upload" onClick={openImport}>{ui("导入资料")}</Button>

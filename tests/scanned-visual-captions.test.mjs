@@ -2,6 +2,25 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { associateVisualCaptions } from '../lib/contexts/materials/visual-captions.js';
 
+test('a single caption above its erroneous owner moves only when one located previous chart is clearly closer', () => {
+  const blocks = [{ id: 'upper', type: 'chart', bbox: [0.2, 0.1, 0.7, 0.3], captions: [] },
+    { id: 'lower', type: 'chart', bbox: [0.2, 0.4, 0.7, 0.6], captions: [{ text: '图1.1 上方图的说明', bbox: [0.2, 0.32, 0.7, 0.35] }] }];
+  const result = associateVisualCaptions(blocks, 1);
+  assert.equal(result[0].captions[0].originalBlockId, 'lower'); assert.equal(result[1].captions.length, 0);
+  assert.deepEqual(associateVisualCaptions(result, 1), result);
+  blocks.unshift({ id: 'ambiguous', type: 'chart', bbox: [0.2, 0.1, 0.7, 0.3], captions: [] });
+  assert.equal(associateVisualCaptions(blocks, 1)[2].captions.length, 1);
+});
+
+test('located side-by-side chart subfigures share the numbered caption without moving or altering literal text', () => {
+  const blocks = [{ id: 'a', type: 'chart', bbox: [0.1, 0.1, 0.4, 0.4], captions: [{ text: '(a) 长沟曲线' }] },
+    { id: 'b', type: 'chart', bbox: [0.5, 0.1, 0.8, 0.4], captions: [{ text: '(b) 短沟曲线' }, { text: '图1.1 两种器件比较' }] }];
+  const result = associateVisualCaptions(blocks, 1);
+  assert.deepEqual(result.map(block => block.figureNumber), ['1.1', '1.1']); assert.deepEqual(result.map(block => block.captions), blocks.map(block => block.captions));
+  blocks[0].bbox = [0.1, 0.5, 0.4, 0.8];
+  assert.equal(associateVisualCaptions(blocks, 1)[0].figureNumber, undefined, 'different rows are not an inferred pair');
+});
+
 // Synthetic regression of the exact geometry observed on the real book's PDF page 149.
 test('distinct misplaced figure caption moves only to a clearly closer image; input and evidence identities remain intact', () => {
   const blocks = [

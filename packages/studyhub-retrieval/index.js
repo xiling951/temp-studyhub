@@ -43,6 +43,9 @@ export function serverConfig({ home, entry, execPath = process.execPath, electro
       DB_PATH: join(data, 'lancedb'),
       CACHE_DIR: join(data, 'models'),
       BASE_DIR: join(data, 'documents'),
+      // Book covers, section separators and short captions are real sources too.
+      // The server still rejects empty/decorative chunks; do not discard short text.
+      CHUNK_MIN_LENGTH: '1',
       // MCP deliberately filters inherited variables. Forward only network routing, never model credentials.
       ...Object.fromEntries(['HTTP_PROXY', 'HTTPS_PROXY', 'NO_PROXY', 'http_proxy', 'https_proxy', 'no_proxy'].filter(key => process.env[key]).map(key => [key, process.env[key]])),
       ...(electron ? { ELECTRON_RUN_AS_NODE: '1' } : {}),

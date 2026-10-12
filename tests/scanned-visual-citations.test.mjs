@@ -4,8 +4,10 @@ import { mkdtemp, rm, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
 import { tmpdir } from 'node:os';
 import { storeBytes, saveManifest, objectPath } from '../lib/contexts/materials/visual-storage.js';
-import { prepareVisualCardEvidence, resolveVisualCardEvidence, commitVisualCardReviews, verifyVisualPublication } from '../lib/contexts/materials/visual-card-evidence.js';
-import { visualReviewIssues, visualCitationShapeIssues } from '../lib/visual-citations.js';
+import { prepareVisualCardEvidence, resolveVisualCardEvidence, commitVisualCardReviews, verifyVisualPublication, commitVisualImageObservation } from '../lib/contexts/materials/visual-card-evidence.js';
+import { IMAGE_OBSERVER_VERSION } from '../lib/visual-observations.js';
+import { syntheticImageObservation } from './helpers/visual-observation.mjs';
+import { visualReviewIssues, visualCitationShapeIssues, VISUAL_REVIEW_VERSION } from '../lib/visual-citations.js';
 import { validateDeck, publicCard } from '../lib/domain.js';
 import { reviewedCardFingerprint } from '../lib/review-integrity.js';
 import { createStudyRuntime } from '../lib/runtime/builtins.js';
@@ -21,7 +23,9 @@ async function setup(t) {
   const card = { id: 'question', kind: 'flashcard', topic: 'Circuit role', objective: 'Explain the function of the selected device', prompt: 'Could the marked device be removed while retaining the shown behavior?', answer: 'No, it supplies the stated path.', hint: 'Trace the two terminal connections.', explanation: 'The required conduction path would be interrupted, changing the operating condition.', misconception: 'Confusing a redundant wire with a switching device', citations: [], visualCitations: evidence.map(item => item.citation) };
   const approve = async () => {
     card.visualCitations.forEach(ref => { ref.reviewState = 'verified'; });
-    await commitVisualCardReviews({ root, read: () => store.read(), update: fn => store.update(fn) }, { cards: [card], checks: [{ cardId: card.id, evidenceValid: true, answerCorrect: true, independent: true, reason: 'Explicit synthetic reviewer fixture' }], jobId: 'fixture-job', attemptId: 'fixture-attempt', route: { provider: 'fixture', model: 'vision' } });
+    const route = { provider: 'fixture', model: 'vision' }, ports = { root, read: () => store.read(), update: fn => store.update(fn) };
+    const observation = await commitVisualImageObservation(ports, { citation: card.visualCitations[0], route, observerVersion: IMAGE_OBSERVER_VERSION, value: syntheticImageObservation, jobId: 'fixture-job', attemptId: 'fixture-attempt' });
+    await commitVisualCardReviews(ports, { cards: [card], checks: [{ cardId: card.id, evidenceValid: true, answerCorrect: true, independent: true, reason: 'Explicit synthetic reviewer fixture', observationKeys: [observation.key] }], jobId: 'fixture-job', attemptId: 'fixture-attempt', route });
   };
   return { root, store, asset, card, approve, runtime };
 }
@@ -38,6 +42,21 @@ test('pure image evidence has no invented source; independent review authority b
   for (const change of [{ answer: 'Changed answer' }, { id: 'different-question' }, { visualCitations: [{ ...card.visualCitations[0], bbox: [0, 0, 1, 1] }] }]) {
     assert.ok(visualReviewIssues({ ...card, ...change }, state.documents).length);
   }
+});
+test('new publication refuses older review criteria while historical image questions remain readable', async t => {
+  const { root, store, card, approve } = await setup(t); await approve();
+  await store.update(state => { state.documents[0].versions[0].visual.cardReviews[0].criteriaVersion = VISUAL_REVIEW_VERSION - 1; });
+  const state = await store.read();
+  assert.deepEqual(visualReviewIssues(card, state.documents), [], 'historical reading retains its original trusted receipt');
+  await assert.rejects(verifyVisualPublication(root, state, [card]), /current independent image-review criteria/);
+});
+
+test('a model-approved flag without a trusted blind observation cannot create a current review receipt', async t => {
+  const { root, store, card } = await setup(t);
+  await assert.rejects(commitVisualCardReviews({ root, read: () => store.read(), update: fn => store.update(fn) },
+    { cards: [card], checks: [{ cardId: card.id, evidenceValid: true, answerCorrect: true, independent: true, reason: 'Constructed fake approval', observationKeys: ['forged'] }],
+      jobId: 'fixture-job', attemptId: 'fixture-attempt', route: { provider: 'fixture', model: 'vision' } }), /trusted blind observation/);
+  assert.equal((await store.read()).documents[0].versions[0].visual.cardReviews?.length || 0, 0);
 });
 test('actual publication APIs reject client flags and resource tampering; quick publish cannot waive image review', async t => {
   const { root, store, card, asset, approve, runtime } = await setup(t);

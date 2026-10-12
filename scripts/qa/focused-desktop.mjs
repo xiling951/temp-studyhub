@@ -1,5 +1,5 @@
 /* Read-only verification of the authorized Desktop upgrade and existing study records. */
-import { readFile, writeFile, mkdir } from 'node:fs/promises';
+import { readFile, writeFile, mkdir, readdir } from 'node:fs/promises';
 import { createHash } from 'node:crypto';
 import { join, resolve } from 'node:path';
 import { Store } from '../../lib/store.js';
@@ -38,7 +38,8 @@ try {
   result.installedVersion = JSON.parse(await readFile(join(installed, 'package.json'), 'utf8')).version;
   result.retrievalVersion = JSON.parse(await readFile(join(home, 'profiles/web/node_modules/@ericwang1358/studyhub-retrieval/package.json'), 'utf8')).version;
   result.sourceChecks = [];
-  for (const file of phase === 'before' ? ['lib/section-weights.js'] : ['lib/contexts/materials/scanned/cloud-import.js', 'lib/contexts/materials/visual-reading.js', 'lib/contexts/generation/scanned/batch-visual-evidence.js', 'lib/generation.js', 'lib/runtime/builtins.js', 'lib/client.js']) {
+  for (const file of phase === 'before' ? ['lib/section-weights.js'] : ['lib/visual-observations.js', 'lib/contexts/generation/scanned/visual-observation.js', 'lib/contexts/generation/jobs/gateway-model.js', 'lib/visual-citations.js', 'lib/contexts/materials/visual-card-evidence.js', 'lib/contexts/materials/scanned/cloud-import.js', 'lib/contexts/materials/scanned/cloud-review.js', 'lib/contexts/materials/scanned/cloud-persistence.js', 'lib/contexts/materials/scanned/cloud-result.js', 'lib/contexts/materials/scanned/visual-import.js', 'lib/contexts/materials/visual-parser.js', 'lib/contexts/materials/visual-captions.js', 'lib/contexts/materials/visual-corrections.js', 'lib/contexts/materials/visual-reading.js', 'lib/contexts/materials/visual-operations.js', 'lib/contexts/materials/visual-candidates.js', 'lib/retrieval-lexical.js', 'lib/retrieval.js', 'lib/model-json.js', 'lib/contexts/generation/operations.js', 'lib/contexts/generation/draft-repair.js', 'lib/contexts/generation/scanned/batch-visual-evidence.js', 'lib/contexts/generation/scanned/visual-questions.js', 'lib/generation.js', 'lib/runtime/builtins.js', 'lib/runtime/domain-contracts.js', 'lib/client.js',
+    ...(await readdir('lib')).filter(name => /^client\..+\.js$/.test(name)).map(name => `lib/${name}`)]) {
     result.sourceChecks.push({ file, matches: hash(await readFile(file)) === hash(await readFile(join(installed, file))) });
   }
   result.libraries = [];

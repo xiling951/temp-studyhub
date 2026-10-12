@@ -26,10 +26,12 @@ test('shared cloud reader resolves the second repeated phrase and renders the ac
   const input = join(folder, 'input.pdf'); await writeFile(input, await pdf.save());
   const original = await retainPdf(root, input), rendered = await renderCloudRegion(root, input, 2, folder, null);
   const image = { ...await storeBytes(root, rendered.data, { mime: 'image/png', kind: 'chart' }), width: rendered.geometry.width, height: rendered.geometry.height };
-  const text = `${phrase}\n\n${phrase}`, sourceId = 'cloud-fixture-source', documentId = 'cloud-fixture-book';
+  const mathProse = 'Before math $V_{DS}$ after math prose.';
+  const repeated = `${phrase}\n\n${phrase}`, text = `${repeated}\n\n${mathProse}`, sourceId = 'cloud-fixture-source', documentId = 'cloud-fixture-book';
   const pages = [{ page: 1, originalPage: 1, sourceId, text, printedPage: null, blocks: [
     { id: 'p1-b0', type: 'text', text: phrase, textRange: { start: 0, end: phrase.length }, captions: [], bbox: [0.1, 0.1, 0.9, 0.3] },
-    { id: 'p1-b1', type: 'text', text: phrase, textRange: { start: phrase.length + 2, end: text.length }, captions: [], bbox: [0.1, 0.4, 0.9, 0.6] },
+    { id: 'p1-b1', type: 'text', text: phrase, textRange: { start: phrase.length + 2, end: repeated.length }, captions: [], bbox: [0.1, 0.4, 0.9, 0.6] },
+    { id: 'p1-b2', type: 'text', text: mathProse, textRange: { start: repeated.length + 2, end: text.length }, captions: [], bbox: [0.1, 0.7, 0.9, 0.8] },
   ] }, { page: 2, originalPage: 2, sourceId: null, text: '', printedPage: null, blocks: [{ id: 'p2-b0', type: 'chart', text: '', captions: [], bbox: [0, 0, 1, 1], assetId: image.assetId }] }];
   const visual = await saveManifest(root, { schema: 1, documentId, revision: 'r1', fingerprint: 'fixture', pages, assets: [original, image], reading: buildReading(pages), quality: { reviewRequired: true } });
   const pureId = 'pure-image-fixture', purePdf = await PDFDocument.create(); purePdf.addPage([300, 400]).drawCircle({ x: 150, y: 200, size: 70 });
@@ -55,6 +57,11 @@ test('shared cloud reader resolves the second repeated phrase and renders the ac
   await until(() => requests.some(request => request.action === 'materials.selection.resolve' && request.args.quote === phrase), 'mapped selection request');
   const request = requests.findLast(request => request.action === 'materials.selection.resolve' && request.args.quote === phrase);
   assert.equal(request.args.start, phrase.length + 2, JSON.stringify(request.args)); assert.equal(request.args.sourceId, sourceId); assert.equal(request.args.quote, phrase);
+  await page.locator('[data-visual-block="p1-b2"] .katex').first().waitFor();
+  const afterMath = page.locator('[data-visual-block="p1-b2"] [data-study-anchor-start]').last();
+  await afterMath.evaluate(element => { const range = document.createRange(); range.selectNodeContents(element); const selection = window.getSelection(); selection.removeAllRanges(); selection.addRange(range); element.dispatchEvent(new MouseEvent('mouseup', { bubbles: true })); });
+  await until(() => requests.some(request => request.action === 'materials.selection.resolve' && request.args.quote === ' after math prose.'), 'prose after rendered math uses its original offsets');
+  assert.equal(requests.findLast(request => request.args.quote === ' after math prose.').args.start, text.indexOf(' after math prose.'));
   const count = requests.filter(request => request.action === 'materials.selection.resolve').length;
   await page.locator('[data-study-reflow]').evaluate(element => { const range = document.createRange(); range.selectNodeContents(element); const selection = window.getSelection(); selection.removeAllRanges(); selection.addRange(range); element.dispatchEvent(new MouseEvent('mouseup', { bubbles: true })); });
   await page.getByText('请将选区缩小到同一个正文块；跨块与跨页选区尚未支持。', { exact: true }).waitFor();

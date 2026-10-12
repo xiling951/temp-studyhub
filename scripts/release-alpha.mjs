@@ -4,6 +4,7 @@ import { fileURLToPath } from 'node:url';
 import { spawn } from 'node:child_process';
 import { createHash } from 'node:crypto';
 import { existsSync } from 'node:fs';
+import { buildHostClient, buildPreview } from './build.mjs';
 
 const root = fileURLToPath(new URL('../', import.meta.url));
 const manifest = JSON.parse(await readFile(join(root, 'package.json'), 'utf8'));
@@ -17,6 +18,9 @@ const npmCli = [process.env.npm_execpath,
   join(dirname(process.execPath), '../lib/node_modules/npm/bin/npm-cli.js')]
   .find(candidate => candidate && /npm-cli\.js$/.test(candidate) && existsSync(candidate));
 if (!npmCli) throw new Error('Cannot find npm-cli.js; run the release pack through npm (npm run release:pack)');
+// npm pack below deliberately skips lifecycle scripts; compile the current UI first.
+await buildHostClient();
+await buildPreview();
 async function pack(cwd) {
   const child = spawn(process.execPath, [npmCli, 'pack', '--json', '--ignore-scripts', '--pack-destination', target],
     { cwd, windowsHide: true, stdio: ['ignore', 'pipe', 'pipe'] });

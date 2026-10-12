@@ -1,0 +1,112 @@
+/* Actual current Desktop + actual exported book; all screenshots remain private. */
+import assert from 'node:assert/strict';
+import { readFile, writeFile } from 'node:fs/promises';
+import { resolve, join } from 'node:path';
+import { pathToFileURL } from 'node:url';
+import { connectDesktop } from './desktop-client.mjs';
+const evidence = resolve('../evidence/fullbook-20261012');
+const baseline = JSON.parse(await readFile(join(evidence, 'baseline-private.json'), 'utf8'));
+const client = await connectDesktop(), { page } = client;
+const errors = [], requests = [], result = { actualBook: true, desktop: true };
+page.on('pageerror', error => errors.push(error.message));
+page.on('request', request => {
+  if (!request.url().includes('/api/study-workspace/call')) return;
+  try {
+    const { action, args } = request.postDataJSON().payload;
+    requests.push({ action, args });
+  } catch { /* unrelated host requests */ }
+});
+try {
+  await page.locator('[data-tour="nav-sources"]').first().click();
+  await page.getByRole('button', { name: '全部展开', exact: true }).click();
+  await page.locator('[data-document-key]').filter({ has: page.getByText(baseline.title, { exact: true }) }).locator('.source-main').click();
+  const reader = page.locator('.study-document-viewer'); await reader.waitFor();
+  await reader.getByRole('group', { name: '显示方式', exact: true }).getByRole('button', { name: '阅读', exact: true }).click();
+  const number = reader.getByLabel('图文 PDF 页码', { exact: true }); await number.fill('148');
+  await reader.locator('[data-visual-block="p149-b8"]').waitFor();
+  await page.waitForFunction(() => globalThis.document.querySelector('[data-visual-block="p148-b15"]')?.textContent.includes('很大。'));
+  assert.equal(await reader.locator('.scanned-reader-page').count(), 3);
+  assert.equal(await reader.locator('[data-visual-block="p149-b3"]').count(), 0, 'joined continuation appears once');
+  result.crossPageParagraph = true;
+  await number.fill('149'); await reader.locator('[data-visual-block="p149-b3"]').waitFor();
+  const order = await reader.locator('.scanned-reader-page').first().locator('[data-visual-block]').evaluateAll(es => es.map(e => e.dataset.visualBlock));
+  assert.ok(order.indexOf('p149-b8') < order.indexOf('p149-b0'));
+  await reader.locator('.katex').first().waitFor();
+  const originalFigure = reader.locator('[data-visual-block="p149-b8"] img');
+  await reader.locator('[data-visual-block="p149-b8"]').scrollIntoViewIfNeeded();
+  await originalFigure.waitFor(); assert.ok((await originalFigure.getAttribute('src')).startsWith('blob:'));
+  await page.screenshot({ path: join(evidence, 'native-inverter-private.png') });
+  result.actualInverterFigure = true; result.inlineMath = true;
+  const afterMath = reader.locator('[data-study-text="true"]').filter({ hasText: /[\u3400-\u9fff]/ }).filter({ visible: true });
+  const anchored = await afterMath.evaluateAll(elements => elements.findIndex(element => element.textContent.length >= 12 && element.previousElementSibling?.classList.contains('reading-inline-math')));
+  assert.ok(anchored >= 0, 'actual textbook has selectable prose after rendered math');
+  const prose = afterMath.nth(anchored);
+  const expectedSelection = await prose.evaluate(element => ({ quote: element.textContent, start: Number(element.dataset.studyAnchorStart), end: Number(element.dataset.studyAnchorEnd) }));
+  const resolution = page.waitForRequest(request => {
+    if (!request.url().includes('/api/study-workspace/call')) return false;
+    const payload = request.postDataJSON()?.payload;
+    return payload?.action === 'materials.selection.resolve' && payload.args.quote === expectedSelection.quote;
+  });
+  await prose.evaluate(element => { const range = globalThis.document.createRange(); range.selectNodeContents(element); const selection = globalThis.getSelection(); selection.removeAllRanges(); selection.addRange(range); element.dispatchEvent(new globalThis.MouseEvent('mouseup', { bubbles: true })); });
+  await resolution;
+  const selected = requests.findLast(request => request.action === 'materials.selection.resolve' && request.args.quote === expectedSelection.quote);
+  assert.ok(selected, 'actual native selection resolves after math');
+  assert.equal(selected.args.start, expectedSelection.start); assert.equal(selected.args.end, expectedSelection.end);
+  const literalManifest = JSON.parse(await readFile(join(evidence, 'corrected-manifest-private.json'), 'utf8').catch(error => {
+    if (error.code !== 'ENOENT') throw error;
+    return readFile(join(evidence, 'original-manifest-private.json'), 'utf8');
+  }));
+  const selectedPage = literalManifest.pages.find(page => page.sourceId === selected.args.sourceId);
+  assert.ok(selectedPage); assert.equal(selectedPage.text.slice(selected.args.start, selected.args.end), selected.args.quote);
+  result.exactSelectionAfterMath = true;
+  await number.fill('201');
+  await page.waitForFunction(() => globalThis.document.querySelector('[data-visual-block="p201-b11"]')?.textContent.includes('NAND'));
+  const table = reader.locator('[data-visual-block="p201-b11"]');
+  assert.equal(await reader.locator('[data-visual-block="p202-b2"]').count(), 0);
+  await table.scrollIntoViewIfNeeded(); await table.locator('img').nth(1).waitFor();
+  assert.equal(await table.locator('img').count(), 2);
+  result.continuedTable = true;
+  await page.screenshot({ path: join(evidence, 'native-continued-table-private.png') });
+  await number.fill('202'); await reader.locator('[data-visual-block="p202-b2"]').waitFor();
+  result.windowBoundaryDoesNotLoseTable = true;
+  await number.fill('292'); await reader.locator('.scanned-reader-page').first().getByText('原书 PDF 第 292 页 · 印刷页码 未识别', { exact: true }).waitFor();
+  assert.equal(await reader.locator('.scanned-reader-page').first().locator('[data-study-source]').count(), 0);
+  result.blankPagePreserved = true;
+  await reader.getByLabel('教材章节', { exact: true }).click();
+  await page.getByRole('option', { name: '第 12 章 存储器和阵列结构设计', exact: true }).click();
+  await page.waitForFunction(() => globalThis.document.querySelector('input[aria-label="图文 PDF 页码"]')?.value === '478');
+  result.chapterJump = true;
+  await reader.getByRole('button', { name: '原始 PDF', exact: true }).click();
+  await reader.getByLabel('原始 PDF 页码', { exact: true }).fill('149');
+  await page.waitForFunction(() => globalThis.document.querySelector('[aria-label="PDF 149"]')?.width > 0, null, { timeout: 90000 });
+  result.originalPdfReadable = true;
+  const chunks = requests.filter(request => request.action === 'materials.visual.chunk');
+  assert.ok(chunks.length); assert.ok(chunks.every(request => (request.args.length || 262144) <= 262144));
+  assert.ok(!requests.some(request => request.action === 'materials.document.bytes'));
+  result.boundedTransfers = true;
+  const offline = await client.browser.newPage();
+  offline.on('pageerror', error => errors.push(error.message));
+  await offline.goto(pathToFileURL(join(evidence, 'book/index.html')).href);
+  assert.equal(await offline.locator('article').count(), 0);
+  await offline.getByRole('link', { name: '第 5 章 CMOS 反相器', exact: true }).click();
+  await offline.locator('#flow-p149-b8').scrollIntoViewIfNeeded();
+  await offline.locator('#flow-p149-b8 img').waitFor();
+  assert.ok(await offline.locator('.katex').count());
+  assert.ok(await offline.locator('#flow-p149-b8 img').evaluate(image => image.complete && image.naturalWidth > 0));
+  await offline.screenshot({ path: join(evidence, 'offline-inverter-private.png') });
+  result.offlineChapterReadable = true;
+  const manifest = JSON.parse(await readFile(join(evidence, 'book/document.json'), 'utf8'));
+  const chapter = manifest.reading.chapters.find(chapter => /第6章/.test(chapter.title));
+  await offline.goto(pathToFileURL(join(evidence, `book/chapters/${chapter.id}.html`)).href);
+  assert.equal(await offline.locator('#flow-p201-b11 figure').count(), 2);
+  assert.equal(await offline.locator('#flow-p201-b11 a').count(), 2);
+  result.offlineTableAndOrigins = true;
+  assert.deepEqual(errors, []); result.pageErrors = 0; result.status = 'passed';
+} catch (error) {
+  result.status = 'failed'; result.error = error.message.replace(/token=[^\s"\\&]+/g, 'token=[redacted]');
+  await page.screenshot({ path: join(evidence, 'reader-failure-private.png') }).catch(() => {}); process.exitCode = 1;
+} finally {
+  await writeFile(join(evidence, 'reader-verification.json'), JSON.stringify(result, null, 2));
+  await writeFile(join(evidence, 'reader-requests-private.json'), JSON.stringify(requests, null, 2));
+  console.log(JSON.stringify(result)); await client.close();
+}

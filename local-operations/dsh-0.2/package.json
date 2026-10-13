@@ -1,0 +1,10 @@
+﻿{
+  "name": "dsh-studyhub-runtime",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Self-contained DSH 0.2 harness runner for the StudyHub deployment",
+  "dependencies": {
+    "@deepseek-ai/dsh": "0.2.0-rc.2"
+  }
+}

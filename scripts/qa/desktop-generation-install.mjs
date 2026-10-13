@@ -7,7 +7,7 @@ import { pathToFileURL } from 'node:url';
 if (!process.execPath.endsWith('DSH Desktop.exe') || process.env.ELECTRON_RUN_AS_NODE !== '1') throw Error('Use the authorized Desktop Node runtime');
 const base = resolve('..');
 const version = process.argv.find(arg => arg.startsWith('--version='))?.slice('--version='.length) ?? JSON.parse(await readFile('package.json', 'utf8')).version;
-if (!/^3\.3\.0-scanned\.(?:[2-9]|1[0-9]|2[01])$/.test(version)) throw Error('Choose a retained scanned.2–21 package');
+if (!/^3\.3\.0-scanned\.(?:[2-9]|1[0-9]|2[0-2])$/.test(version)) throw Error('Choose a retained scanned.2–22 package');
 const evidence = resolve(process.argv.find(arg => arg.startsWith('--evidence-dir='))?.slice('--evidence-dir='.length) ?? join(base, 'evidence/mos-desktop-upgrade'));
 const home = join(process.env.APPDATA, 'dsh-desktop/harness');
 const resources = join(process.env.LOCALAPPDATA, 'Programs/DSH Desktop/resources/app.asar');

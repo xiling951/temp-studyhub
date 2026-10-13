@@ -1,6 +1,8 @@
 # StudyHub 云端 PDF 图文解析与电子书资源包实施计划（架构审查修订版）
 
-修订日期：2026-10-12。状态：**日常 Desktop 已部署 `.21` 并通过重启、源码和旧库核验；整书资源、阅读与索引已验证，DSH + Qwen 自主流程已通过真实两页材料和六题样本验收**。572页教材已通过 MinerU API 完整提取，保留原件及1321个资源，跨页段落/续表、公式后精确选区、原书对照和三个MOS基准题组共30题可用。云解析新增逐页独立原图核验、一次差异修复及复审；普通图文出题新增逐题检查点、盲图观察及最多两轮自动修订。真实样本中题干引导造成的原图输入端数误读，已由Qwen盲观察、独立拒绝、自动修订和复审修正，未人工改题。MOS基准含开发期人工校正，不作为自动出题达标证据；以未经人工改题的新样本验收。未执行572页逐页Qwen重解析，也未完成10,000字人工真值集或新版正式降级演练。
+修订日期：2026-10-13。状态：**日常 Desktop 已部署 `.22` 并通过重启、源码和旧库核验；整书资源、阅读与索引已验证，DSH + Qwen 自主流程已通过真实两页材料和六题样本验收**。572页教材已通过 MinerU API 完整提取，保留原件及1321个资源，跨页段落/续表、公式后精确选区、原书对照和三个MOS基准题组共30题可用。云解析新增逐页独立原图核验、一次差异修复及复审；普通图文出题新增逐题检查点、盲图观察及最多两轮自动修订。真实样本中题干引导造成的原图输入端数误读，已由Qwen盲观察、独立拒绝、自动修订和复审修正，未人工改题。MOS基准含开发期人工校正，不作为自动出题达标证据；以未经人工改题的新样本验收。未执行572页逐页Qwen重解析，也未完成10,000字人工真值集或新版正式降级演练。
+
+本次范围建议已修复并实际验收：帮我想想发送用户填写的范围，按范围优先抽取相关目录；范围变化隐藏旧结果并丢弃过期响应，失败不推荐无关章节或设置。日常 `.22` 选择整书571页、输入截图原话后，真实Qwen返回反相器静态性能、性能改进、工作状态计算等相关建议。79项定向测试、147项安装源码/客户端SHA和旧两库/启动链核对通过；脱敏证据见 `implementation/evidence/cloud-pdf/suggest-scope.json`，此前整书验收保留原版本证据。 资料空白已定位为新会话连接其他工作区的空库；按用户选择继续分工作区保存，临时跨库连接已撤回。原D:/studyhub工作区仍绑定教材库，资料页571页教材与4/12复习已实际显示，旧两库SHA仍与升级前一致。
 
 本文件供新会话直接开始开发。删除上一版的成本、价格、整书 Token 估算与预算情景；保留防止无限调用、任务失控所需的运行限制和真实用量记录。
 
@@ -13,7 +15,7 @@
 - 交付仓库：[xiling951/temp-studyhub](https://github.com/xiling951/temp-studyhub)。Git remote 为 `delivery`，交付分支为 `main`。
 - 上游仓库：[EricWang1358/dsh-web-studyhub](https://github.com/EricWang1358/dsh-web-studyhub)。Git remote 为 `origin`；不向上游推送本轮改动。
 - 当前开发分支：`feat/scanned-textbook-visual`；实际交付提交以 Git HEAD/工作树为准，代码是当前状态的依据。
-- 当前日常 Desktop 整包：`3.3.0-scanned.21`；已安装检索服务为 `.5`，短页入索引修复已生效。整包、拆分插件和检索交付包由现有脚本构建到 `D:/studyhub/implementation/packages/3.3.0-scanned.21`，8包和2安装页已核验；不覆盖已有发布或回退包，不上传教材资源包。
+- 当前日常 Desktop 整包：`3.3.0-scanned.22`；已安装检索服务为 `.5`，短页入索引修复已生效。整包、拆分插件和检索交付包由现有脚本构建到 `D:/studyhub/implementation/packages/3.3.0-scanned.22`，8包和2安装页已核验；不覆盖已有发布或回退包，不上传教材资源包。
 - 已验证的宿主基线：DSH Desktop `0.11.1`，原生接口 `0.2.0-rc.2`；PDF.js 依赖 `6.3.289`。新会话核对实际安装状态，不把这些历史值当作自动保证。
 - 桌面快捷方式：`C:/Users/Lenovo/Desktop/DSH Desktop.lnk`，现有启动链经 `D:/studyhub/start-dsh-desktop.cmd`。本轮开发和测试不修改此启动链。
 
@@ -409,7 +411,7 @@ npm run release:check -- --outdir=D:/studyhub/implementation/delivery-cloud
 - 进度：源码中的 `implementation/progress.md`，同步到 `D:/studyhub/implementation/progress.md`；每阶段写状态/提交/验证结果，保持已有历史，不改AGENTS/README成流水账。
 - 推荐本轮隔离home：`D:/studyhub/implementation/test-harness/cloud-pdf`，隔离profile/workspace在其下创建；使用显式 DSH_HOME/库根，不继承正式APPDATA。隔离Desktop generation按宿主能力设置独立home并验证，不假称CLIprofile就是Desktop隔离。
 - 推荐测试库：`D:/studyhub/implementation/test-libraries/cloud-pdf`；恢复测试用同目录下独立 restore 库。正式 `D:/studyhub/libraries/数字集成电路-图文` 和其他已有库只读。
-- 私有备份：`D:/studyhub/implementation/private-backups/desktop-before-fullbook*`；新版包：`D:/studyhub/implementation/packages/3.3.0-scanned.21`。整书、API原始回包、截图和题目验收内容保存在源码目录外的 `D:/studyhub/implementation/evidence/fullbook-20261012`；不要覆盖已有回退包或提交私有教材内容。
+- 私有备份：`D:/studyhub/implementation/private-backups/desktop-before-fullbook*`；新版包：`D:/studyhub/implementation/packages/3.3.0-scanned.22`。整书、API原始回包、截图和题目验收内容保存在源码目录外的 `D:/studyhub/implementation/evidence/fullbook-20261012`；不要覆盖已有回退包或提交私有教材内容。
 - 私有模型回包、全书图像/全文、截图和题目内容保存在Git源码目录之外的隔离库/证据目录；提交仓库的证据在 `implementation/evidence/cloud-pdf/`，仅含脱敏汇总、测试日志、哈希及公开自建fixture。
 
 ### 8.2 提交和证据要求

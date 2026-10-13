@@ -30,6 +30,7 @@ import { useRetrievalStatus } from './retrieval-status.js';
 import {
   DIFFICULTIES, LANGUAGES, appendFocus, applySuggestion, autoOf, customCountOf, courseHasCaseExam, coverageStructure,
   NOTATION_CHOICES, caseEvidence, difficultyNote, estimateMinutes, generationRequest, importDialog, kindNote, kindsOfForm, kindsPatch, moreValuesOf, notationNote, planLine, roleOpenByDefault, selectionStats, summaryLine,
+  practiceSuggestionRequest, practiceSuggestionKey,
 } from './generate-form.js';
 import { DEFAULT_LEVEL, levelOf } from '../lib/coverage-strength.js';
 import homeCss from './generate-home.css';
@@ -89,11 +90,15 @@ export default function Generate({
   useLiveEffect((live) => {
     Promise.resolve(call?.('coach.profile', {})).then((profile) => { if (live() && typeof profile?.goal === 'string') setGoal(profile.goal); }, () => {});
   }, []);
-  // 帮我想想: asked on click only; a result belongs to the sources and course it was asked for.
-  const [assist, setAssist] = React.useState({ phase: 'idle', result: null, applied: false });
+  // A result belongs to this library, selection and stated practice scope; changes hide it immediately, including while a call is pending.
+  const [storedAssist, setAssist] = React.useState({ phase: 'idle', result: null, applied: false });
   const assistToken = React.useRef(0);
-  const selectionKey = `${generationCourse}|${selectedSources.join(',')}`;
-  React.useEffect(() => { assistToken.current += 1; setAssist({ phase: 'idle', result: null, applied: false }); }, [selectionKey]);
+  const assistRequest = practiceSuggestionRequest({ sourceIds: selectedSources, course: generationCourse, focus: gen.focus, goal });
+  const selectionKey = practiceSuggestionKey(assistRequest, data.root);
+  const currentAssistKey = React.useRef(selectionKey);
+  currentAssistKey.current = selectionKey;
+  const assist = storedAssist.key === selectionKey ? storedAssist : { phase: 'idle', result: null, applied: false };
+  React.useEffect(() => () => { assistToken.current += 1; }, []);
   // 分步出题: the plan of steps and what it does live in one hook so the form's own button can queue it; the choice of how to go on is this page's (TooBigChoice).
   const path = useGenerationPath({ sources: data.sources, selectedIds: selectedSources, gen, course: generationCourse, goal, indexCoverage, visualEvidence,
     onQueued: () => { setGen(current => freshGeneration(current, data.settings?.generation)); setPage("library"); } });
@@ -118,11 +123,12 @@ export default function Generate({
   }, [gen.focus]);
   async function askAssist() {
     const token = ++assistToken.current;
-    setAssist({ phase: 'loading', result: null, applied: false });
+    const key = selectionKey;
+    setAssist({ key, phase: 'loading', result: null, applied: false });
     let result;
-    try { result = await call('generate.suggest', { sourceIds: selectedSources, course: generationCourse, ...(goal ? { goal } : {}) }); }
+    try { result = await call('generate.suggest', assistRequest); }
     catch (error) { result = { source: 'local', focus: [], unavailable: { reason: 'failed', message: String(error?.message || '') } }; }
-    if (token === assistToken.current) setAssist({ phase: 'done', result, applied: false });
+    if (token === assistToken.current && key === currentAssistKey.current) setAssist({ key, phase: 'done', result, applied: false });
   }
   // `options` ({ course, onImported }) is for a tab that takes the new materials itself (案例分析题); a click passes an event, which means neither.
   const openImport = (options) => setModal(importDialog(options?.course ?? (sourceScope === '*' ? '' : sourceScope), options));
@@ -276,9 +282,14 @@ export default function Generate({
                     {(pathMode || retrievalMode) && <FocusHelp mode={mode} />}
                     <GenerateAssist ready={model.ready} phase={assist.phase} result={assist.result} applied={assist.applied} focus={gen.focus} disabled={busy}
                       estimate={<TokenEstimate enabled={model.ready && selectedSources.length > 0}
-                        request={{ feature: 'suggest', sourceIds: selectedSources, course: generationCourse, ...(goal ? { goal } : {}) }} />}
+                        request={{ feature: 'suggest', ...assistRequest }} />}
                       onAsk={askAssist} onSettings={openSettings}
-                      onPick={(item) => setGen({ ...gen, focus: appendFocus(gen.focus, item) })}
+                      onPick={(item) => {
+                        const focus = appendFocus(gen.focus, item);
+                        setGen({ ...gen, focus });
+                        // Picking one of this result's refinements preserves the other chips; editing the scope independently invalidates them.
+                        setAssist({ ...assist, key: practiceSuggestionKey(practiceSuggestionRequest({ ...assistRequest, focus }), data.root) });
+                      }}
                       onApply={() => { setGen(applySuggestion(gen, assist.result)); setAssist({ ...assist, applied: true }); }} />
                   </FormRow>
                   <FormRow label={ui("题组名称（可选）")} htmlFor="generate-title">

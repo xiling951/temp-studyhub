@@ -211,6 +211,13 @@ export function summaryLine({ materials = 0, pages = 0, count = null, difficulty
 
 /* ---------- focus text and suggestions ---------- */
 
+/** The assist and its estimate use the same explicit practice scope. */
+export function practiceSuggestionRequest({ sourceIds = [], course = '', focus = '', goal = '' } = {}) {
+  const scope = String(focus ?? '').trim();
+  return { sourceIds: [...sourceIds], course, ...(scope ? { focus: scope } : {}), ...(goal ? { goal } : {}) };
+}
+export const practiceSuggestionKey = (request, root) => JSON.stringify([root, request]);
+
 const SEPARATOR = '；';
 const parts = (text) => String(text || '').split(/[；;\n]/).map((item) => item.trim()).filter(Boolean);
 export const focusIncludes = (text, item) => parts(text).includes(String(item).trim());

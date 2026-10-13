@@ -232,6 +232,22 @@ test('a host token meter prices the same text when given', () => {
   assert.ok(result.inputTokens.low > 0);
 });
 
+test('the assist estimate includes the unchanged requested focus and relevant headings without the body', () => {
+  const focus = '如何设计能提高反相器的静态性能？如何计算反相器工作状态？CMOS反相器静态指标和动态指标及其影响因素';
+  const sources = Array.from({ length: 240 }, (_, i) => ({ id: `scope-p${i}`, title: `circuits.pdf · p.${i + 1}`,
+    document: { id: 'scope-book', page: i + 1, filename: 'circuits.pdf' },
+    text: `## ${i === 117 ? 'CMOS反相器静态特性与工作状态' : `其它章节 ${i}`}\nPrivate prose must not enter the suggestion estimate.` }));
+  const seen = [];
+  const tokenMeter = { estimateMessage(message) { const text = message.content[0].text; seen.push({ role: message.role, text }); return text.length; } };
+  const state = { sources, decks: [], drafts: [], courses: [], settings: {}, attempts: [], runs: [] };
+  const estimate = estimateFromState('suggest', { sourceIds: sources.map(s => s.id), focus }, state, { tokenMeter });
+  const data = JSON.parse(seen.find(item => item.role === 'user' && item.text.includes('"focus":') && item.text.includes(focus)).text);
+  assert.equal(data.focus, focus);
+  assert.ok(data.sources[0].headings.includes('CMOS反相器静态特性与工作状态'));
+  assert.ok(!JSON.stringify(data).includes('Private prose'));
+  assert.equal(estimate.calls.low, 1);
+});
+
 test('estimateFromState resolves materials and existing objectives like the generate action does', () => {
   const state = { sources: [note, ...pdf(3)], decks: [{ id: 'd', cards: [{ objective: 'one' }, { objective: 'two' }] }], drafts: [{ id: 'dr', cards: [{ objective: 'three' }] }],
     courses: [], settings: {}, attempts: [], runs: [] };

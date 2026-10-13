@@ -4,7 +4,7 @@ import { mkdir, readdir, lstat, copyFile, writeFile } from 'node:fs/promises';
 import { resolve, join, relative } from 'node:path';
 import { hashFile } from '../../lib/contexts/materials/visual-storage.js';
 const name = process.argv.find(arg => arg.startsWith('--name='))?.slice(7);
-if (!/^desktop-before-fullbook[0-9]*-20261012$/.test(name || '')) throw Error('Choose the explicit book backup name');
+if (!/^desktop-before-fullbook[0-9]*-(?:20261012|20261013)$/.test(name || '')) throw Error('Choose the explicit book backup name');
 const destination = resolve('../private-backups', name);
 await mkdir(destination);
 const inventory = [];

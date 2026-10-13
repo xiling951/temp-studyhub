@@ -292,5 +292,8 @@
   "把选择缩到这一步的页面，回到普通出题（会离开分步模式），题数用这一步的建议题数": "Narrows the selection to this step’s pages and goes back to ordinary generation (this leaves step-by-step mode); the count is this step’s suggested count.",
   "显示全部 {0} 步": "Show all {0} steps",
   "{0} 个可选步骤默认跳过（{1}等）": "{0} optional step(s) skipped by default ({1}, …)",
-  "已勾选 {0} 个": "{0} ticked"
+  "已勾选 {0} 个": "{0} ticked",
+  "发送本次练习范围、资料标题与目录，不发送全文": "Your practice scope, material titles and outlines are sent, never the full text.",
+  "保留你填写的范围，可重试": "Your practice scope is kept; you can try again.",
+  "尚未得到符合本次范围的建议，你填写的范围会保留。": "No suggestions for this practice scope yet. Your input is kept."
 }

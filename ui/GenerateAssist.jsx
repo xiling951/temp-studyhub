@@ -17,6 +17,7 @@ export default function GenerateAssist({ ready = false, phase = 'idle', result =
   // A learner who knowingly has no model is told by the button itself; the line is for a helper that was expected to work.
   const why = local && (ready || result?.unavailable?.reason !== 'no-model') ? result?.unavailable : null;
   const items = Array.isArray(result?.focus) ? result.focus : [];
+  const scoped = !!String(focus || '').trim();
   const settings = [result?.coverage ? uiFormat('覆盖强度：{0}', [levelLabel(result.coverage)]) : '',
     DIFFICULTIES.find((item) => item.value === result?.difficulty)?.label || '',
     result?.kind ? kindsLabel(kindsOfLegacyKind(result.kind) ?? []) : ''].filter(Boolean).join(' · ');
@@ -26,20 +27,20 @@ export default function GenerateAssist({ ready = false, phase = 'idle', result =
         <Button variant="secondary" size="sm" icon={ready ? 'sparkle' : undefined} busy={loading} disabled={disabled} data-generate-assist onClick={onAsk}>
           {ready ? ui('帮我想想') : ui('看看建议')}
         </Button>
-        <span className="generate-assist__sent">{ready ? ui('只发送资料标题与目录，不发送全文') : ui('只用你的错题与资料目录，不调用模型')}</span>
+        <span className="generate-assist__sent">{ready ? ui(scoped ? '发送本次练习范围、资料标题与目录，不发送全文' : '只发送资料标题与目录，不发送全文') : ui('只用你的错题与资料目录，不调用模型')}</span>
       </div>
       {estimate}
       {phase === 'done' && result && (
         <div className="generate-assist__result" aria-live="polite">
-          {local && <p className="generate-assist__label">{ui('来自你的错题与资料目录')}</p>}
-          {why && <AiHelperNote unavailable={why} fallback="先给你来自本地数据的建议" onRetry={onAsk} onSettings={onSettings} />}
+          {local && items.length > 0 && <p className="generate-assist__label">{ui('来自你的错题与资料目录')}</p>}
+          {why && <AiHelperNote unavailable={why} fallback={scoped && !items.length ? '保留你填写的范围，可重试' : '先给你来自本地数据的建议'} onRetry={onAsk} onSettings={onSettings} />}
           {items.length ? (
             <div className="generate-presets" role="group" aria-label={ui('练习重点建议')}>
               {items.map((item) => (
                 <Chip key={item} className="generate-suggestion" selected={focusIncludes(focus, item)} title={item} onClick={() => onPick?.(item)}>{item}</Chip>
               ))}
             </div>
-          ) : <p className="generate-assist__note">{ui('还没有可以推荐的内容。先选好资料，或多做几轮练习再来。')}</p>}
+          ) : <p className="generate-assist__note">{ui(scoped ? '尚未得到符合本次范围的建议，你填写的范围会保留。' : '还没有可以推荐的内容。先选好资料，或多做几轮练习再来。')}</p>}
           {!local && hasSettings(result) && (
             <div className="generate-assist__apply">
               <Button variant="secondary" size="sm" disabled={applied} onClick={onApply}>{applied ? ui('已按建议设置') : ui('按建议设置')}</Button>

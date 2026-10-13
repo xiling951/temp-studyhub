@@ -157,6 +157,19 @@ test("focus chips append once and the form applies a suggestion without touching
   assert.equal(form.hasSettings({ coverage: "lean" }), true);
 });
 
+test("practice suggestions and estimates share a scope-aware request identity", () => {
+  const requested = { sourceIds: ["a", "b"], course: "数字集成电路", focus: "反相器静态指标\n动态指标及影响因素", goal: "exam" };
+  const payload = form.practiceSuggestionRequest(requested);
+  assert.deepEqual(payload, requested, "the current scope belongs to the assist payload, alongside its source selection");
+  assert.notEqual(payload.sourceIds, requested.sourceIds, "the request captures the current source selection");
+  const key = form.practiceSuggestionKey(payload, "library-a");
+  for (const patch of [{ focus: "加法器" }, { course: "另一课程" }, { sourceIds: ["b"] }, { goal: "work" }]) {
+    assert.notEqual(form.practiceSuggestionKey(form.practiceSuggestionRequest({ ...requested, ...patch }), "library-a"), key);
+  }
+  assert.notEqual(form.practiceSuggestionKey(payload, "library-b"), key, "another library cannot reuse this result");
+  assert.deepEqual(form.practiceSuggestionRequest({ sourceIds: ["a"], course: "C", focus: " \n ", goal: "" }), { sourceIds: ["a"], course: "C" });
+});
+
 test("the target role shows by default only for interview preparation", () => {
   assert.equal(form.roleOpenByDefault({ goal: "interview" }), true);
   assert.equal(form.roleOpenByDefault({ focus: { mode: "interview" } }), true);
@@ -246,6 +259,12 @@ test("the focus box is two rows with its assist, chips and the what-is-sent line
   assert.match(section, /帮我想想/);
   assert.match(section, /只发送资料标题与目录，不发送全文/);
   assert.match(section, /<button[^>]*data-generate-assist[^>]*>/);
+});
+
+test("a populated practice scope is explicitly included in the assist's sending explanation", () => {
+  const section = formOf(render({}, { gen: { ...gen, focus: "CMOS反相器静态与动态指标" } }));
+  assert.match(section, /发送本次练习范围、资料标题与目录，不发送全文/);
+  assert.doesNotMatch(section, /只发送资料标题与目录，不发送全文/, "the explanation no longer omits the user's scope");
 });
 
 test("without a usable model the assist offers local suggestions and never claims AI", () => {
@@ -393,4 +412,13 @@ test("the failure line has the retry as an sh- button and no Han in English", ()
 test("nothing to suggest says so quietly, and the button shows its busy state", () => {
   assert.match(assist({ phase: "done", result: { source: "local", focus: [] } }), /还没有可以推荐的内容/);
   assert.match(assist({ phase: "loading" }), /sh-btn--busy|aria-busy="true"/);
+});
+
+test("an empty scoped fallback keeps the learner's scope and shows no unrelated directory suggestions or settings", () => {
+  for (const [ready, unavailable] of [[false, { reason: "no-model" }], [true, { reason: "failed", message: "429 rate limit" }]]) {
+    const html = assist({ ready, focus: "CMOS反相器静态与动态指标", phase: "done", result: { source: "local", focus: [], unavailable } });
+    assert.match(html, /尚未得到符合本次范围的建议，你填写的范围会保留/);
+    assert.doesNotMatch(html, /来自你的错题与资料目录|generate-suggestion|按建议设置|先给你来自本地数据的建议/);
+    if (ready) assert.match(html, /保留你填写的范围，可重试/);
+  }
 });

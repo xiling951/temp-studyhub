@@ -1,0 +1,121 @@
+{
+  "schema": 1,
+  "verifiedDate": "2026-10-13",
+  "status": "passed",
+  "scope": "Practice-suggestion range fix; prior full-book acceptance remains in fullbook-autonomy.json",
+  "rootCause": [
+    "The suggestion request omitted the learner-entered focus.",
+    "Previous results were retained when focus changed.",
+    "Whole-book heading sampling and local fallbacks did not respect an explicit practice range."
+  ],
+  "desktop": {
+    "version": "3.3.0-scanned.22",
+    "retrievalVersion": "3.3.0-scanned.5",
+    "nativeInstallation": true,
+    "matchedSourceAndClientFiles": 147,
+    "bothLibraryStatesUnchangedThroughUpgrade": true,
+    "launchChainUnchanged": true,
+    "verifiedBackupFiles": 5221,
+    "verifiedBackupBytes": 554197006,
+    "pageErrors": 0
+  },
+  "realQwenUi": {
+    "checkedAt": "2026-10-13T11:26:52.228Z",
+    "modelReportedByDesktop": {
+      "provider": "qwen",
+      "model": "qwen3.8-flash"
+    },
+    "modelReceiptAvailable": false,
+    "usage": "unknown",
+    "selectedMaterialPages": 571,
+    "suggestionSignalPageLimit": 500,
+    "sourceProseSent": false,
+    "learnerFocus": "如何设计能提高反相器的静态性能？如何计算反相器工作状态？CMOS反相器静态指标和动态指标及其影响因素",
+    "suggestedFocus": [
+      "CMOS反相器静态性能指标",
+      "反相器静态性能改进设计",
+      "反相器工作状态与电流计算",
+      "静态指标与动态指标对比",
+      "缩小与互连负载影响"
+    ],
+    "settings": {
+      "coverage": "lean",
+      "difficulty": "mixed",
+      "kind": "mixed",
+      "reason": "聚焦你指定的反相器静态性能改进、工作状态计算和动静态指标影响，对最相关章节做精炼复习。"
+    },
+    "exactFocusSent": true,
+    "fullBookSelectionSent": true,
+    "editedScopeHidesOldResult": true,
+    "suggestionRequests": 1,
+    "libraryStateUnchanged": true,
+    "librarySha256": "c14fd99463b8a680017231b9902be0fe7f07e0192dd06aeb2f33fd52e1ce0451",
+    "pageErrors": 0
+  },
+  "regressions": {
+    "tests": [
+      {
+        "file": "tests/wp23-generate-suggest.test.mjs",
+        "passed": 25
+      },
+      {
+        "file": "tests/wp23-generate-form.test.mjs",
+        "passed": 32
+      },
+      {
+        "file": "tests/wp27-estimate.test.mjs",
+        "passed": 20
+      },
+      {
+        "file": "tests/generate-short-browser.test.mjs",
+        "passed": 2
+      }
+    ],
+    "totalPassed": 79,
+    "failed": 0,
+    "browserFixtureIsSynthetic": true,
+    "browserCoverage": [
+      "Edited scope discards a pending response.",
+      "Completed suggestions disappear after an independent scope edit.",
+      "Estimate and actual request carry the same focus.",
+      "Applying settings preserves entered scope.",
+      "A selected refinement retains peer suggestions."
+    ],
+    "eslint": "passed",
+    "build": "passed",
+    "releaseHashVerification": {
+      "packages": 8,
+      "installerPages": 2,
+      "status": "passed"
+    }
+  },
+  "limits": [
+    "Real native verification covers the reported range and one Qwen response; it is not a guarantee of all future semantic outputs.",
+    "This check did not regenerate or regrade the textbook questions, reparse the book, or execute a formal production rollback.",
+    "Prior uncompleted human truth-set and accuracy acceptance remain unchanged."
+  ],
+  "workspaceConnectionRecovery": {
+    "cause": "New desktop chats used different working directories and followed their empty default learning libraries.",
+    "learnerPreference": "separate libraries per workspace",
+    "temporaryConnectionUiVerified": true,
+    "temporaryBindingsRestoredToWorkspaceDefaults": true,
+    "originalProjectWorkspace": "D:/studyhub",
+    "originalProjectBoundLibrary": "D:/studyhub/libraries/数字集成电路-图文",
+    "originalProjectRawStoredSources": 1754,
+    "bookPagesVerifiedInUi": 571,
+    "reviewProgressVerifiedInUi": "4/12",
+    "uiCheckUsedTemporaryBinding": true,
+    "modelSelectionPreserved": true,
+    "originalBothLibraryHashesStillMatchBeforeUpgrade": true,
+    "materialDataNotCopiedOrMerged": true,
+    "additionalModelCalls": 0,
+    "pageErrors": 0,
+    "qaSessionSelection": {
+      "explicitWorkspaceRpcSelectionSupported": true,
+      "defaultStillFollowsLatestSession": true,
+      "explicitWorkspaceDoesNotSelectBrowserChat": true,
+      "pureSelectionChecks": 8,
+      "status": "passed"
+    }
+  }
+}

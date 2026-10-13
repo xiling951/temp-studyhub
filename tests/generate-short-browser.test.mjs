@@ -136,3 +136,91 @@ test('创建题组 opens ticked with a reason, the main path is one line, the pl
     }
   } finally { await running.close(); await browser.close(); await rm(dist, { recursive: true, force: true }); }
 });
+
+test('practice suggestions carry the current scope and discard late or edited-scope results; picking a refinement preserves its peers and applying settings preserves the scope', { timeout: 180000 }, async t => {
+  let browser;
+  try { browser = await launchChromium(); } catch (error) { t.skip(`no Chromium to verify the assist with: ${String(error.message).split('\n')[0]}`); return; }
+  const dist = await mkdtemp(join(tmpdir(), 'study-generate-assist-dist-'));
+  await buildPreview({ outdir: dist });
+  const running = await start(dist);
+  let releaseDelayed;
+  const delayed = new Promise(resolve => { releaseDelayed = resolve; });
+  try {
+    const { page, errors, context } = await openApp(browser, running);
+    const calls = [], asked = [];
+    page.on('request', request => {
+      if (request.url().endsWith('/api/call')) calls.push(request.postDataJSON());
+    });
+    const oldScope = 'CMOS反相器静态性能与工作状态';
+    const currentScope = 'CMOS反相器静态和动态指标及其影响因素';
+    const refined = ['静态指标的计算', '工作状态判定', '动态延迟与影响因素'];
+    // UI interaction fixtures only: model results are held/released at the HTTP
+    // boundary. The preview uses createFakeModel and never a real paid API.
+    await page.route('**/api/call', async route => {
+      const payload = route.request().postDataJSON();
+      if (payload.action !== 'generate.suggest') return route.fallback();
+      const index = asked.push(payload.args) - 1;
+      if (index === 0) await delayed;
+      const value = index === 0
+        ? { source: 'model', focus: ['旧范围建议不应出现'], coverage: 'full', difficulty: 'advanced', kind: 'quiz', why: '过期结果。' }
+        : { source: 'model', focus: refined, coverage: 'lean', difficulty: 'foundation', kind: 'flashcard', why: '围绕当前反相器范围练习。' };
+      await route.fulfill({ json: { ok: true, value } });
+    });
+    await goGenerate(page);
+    await page.locator('.generate-more > summary').click();
+    const scope = page.locator('#generate-focus');
+    await scope.fill(oldScope);
+    await until(() => calls.some(call => call.action === 'usage.estimate' && call.args.feature === 'suggest' && call.args.focus === oldScope), 'the scoped assist estimate');
+    await page.locator('[data-generate-assist]').click();
+    await until(() => asked.length === 1, 'the delayed assist request');
+    assert.equal(asked[0].focus, oldScope);
+    assert.deepEqual([...asked[0].sourceIds].sort(), ['n1', 'n2']);
+    assert.equal(asked[0].course, '数据库');
+    const estimate = calls.findLast(call => call.action === 'usage.estimate' && call.args.feature === 'suggest' && call.args.focus === oldScope).args;
+    const { feature, ...estimateArgs } = estimate;
+    assert.equal(feature, 'suggest');
+    assert.deepEqual(estimateArgs, asked[0], 'the estimate and actual assist use the same scope, sources and course');
+
+    // No second ask yet: an old result must be rejected because the scope changed,
+    // rather than merely because a later request happened to replace its token.
+    await scope.fill(currentScope);
+    assert.equal(await page.locator('.generate-assist__result').count(), 0, 'editing the scope hides its pending result immediately');
+    const oldResponse = page.waitForResponse(response => response.url().endsWith('/api/call') && response.request().postDataJSON().action === 'generate.suggest');
+    releaseDelayed();
+    await (await oldResponse).finished();
+    await frames(page, 4);
+    assert.equal(await scope.inputValue(), currentScope);
+    assert.equal(await page.locator('.generate-assist__result').count(), 0, 'the obsolete response never fills the changed form');
+    assert.equal(await page.getByRole('button', { name: '按建议设置', exact: true }).count(), 0, 'obsolete settings cannot be applied');
+    assert.equal(await page.getByRole('button', { name: '旧范围建议不应出现', exact: true }).count(), 0);
+
+    await page.locator('[data-generate-assist]').click();
+    await page.getByRole('button', { name: refined[0], exact: true }).waitFor();
+    assert.equal(asked.length, 2);
+    assert.equal(asked[1].focus, currentScope);
+    assert.deepEqual(await page.locator('.generate-suggestion button').allInnerTexts(), refined);
+    await page.getByRole('button', { name: refined[0], exact: true }).click();
+    const refinedScope = `${currentScope}；${refined[0]}`;
+    assert.equal(await scope.inputValue(), refinedScope, 'a refinement appends to the learner\'s own words');
+    assert.deepEqual(await page.locator('.generate-suggestion button').allInnerTexts(), refined, 'picking a same-scope chip keeps the other refinements available');
+    assert.equal(await page.getByRole('button', { name: refined[0], exact: true }).getAttribute('aria-pressed'), 'true');
+    assert.equal(asked.length, 2, 'picking a refinement does not issue another model call');
+
+    await page.getByRole('button', { name: '按建议设置', exact: true }).click();
+    assert.equal(await scope.inputValue(), refinedScope, 'applying coverage/difficulty/type leaves the learner\'s scope intact');
+    assert.equal(await page.getByRole('button', { name: '已按建议设置', exact: true }).isDisabled(), true);
+    assert.equal(await page.locator('[role="group"][aria-label="覆盖强度"] button[aria-pressed="true"]').innerText(), '精简');
+    assert.equal(await page.locator('[role="group"][aria-label="难度"] button[aria-pressed="true"]').innerText(), '基础理解');
+    assert.equal(await page.locator('input[name="kinds-flashcard"]').isChecked(), true);
+    assert.equal(await page.locator('input[name="kinds-quiz"]').isChecked(), false);
+
+    await scope.fill('只练习输入输出电压与噪声容限');
+    assert.equal(await page.locator('.generate-assist__result').count(), 0, 'editing a completed scope also hides all its suggestions immediately');
+    assert.equal(await page.getByRole('button', { name: '按建议设置', exact: true }).count(), 0);
+    assert.equal(await page.getByRole('button', { name: '已按建议设置', exact: true }).count(), 0);
+    assert.equal(asked.length, 2, 'manual edits never ask the model automatically');
+    assert.ok(!calls.some(call => call.action === 'generate'), 'this assist never starts question generation');
+    assert.deepEqual(errors, []);
+    await context.close();
+  } finally { releaseDelayed(); await running.close(); await browser.close(); await rm(dist, { recursive: true, force: true }); }
+});
